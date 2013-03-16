@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 
 public class SequencePlayerTest {
-    /*@Test
+    @Test
     public void SequencePlayer_piece1_play(){
         SequencePlayer player;
         try {
@@ -53,7 +53,7 @@ public class SequencePlayerTest {
         } catch (InvalidMidiDataException e) {
             e.printStackTrace();
         }
-    }*/
+    }
     
     @Test
     public void SequencePlayer_piece2_play(){
