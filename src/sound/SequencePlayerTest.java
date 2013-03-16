@@ -10,11 +10,11 @@ import org.junit.Test;
  */
 
 public class SequencePlayerTest {
-    @Test
+    /*@Test
     public void SequencePlayer_piece1_play(){
         SequencePlayer player;
         try {
-            player = new SequencePlayer(140, 12);
+            player = new SequencePlayer(70, 12);
 
             player.addNote(new Pitch('C').toMidiNote(), 0, 12);
             player.addNote(new Pitch('C').toMidiNote(), 12, 12);
@@ -26,9 +26,9 @@ public class SequencePlayerTest {
             player.addNote(new Pitch('E').toMidiNote(), 60, 9);
             player.addNote(new Pitch('F').toMidiNote(), 69, 3);
             player.addNote(new Pitch('G').toMidiNote(), 72, 24);
-            player.addNote(new Pitch('D').transpose(Pitch.OCTAVE).toMidiNote(), 96, 4);
-            player.addNote(new Pitch('D').transpose(Pitch.OCTAVE).toMidiNote(), 100, 4);
-            player.addNote(new Pitch('D').transpose(Pitch.OCTAVE).toMidiNote(), 104, 4);
+            player.addNote(new Pitch('C').transpose(Pitch.OCTAVE).toMidiNote(), 96, 4);
+            player.addNote(new Pitch('C').transpose(Pitch.OCTAVE).toMidiNote(), 100, 4);
+            player.addNote(new Pitch('C').transpose(Pitch.OCTAVE).toMidiNote(), 104, 4);
             player.addNote(new Pitch('G').toMidiNote(), 108, 4);
             player.addNote(new Pitch('G').toMidiNote(), 112, 4);
             player.addNote(new Pitch('G').toMidiNote(), 116, 4);
@@ -53,12 +53,13 @@ public class SequencePlayerTest {
         } catch (InvalidMidiDataException e) {
             e.printStackTrace();
         }
-    }
+    }*/
+    
     @Test
     public void SequencePlayer_piece2_play(){
         SequencePlayer player;
         try {
-            player = new SequencePlayer(200, 12);
+            player = new SequencePlayer(100, 12);
             
             player.addNote(new Pitch('E').transpose(Pitch.OCTAVE).toMidiNote(), 0, 6);
             player.addNote(new Pitch('F').transpose(1).toMidiNote(), 0, 6);
@@ -81,7 +82,7 @@ public class SequencePlayerTest {
             player.addNote(new Pitch('A').toMidiNote(), 150, 12);
             player.addNote(new Pitch('B').toMidiNote(), 162, 12);
             player.addNote(new Pitch('B').transpose(-1).toMidiNote(), 174, 6);
-            player.addNote(new Pitch('G').toMidiNote(), 180, 12);
+            player.addNote(new Pitch('A').toMidiNote(), 180, 12);
             player.addNote(new Pitch('G').toMidiNote(), 192, 8);
             player.addNote(new Pitch('E').transpose(Pitch.OCTAVE).toMidiNote(), 200, 8);
             player.addNote(new Pitch('G').transpose(Pitch.OCTAVE).toMidiNote(), 208, 8);
