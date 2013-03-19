@@ -12,6 +12,11 @@ public class Measure implements ABCmusic {
     public <R> R accept(Visitor<R> m) {
         return m.on(this);
     }
+    /**
+     * group tokens in tk into one of note, rest, chord or tuplet and add to elements.
+     * @param tk represents a measure. should contain only note. rest, multinote_start, multinote_end, tuplet_spec.
+     * @throws if type is not one of the above, or other syntax error related to chord or tuplet
+     */
     public Measure(List<Token> tk) {
         int point=0;
         int len=tk.size();
@@ -71,6 +76,11 @@ public class Measure implements ABCmusic {
         }
             
     }
+    /**
+     * [Helper] change the accidental of note according to the previous accidentals recording in accidentalList.
+     * this is a mutator method. If note contains accidental, updates the accidentalList.
+     * @param note note to be changes.
+     */
     private void checkAccidental(Note note) {
         Pair<Character, Integer> key=new Pair<Character,Integer>(note.value,note.octave);
         if (note.getHasAccidental()) accidentalList.put(key, note.getAccidental());

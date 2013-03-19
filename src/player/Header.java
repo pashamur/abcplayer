@@ -38,7 +38,7 @@ public class Header {
     public int getVoiceIndex(String v) {
         if (voice.containsKey(v)) return voice.get(v);
         else throw new RuntimeException("Voice not found.");
-    }
+    } 
     public int getAccidental(char c) {
         if (c < 'A' || c > 'G') throw new RuntimeException("Basenote out of bouand.");
         return keySignature[c-'A'];

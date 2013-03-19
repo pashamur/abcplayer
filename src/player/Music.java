@@ -12,9 +12,9 @@ public class Music implements ABCmusic {
      * Generate a AST with music as the root.
      * @param tk each element of tk represents a voice.
      */
-    public Music(List<List<Token>> tk) {
-        int len=tk.size();
+    public Music(Lexer lex) {
+        int len=lex.getLength();
         voices=new ArrayList<ABCmusic>();
-        for (int i=0;i<len;i++) voices.add(new Voice(tk.get(i)));
+        for (int i=0;i<len;i++) voices.add(new Voice(lex.getTokens(i)));
     }
 }
