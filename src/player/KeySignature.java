@@ -1,12 +1,16 @@
 package player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class KeySignature {
-    private char note='C';
-    private boolean sharp=false;
-    private boolean flat=false;
-    private boolean minor=false;
     
-    public int[] KeySignatureToInt(String s) {
+    public static int[] KeySignatureToInt(String s) {
+        char note='C';
+        boolean sharp=false;
+        boolean flat=false;
+        boolean minor=false;
         if (!s.matches("[A-G][#|b]?[m]?"))
             throw new RuntimeException("Key signature string invalid.");
         note=s.charAt(0);
@@ -14,18 +18,18 @@ public class KeySignature {
             char temp;
             temp=s.charAt(1);
             if (temp=='#') sharp=true;
-            else if (temp=='b') sharp=true;
+            else if (temp=='b') flat=true;
             else minor=true;
         }
         else if (s.length()==3) {
             minor=true;
             if (s.charAt(1)=='#') sharp=true;
-            else sharp=true;
+            else flat=true;
         }
-        return KeySignatureLookup();
+        return KeySignatureLookup(note,sharp,flat,minor);
     }
     
-    public int[] KeySignatureLookup() {
+    private static int[] KeySignatureLookup(char note, boolean sharp, boolean flat, boolean minor) {
         switch(note){
         case 'A':
             if(minor){
@@ -186,5 +190,46 @@ public class KeySignature {
         default:
             throw new RuntimeException("Key signature is not supported.");
         }
+    }
+    public static void main(String args[]) {
+        List<String> listKey=new ArrayList<String>();
+        listKey.add("A");
+        listKey.add("Am");
+        listKey.add("Ab");
+        listKey.add("A#m");
+        listKey.add("Abm");
+        
+        listKey.add("B");
+        listKey.add("Bm");
+        listKey.add("Bb");
+        listKey.add("Bbm");
+        
+        listKey.add("C");
+        listKey.add("Cm");
+        listKey.add("C#");
+        listKey.add("Cb");
+        listKey.add("C#m");
+        
+        listKey.add("D");
+        listKey.add("Dm");
+        listKey.add("Db");
+        listKey.add("D#m");
+        
+        listKey.add("E");
+        listKey.add("Em");
+        listKey.add("Eb");
+        listKey.add("Ebm");
+        
+        listKey.add("F");
+        listKey.add("Fm");
+        listKey.add("F#");
+        listKey.add("F#m");
+        
+        listKey.add("G");
+        listKey.add("Gm");
+        listKey.add("Gb");
+        listKey.add("G#m");
+        
+        for (int i=0;i<listKey.size();i++) System.out.println(listKey.get(i)+": "+Arrays.toString(KeySignatureToInt(listKey.get(i))));
     }
 }
