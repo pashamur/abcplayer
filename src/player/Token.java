@@ -190,9 +190,9 @@ public class Token {
     /**
      * prints text to so.
      */
-    public void print() {
+    public String print() {
         StringBuilder sb=new StringBuilder();
         for (int i=0;i<text.size();i++) sb.append(text.get(i));
-        System.out.println(sb);
+        return sb.toString();
     }
 }
