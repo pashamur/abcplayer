@@ -87,4 +87,7 @@ public class Measure implements ABCmusic {
         else if (accidentalList.containsKey(key))
             note.setAccidental(accidentalList.get(key), true);        
     }
+    public Rational getLength() {
+        return length.clone();
+    }
 }

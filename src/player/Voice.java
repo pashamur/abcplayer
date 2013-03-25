@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Voice implements ABCmusic {
-    private List<ABCmusic> majorSections;
+    private List<MajorSection> majorSections;
+    public final int size;
+    public List<Rational> mList=new ArrayList<Rational>();
+    
     public <R> R accept(Visitor<R> v) {
         return v.on(this);
     }
@@ -20,7 +23,7 @@ public class Voice implements ABCmusic {
             ni++;
             nf++;
         }//ignore first major section start.
-        majorSections=new ArrayList<ABCmusic>();
+        majorSections=new ArrayList<MajorSection>();
         while (ni<len) {
             while (nf<len && !tk.get(nf).type.equals(Token.Type.major_section_end) && 
                     !tk.get(nf).type.equals(Token.Type.major_section_start)) ++nf;
@@ -31,5 +34,7 @@ public class Voice implements ABCmusic {
             else majorSections.add(new MajorSection(tk.subList(ni,nf)));
             ni=++nf;
         }
+        size=majorSections.size();
+        for (int i=0;i<size;i++) mList.addAll(majorSections.get(i).mList);
     }
 }

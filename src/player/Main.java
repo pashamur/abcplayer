@@ -3,13 +3,11 @@ package player;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -30,6 +28,12 @@ public class Main {
      */
     public static void play(String file) throws IOException {
         List<String> result = new ArrayList<String>();
+        Header header=readFile(file,result);
+        Lexer lexer = new Lexer(result, header);
+        printLexerToFile(lexer,header,"../../dp1/1.txt");
+    }
+    
+    public static Header readFile(String file, List<String> result) throws IOException {
         FileReader fileReader;
         try {
             fileReader = new FileReader(file);
@@ -52,12 +56,12 @@ public class Main {
                 result = new ArrayList<String>();
             }
         }
-
-        Lexer lexer = new Lexer(result, header);
-        
-        
+        return header;
+    }
+    
+    public static void printLexerToFile(Lexer lexer, Header header, String outFile) throws IOException{
         //print for check
-        FileWriter fw = new FileWriter("d:/1.txt");
+        FileWriter fw = new FileWriter(outFile);
         BufferedWriter bw = new BufferedWriter(fw);
 
         for (int j = 0; j < header.getNumVoices(); j++) {
@@ -75,9 +79,7 @@ public class Main {
         }
         bw.close();
         fw.close();
-        
     }
-
     public static void main(String[] args) throws IOException {
         play("sample_abc/invention.abc");
     }
