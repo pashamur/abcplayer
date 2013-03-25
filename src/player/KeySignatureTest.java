@@ -4,6 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class KeySignatureTest {
+    //test all kinds of valid key signature (major, minor, sharp, flat, sharp/flat minor)
     @Test
     public void KeySignatureTest_C(){
         int[] result=KeySignature.KeySignatureToInt("A");
@@ -39,6 +40,7 @@ public class KeySignatureTest {
         int[] expected={0,0,1,0,0,1,1};
         assertArrayEquals(result,expected);
     }  
+    // test exception for none-supported key signature
     @Test
     public void KeySignatureTest_NoneExist(){
         boolean flag=false;
@@ -49,6 +51,7 @@ public class KeySignatureTest {
         }
         assertTrue(flag);
     }
+    // note not in A-G
     @Test
     public void KeySignatureTest_InvalidNote(){
         boolean flag=false;
@@ -59,6 +62,7 @@ public class KeySignatureTest {
         }
         assertTrue(flag);
     }  
+    // containing invalid character
     @Test
     public void KeySignatureTest_InvalidCharacter(){
         boolean flag=false;
@@ -69,6 +73,7 @@ public class KeySignatureTest {
         }
         assertTrue(flag);
     }  
+    // containing white space
     @Test
     public void KeySignatureTest_InvalidWhitespace(){
         boolean flag=false;
@@ -78,5 +83,27 @@ public class KeySignatureTest {
             flag=true;
         }
         assertTrue(flag);
-    }  
+    }
+    // contains both sharp and flat
+    @Test
+    public void KeySignatureTest_InvalidSharpFlat(){
+        boolean flag=false;
+        try{
+            KeySignature.KeySignatureToInt("C#b");
+        }catch(RuntimeException e) {
+            flag=true;
+        }
+        assertTrue(flag);
+    } 
+    // note, sharp/flat and minor not given in the correct sequence
+    @Test
+    public void KeySignatureTest_InvalidSequence(){
+        boolean flag=false;
+        try{
+            KeySignature.KeySignatureToInt("#Gm");
+        }catch(RuntimeException e) {
+            flag=true;
+        }
+        assertTrue(flag);
+    } 
 }

@@ -15,7 +15,11 @@ package player;
  *    - See http://www.cs.princeton.edu/introcs/92symbolic/BigRational.java.html
  *      for a version that supports negative fractions and arbitrary
  *      precision numerators and denominators.
- *
+ *  
+ *  More Remarks:
+ *  --------
+ *     - Downloaded and modified by Qian Lin (4/22/2013).
+ *     
  *  % java Rational
  *  5/6
  *  1
@@ -37,7 +41,6 @@ public class Rational {
         int g = gcd(numerator, denominator);
         num = numerator   / g;
         den = denominator / g;
-
     }
     
     @Override
@@ -60,7 +63,6 @@ public class Rational {
         return new Rational(this.num * b.num, this.den * b.den);
     }
 
-
     // return (this + b)
     public Rational plus(Rational b) {
         int numerator   = (this.num * b.den) + (this.den * b.num);
@@ -76,12 +78,7 @@ public class Rational {
         return this.times(b.reciprocal());
     }
 
-
-   /*************************************************************************
-    *  Helper functions
-    *************************************************************************/
-
-    // return gcd(m, n)
+    // [helper] return gcd(m, n)
     private static int gcd(int m, int n) {
         if (0 == n) return m;
         else return gcd(n, m % n);

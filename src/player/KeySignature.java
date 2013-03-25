@@ -5,7 +5,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class KeySignature {
-    
+    /**
+     * given input string s representing one of the 30 types of key signature, return a int[]
+     * which is the accidental for key A-G for the given key signature.
+     * 
+     * @param s key signature name, e.g. "A", "Am", "C#", "Bb", "F#m" or "Gbm"
+     * @return int[]
+     * @throws RuntimeException("Key signature string invalid.") if s is not a valid abc signature
+     * @throws RuntimeException("Key signature is not supported.") if the given key signature is
+     * not one of the 30 major types (e.g. "Fb", "G#b").
+     */
     public static int[] KeySignatureToInt(String s) {
         char note='C';
         boolean sharp=false;
@@ -28,7 +37,15 @@ public class KeySignature {
         }
         return KeySignatureLookup(note,sharp,flat,minor);
     }
-    
+    /**
+     * helper function. maps key signature to int[]
+     * 
+     * @param note A-G
+     * @param sharp true if key signature contains "#"
+     * @param flat true if key signature contains "b"
+     * @param minor true if key signature contains "m"
+     * @return
+     */
     private static int[] KeySignatureLookup(char note, boolean sharp, boolean flat, boolean minor) {
         switch(note){
         case 'A':
