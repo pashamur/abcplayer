@@ -4,17 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MajorSection implements ABCmusic {
-    private List<ABCmusic> sections;
+    private List<Section> sections;
     private int state = 0;
     private boolean repeat = false;
-
+    public final int size;
+    public List<Rational> mList=new ArrayList<Rational>();
+    
     public <R> R accept(Visitor<R> m) {
         return m.on(this);
     }
 
     // tk is non-empty; end with ':|' or no bar
     public MajorSection(List<Token> tk) {
-        sections = new ArrayList<ABCmusic>();
+        sections = new ArrayList<Section>();
         int ni = 0;
         int nf = 0;
         int nm = 0;
@@ -74,6 +76,8 @@ public class MajorSection implements ABCmusic {
             }
             ni = ++nf;
         }
+        size=sections.size();
+        for (int i=0;i<size;i++) mList.addAll(sections.get(i).mList);
     }
 
     /*
@@ -88,7 +92,7 @@ public class MajorSection implements ABCmusic {
     private int handleRepeat(List<Token> tk, int ni, int nm, int nf) {
         int len = tk.size();
         if (!repeat) {
-            ABCmusic temp = new Section(tk.subList(ni, nf));
+            Section temp = new Section(tk.subList(ni, nf));
             sections.add(temp);
             sections.add(temp);
             state = 2;
@@ -99,7 +103,7 @@ public class MajorSection implements ABCmusic {
             Token current = tk.get(nf + 1);
             if (current.type.equals(Token.Type.nth_repeat)
                     && current.getValue() == 2) {
-                ABCmusic temp = new Section(tk.subList(ni, nm));
+                Section temp = new Section(tk.subList(ni, nm));
                 sections.add(temp);
                 sections.add(new Section(tk.subList(nm + 1, nf)));
                 sections.add(temp);

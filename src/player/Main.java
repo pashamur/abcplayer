@@ -32,7 +32,7 @@ public class Main {
         Lexer lexer = new Lexer(result, header);
         writeTokens("../../dp1/1.txt",header,lexer);
     }
-    public static Header readFile(String file, List<String> result) throws IOException{
+    public static Header readFile(String file, List<String> result) throws IOException {
         FileReader fileReader;
         List<String> headerStr=new ArrayList<String>();
         try {
@@ -76,7 +76,6 @@ public class Main {
         bw.close();
         fw.close();
     }
-
     public static void main(String[] args) throws IOException {
         play("sample_abc/invention.abc");
     }
