@@ -18,4 +18,7 @@ public class Music implements ABCmusic {
         voices=new ArrayList<Voice>();
         for (int i=0;i<size;i++) voices.add(new Voice(lex.getTokens(i)));
     }
+    public Voice getVoice(int i) {
+        return voices.get(i);
+    }
 }

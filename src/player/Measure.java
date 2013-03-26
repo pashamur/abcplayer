@@ -8,6 +8,7 @@ import java.util.Map;
 public class Measure implements ABCmusic {
     private List<ABCmusic> elements;
     private Rational length=new Rational(0,1);
+    public final int size;
     private Map<Pair<Character,Integer>,Integer> accidentalList=new HashMap<Pair<Character,Integer>,Integer>();
     public <R> R accept(Visitor<R> m) {
         return m.on(this);
@@ -57,12 +58,17 @@ public class Measure implements ABCmusic {
             }
             else if (current.type.equals(Token.Type.multinote_start)) {
                 Token temp;
-                List<Note> n=new ArrayList<Note>();
+                List<Note> notes=new ArrayList<Note>();
+                Note note;
                 while ((++point)<len) {
                     temp=tk.get(point);
-                    if (temp.type.equals(Token.Type.note)) n.add(temp.getNote());
+                    if (temp.type.equals(Token.Type.note)) {
+                        note=temp.getNote();
+                        checkAccidental(note);
+                        notes.add(note);
+                    }
                     else if (temp.type.equals(Token.Type.multinote_end)) {
-                        Chord newChord=new Chord(n);
+                        Chord newChord=new Chord(notes);
                         elements.add(newChord);
                         length=length.plus(newChord.getLength());
                         break;
@@ -74,7 +80,7 @@ public class Measure implements ABCmusic {
             else throw new RuntimeException("Illegal token within a measure.");
             point++;
         }
-            
+        size=elements.size();   
     }
     /**
      * [Helper] change the accidental of note according to the previous accidentals recording in accidentalList.
@@ -89,5 +95,8 @@ public class Measure implements ABCmusic {
     }
     public Rational getLength() {
         return length.clone();
+    }
+    public ABCmusic getElements(int i) {
+        return elements.get(i);
     }
 }

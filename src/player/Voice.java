@@ -37,4 +37,7 @@ public class Voice implements ABCmusic {
         size=majorSections.size();
         for (int i=0;i<size;i++) mList.addAll(majorSections.get(i).mList);
     }
+    public MajorSection getMajorSection(int i) {
+        return majorSections.get(i);
+    }
 }

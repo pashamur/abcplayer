@@ -29,4 +29,7 @@ public class Section implements ABCmusic{
             mList.add(measures.get(i).getLength());
         }
     }
+    public Measure getMeasure(int i){
+        return measures.get(i);
+    }
 }

@@ -77,6 +77,6 @@ public class Main {
         fw.close();
     }
     public static void main(String[] args) throws IOException {
-        play("sample_abc/invention.abc");
+        play("sample_abc/scale.abc");
     }
 }

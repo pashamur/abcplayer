@@ -160,7 +160,7 @@ public class Token {
             else if (temp.matches("[,]+")) o-=tempLen;
             else throw new RuntimeException("Octave syntax error.");
         }
-        return new Note(v,a,o,b,toLength(s.subList(3, len)));
+        return new Note(v,o,a,b,toLength(s.subList(3, len)));
     }
     /**
      * @return this.value
