@@ -24,6 +24,7 @@ public class MusicTest {
             throw new RuntimeException("File error.");
         }
     }
+    // check the corrent number of voices are added, and the voices matches (checkRep())
     @Test
     public void MusicTest_MultiVoice2() {
         String file = "sample_abc/invention.abc";

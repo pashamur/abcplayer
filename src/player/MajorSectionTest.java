@@ -1,7 +1,6 @@
 package player;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 public class MajorSectionTest {
+    // test in case of no repeat, only one section is added. e.g A -> A
     @Test
     public void MajorSectionTest_NoRepeat() {
         String file = "sample_abc/scale.abc";
@@ -28,7 +28,8 @@ public class MajorSectionTest {
             throw new RuntimeException("File error.");
         }
     }
-
+    // check that in case one single repeat appears at the end of the major section
+    // e.g. A:| -> AA
     @Test
     public void MajorSectionTest_RepeatEnd() {
         String file = "sample_abc/testRepeat0.abc";
@@ -39,6 +40,7 @@ public class MajorSectionTest {
             List<Token> tk = lexer.getTokens(0);
             MajorSection majorSection = new MajorSection(tk);
             assertEquals(2, majorSection.size);
+            assertTrue(ABCmusicEqual.abcmusicEqual(majorSection.getSection(0), majorSection.getSection(1)));
             Rational expMeter = new Rational(6, 1);
             for (int i = 0; i < 4; i++)
                 assertTrue(expMeter.equals(majorSection.mList.get(i)));
@@ -47,7 +49,7 @@ public class MajorSectionTest {
             throw new RuntimeException("File error.");
         }
     }
-
+    // check one single repeat followed by a non-repeating section, e.g. A :| B -> AAB
     @Test
     public void MajorSectionTest_RepeatNotEnd() {
         String file = "sample_abc/testRepeat1.abc";
@@ -58,6 +60,8 @@ public class MajorSectionTest {
             List<Token> tk = lexer.getTokens(0);
             MajorSection majorSection = new MajorSection(tk);
             assertEquals(3, majorSection.size);
+            assertTrue(ABCmusicEqual.abcmusicEqual(majorSection.getSection(0), majorSection.getSection(1)));
+            assertFalse(ABCmusicEqual.abcmusicEqual(majorSection.getSection(0), majorSection.getSection(2)));
             Rational expMeter = new Rational(6, 1);
             for (int i = 0; i < 5; i++)
                 assertTrue(expMeter.equals(majorSection.mList.get(i)));
@@ -66,6 +70,7 @@ public class MajorSectionTest {
             throw new RuntimeException("File error.");
         }
     }
+    // check nth-repeat, e.g. A |[1 B:| [2 C -> ABAC
     @Test
     public void MajorSectionTest_NthRepeat() {
         String file = "sample_abc/testRepeat2.abc";
@@ -76,6 +81,8 @@ public class MajorSectionTest {
             List<Token> tk = lexer.getTokens(0);
             MajorSection majorSection = new MajorSection(tk);
             assertEquals(4, majorSection.size);
+            assertTrue(ABCmusicEqual.abcmusicEqual(majorSection.getSection(0), majorSection.getSection(2)));
+            assertFalse(ABCmusicEqual.abcmusicEqual(majorSection.getSection(3), majorSection.getSection(1)));
             Rational expMeter = new Rational(6, 1);
             for (int i = 0; i < 4; i++)
                 assertTrue(expMeter.equals(majorSection.mList.get(i)));
@@ -84,6 +91,7 @@ public class MajorSectionTest {
             throw new RuntimeException("File error.");
         }
     }
+    // check single repeat start, e.g. A |: B :| C -> ABBC
     @Test
     public void MajorSectionTest_RepeatStart() {
         String file = "sample_abc/testRepeat3.abc";
@@ -94,6 +102,7 @@ public class MajorSectionTest {
             List<Token> tk = lexer.getTokens(0);
             MajorSection majorSection = new MajorSection(tk);
             assertEquals(4, majorSection.size);
+            assertTrue(ABCmusicEqual.abcmusicEqual(majorSection.getSection(2), majorSection.getSection(1)));
             Rational expMeter = new Rational(6, 1);
             for (int i = 0; i < 4; i++)
                 assertTrue(expMeter.equals(majorSection.mList.get(i)));
@@ -102,6 +111,7 @@ public class MajorSectionTest {
             throw new RuntimeException("File error.");
         }
     }
+    // check nth-repeat with start A |: B |[1 C :| [2 D -> ABCBD
     @Test
     public void MajorSectionTest_NthRepeatStart() {
         String file = "sample_abc/testRepeat4.abc";
@@ -112,6 +122,8 @@ public class MajorSectionTest {
             List<Token> tk = lexer.getTokens(0);
             MajorSection majorSection = new MajorSection(tk);
             assertEquals(5, majorSection.size);
+            assertTrue(ABCmusicEqual.abcmusicEqual(majorSection.getSection(3), majorSection.getSection(1)));
+            assertFalse(ABCmusicEqual.abcmusicEqual(majorSection.getSection(2), majorSection.getSection(4)));
             Rational expMeter = new Rational(6, 1);
             for (int i = 0; i < 6; i++)
                 assertTrue(expMeter.equals(majorSection.mList.get(i)));

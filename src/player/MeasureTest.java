@@ -29,6 +29,7 @@ public class MeasureTest {
             throw new RuntimeException("File error.");
         }
     }
+    //test if local accidental is applied correctly to following notes on the same octave
     @Test
     public void MeasureTest_LocalAccidental() {
         String file = "sample_abc/testMeasure2.abc";
@@ -46,6 +47,7 @@ public class MeasureTest {
             throw new RuntimeException("File error.");
         }
     }
+    //test if local accidental overwriting the previous ones is applied
     @Test
     public void MeasureTest_LocalAccidentalChange() {
         String file = "sample_abc/testMeasure3.abc";

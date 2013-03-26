@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 public class SectionTest {
+    //test is the correct number of measures are generated and if length of measures are correct
     @Test
     public void SectionTest_scale() {
         String file="sample_abc/scale.abc";

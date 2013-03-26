@@ -1,5 +1,16 @@
 package player;
-
+/*
+ * convert AST to string for print out. Format for note: [\d]*[A-G][\d]([\d(/\d)*]), 
+ * e.g. 1A-1(1/2) translates to ^A,1/2.
+ * The number preceeding basenote is accidental, and will be omitted if hasAccidental=false. 
+ * The number following basenote is octave
+ * The number in parentheses is length, and has the form [/d] if is integer, or [/d]/[/d] if is 
+ * fractional.
+ * 
+ * measures are separated by |
+ * sections and majorsections start on a new line
+ * one voice is included in {V0: ... }
+ */
 public class ABCmusicToString implements ABCmusic.Visitor<String>{
     public String on(Music mu){
         int len=mu.size;

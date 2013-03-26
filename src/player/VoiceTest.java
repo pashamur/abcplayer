@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Test;
 
 public class VoiceTest {
+    // check that the correct number of majorSections are added
     @Test
     public void VoiceTest_Basic() {
         String file = "sample_abc/paddy.abc";
