@@ -1,7 +1,6 @@
 package player;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertArrayEquals;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

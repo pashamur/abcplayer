@@ -25,14 +25,17 @@ public class ABCmusicToString implements ABCmusic.Visitor<String>{
     }
     public String on(MajorSection ms) {
         StringBuilder s=new StringBuilder();
-        for (int i=0;i<ms.size;i++) s.append(abcmusicToString(ms.getSection(i)));
+        for (int i=0;i<ms.size;i++) {
+            s.append(abcmusicToString(ms.getSection(i)));
+            if (i<(ms.size-1)) s.append("|\n");
+        }
         return s.toString();
     }
     public String on(Section sc) {
         StringBuilder s=new StringBuilder();
         for (int i=0;i<sc.size;i++) {
             s.append(abcmusicToString(sc.getMeasure(i)));
-            s.append("| ");
+            if (i<(sc.size-1)) s.append("| ");
         }
         return s.toString();
     }

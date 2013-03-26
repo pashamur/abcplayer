@@ -22,7 +22,7 @@ public class SectionTest {
             Rational expMeter=new Rational(4,1);
             for (int i=0;i<4;i++)
                 assertTrue(expMeter.equals(section.mList.get(i)));
-            System.out.println(ABCmusicToString.abcmusicToString(section));
+            //System.out.println(ABCmusicToString.abcmusicToString(section));
         }catch(IOException e) {
             throw new RuntimeException("File error.");
         }
@@ -40,7 +40,7 @@ public class SectionTest {
             Rational expMeter=new Rational(4,1);
             for (int i=0;i<4;i++)
                 assertTrue(expMeter.equals(section.mList.get(i)));
-            System.out.println(ABCmusicToString.abcmusicToString(section));
+            //System.out.println(ABCmusicToString.abcmusicToString(section));
         }catch(IOException e) {
             throw new RuntimeException("File error.");
         }
@@ -58,7 +58,7 @@ public class SectionTest {
             Rational expMeter=new Rational(4,1);
             for (int i=0;i<6;i++)
                 assertTrue(expMeter.equals(section.mList.get(i)));
-            System.out.println(ABCmusicToString.abcmusicToString(section));
+            //System.out.println(ABCmusicToString.abcmusicToString(section));
         }catch(IOException e) {
             throw new RuntimeException("File error.");
         }

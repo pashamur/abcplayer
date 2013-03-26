@@ -23,7 +23,7 @@ public class MajorSectionTest {
             Rational expMeter = new Rational(4, 1);
             for (int i = 0; i < 4; i++)
                 assertTrue(expMeter.equals(majorSection.mList.get(i)));
-            System.out.println(ABCmusicToString.abcmusicToString(majorSection));
+            //System.out.println(ABCmusicToString.abcmusicToString(majorSection));
         } catch (IOException e) {
             throw new RuntimeException("File error.");
         }
@@ -37,12 +37,12 @@ public class MajorSectionTest {
             Header header = Main.readFile(file, result);
             Lexer lexer = new Lexer(result, header);
             List<Token> tk = lexer.getTokens(0);
-            MajorSection majorSection = new MajorSection(tk.subList(0, tk.size()));
+            MajorSection majorSection = new MajorSection(tk);
             assertEquals(2, majorSection.size);
             Rational expMeter = new Rational(6, 1);
             for (int i = 0; i < 4; i++)
                 assertTrue(expMeter.equals(majorSection.mList.get(i)));
-            System.out.println(ABCmusicToString.abcmusicToString(majorSection));
+            //System.out.println(ABCmusicToString.abcmusicToString(majorSection));
         } catch (IOException e) {
             throw new RuntimeException("File error.");
         }
@@ -56,12 +56,12 @@ public class MajorSectionTest {
             Header header = Main.readFile(file, result);
             Lexer lexer = new Lexer(result, header);
             List<Token> tk = lexer.getTokens(0);
-            MajorSection majorSection = new MajorSection(tk.subList(0, tk.size()));
+            MajorSection majorSection = new MajorSection(tk);
             assertEquals(3, majorSection.size);
             Rational expMeter = new Rational(6, 1);
             for (int i = 0; i < 5; i++)
                 assertTrue(expMeter.equals(majorSection.mList.get(i)));
-            System.out.println(ABCmusicToString.abcmusicToString(majorSection));
+            //System.out.println(ABCmusicToString.abcmusicToString(majorSection));
         } catch (IOException e) {
             throw new RuntimeException("File error.");
         }
@@ -74,12 +74,12 @@ public class MajorSectionTest {
             Header header = Main.readFile(file, result);
             Lexer lexer = new Lexer(result, header);
             List<Token> tk = lexer.getTokens(0);
-            MajorSection majorSection = new MajorSection(tk.subList(0, tk.size()));
+            MajorSection majorSection = new MajorSection(tk);
             assertEquals(4, majorSection.size);
             Rational expMeter = new Rational(6, 1);
             for (int i = 0; i < 4; i++)
                 assertTrue(expMeter.equals(majorSection.mList.get(i)));
-            System.out.println(ABCmusicToString.abcmusicToString(majorSection));
+            //System.out.println(ABCmusicToString.abcmusicToString(majorSection));
         } catch (IOException e) {
             throw new RuntimeException("File error.");
         }
@@ -92,12 +92,12 @@ public class MajorSectionTest {
             Header header = Main.readFile(file, result);
             Lexer lexer = new Lexer(result, header);
             List<Token> tk = lexer.getTokens(0);
-            MajorSection majorSection = new MajorSection(tk.subList(0, tk.size()));
+            MajorSection majorSection = new MajorSection(tk);
             assertEquals(4, majorSection.size);
             Rational expMeter = new Rational(6, 1);
             for (int i = 0; i < 4; i++)
                 assertTrue(expMeter.equals(majorSection.mList.get(i)));
-            System.out.println(ABCmusicToString.abcmusicToString(majorSection));
+            //System.out.println(ABCmusicToString.abcmusicToString(majorSection));
         } catch (IOException e) {
             throw new RuntimeException("File error.");
         }
@@ -110,12 +110,12 @@ public class MajorSectionTest {
             Header header = Main.readFile(file, result);
             Lexer lexer = new Lexer(result, header);
             List<Token> tk = lexer.getTokens(0);
-            MajorSection majorSection = new MajorSection(tk.subList(0, tk.size()));
+            MajorSection majorSection = new MajorSection(tk);
             assertEquals(5, majorSection.size);
             Rational expMeter = new Rational(6, 1);
             for (int i = 0; i < 6; i++)
                 assertTrue(expMeter.equals(majorSection.mList.get(i)));
-            System.out.println(ABCmusicToString.abcmusicToString(majorSection));
+            //System.out.println(ABCmusicToString.abcmusicToString(majorSection));
         } catch (IOException e) {
             throw new RuntimeException("File error.");
         }

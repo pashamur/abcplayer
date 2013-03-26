@@ -30,7 +30,10 @@ public class Main {
         List<String> result = new ArrayList<String>();
         Header header=readFile(file,result);
         Lexer lexer = new Lexer(result, header);
-        writeTokens("../../dp1/1.txt",header,lexer);
+        writeTokens("../../dp1/lexer.txt",header,lexer);
+        Music music=new Music(lexer);
+        if (!music.checkRep()) throw new RuntimeException("Voices in music do not match.");
+        writeMusic("../../dp1/music.txt",music);
     }
     public static Header readFile(String file, List<String> result) throws IOException {
         FileReader fileReader;
@@ -76,7 +79,17 @@ public class Main {
         bw.close();
         fw.close();
     }
+    public static void writeMusic(String file, Music music) throws IOException {
+        FileWriter fw = new FileWriter(file);
+        BufferedWriter bw = new BufferedWriter(fw);
+
+        try{
+            bw.write(ABCmusicToString.abcmusicToString(music));
+            } catch (RuntimeException e) {}
+        bw.close();
+        fw.close();
+    }
     public static void main(String[] args) throws IOException {
-        play("sample_abc/scale.abc");
+        play("sample_abc/little_night_music.abc");
     }
 }

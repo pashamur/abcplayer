@@ -21,4 +21,15 @@ public class Music implements ABCmusic {
     public Voice getVoice(int i) {
         return voices.get(i);
     }
+    public boolean checkRep() {
+        int nmeasures=voices.get(0).mList.size();
+        List<Rational> mlist=voices.get(0).mList;
+        for (int i=1;i<size;i++) {
+            if (voices.get(i).mList.size()!=nmeasures) return false;
+            List<Rational> temp=voices.get(i).mList;
+            for (int j=0;j<nmeasures;j++) 
+                if (!temp.get(j).equals(mlist.get(j))) return false;
+        }
+        return true;
+    }
 }
