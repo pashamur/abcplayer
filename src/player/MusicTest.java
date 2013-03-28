@@ -19,12 +19,13 @@ public class MusicTest {
             Music music = new Music(lexer);
             assertEquals(1, music.size);
             //System.out.println(ABCmusicToString.abcmusicToString(music));
+            //System.out.println(ABCmusicTicks.ABCMusicTicks(music));
             assertTrue(music.checkRep());
         } catch (IOException e) {
             throw new RuntimeException("File error.");
         }
     }
-    // check the corrent number of voices are added, and the voices matches (checkRep())
+    // check the correct number of voices are added, and the voices matches (checkRep())
     @Test
     public void MusicTest_MultiVoice2() {
         String file = "sample_abc/invention.abc";
@@ -34,7 +35,7 @@ public class MusicTest {
             Lexer lexer = new Lexer(result, header);
             Music music = new Music(lexer);
             assertEquals(2, music.size);
-            //System.out.println(ABCmusicToString.abcmusicToString(music));
+            System.out.println(ABCmusicToString.abcmusicToString(music));
             assertTrue(music.checkRep());
         } catch (IOException e) {
             throw new RuntimeException("File error.");

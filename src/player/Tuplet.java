@@ -2,6 +2,7 @@ package player;
 
 public class Tuplet implements ABCmusic {
     private final Rational length;
+    private final Rational noteLength;
     public final int size;
     private final Note[] notes;
     
@@ -16,6 +17,7 @@ public class Tuplet implements ABCmusic {
      * @throws RuntimeException("Tuplet spec does not match notes.") if length of note[] does not equal spec.
      */
     public Tuplet(int spec, Note[] n, Rational l) {
+    	noteLength = l;
         size=spec;
         int len=n.length;
         if (spec!=len) throw new RuntimeException("Tuplet spec does not match notes.");
@@ -32,5 +34,8 @@ public class Tuplet implements ABCmusic {
     public Note getNote(int i) {
         if (i>=size) throw new RuntimeException("Index out of bound in Tuplet.");
         return notes[i].clone();
+    }
+    public Rational getNoteLength(){
+    	return noteLength.clone();
     }
 }

@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.sound.midi.MidiUnavailableException;
+
+import sound.SequencePlayer;
+
 /**
  * Main entry point of your application.
  */
@@ -30,10 +34,24 @@ public class Main {
         List<String> result = new ArrayList<String>();
         Header header=readFile(file,result);
         Lexer lexer = new Lexer(result, header);
-        writeTokens("../../dp1/lexer.txt",header,lexer);
+        //writeTokens("../../dp1/lexer.txt",header,lexer);
         Music music=new Music(lexer);
         if (!music.checkRep()) throw new RuntimeException("Voices in music do not match.");
-        writeMusic("../../dp1/music.txt",music);
+        //writeMusic("../../dp1/music.txt",music);
+        ABCmusicTicks ticks = new ABCmusicTicks();
+        int ticksPerQuarterNote = ticks.ABCMusicTicks(music);
+        // Number of quarter notes (!) per minute: Tempo * default note length divided by 4 (to scale according to quarter notes)
+        int beatsPerMinute = header.getQ() * header.getL().den / header.getL().num / 4;
+        ABCPlayer player = new ABCPlayer(ticksPerQuarterNote, beatsPerMinute, header);
+        SequencePlayer p = player.on(music);
+        System.out.print(ticksPerQuarterNote);
+        System.out.println(p.toString());
+        try {
+			p.play();
+		} catch (MidiUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     public static Header readFile(String file, List<String> result) throws IOException {
         FileReader fileReader;
