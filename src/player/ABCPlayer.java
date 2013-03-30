@@ -61,8 +61,9 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         return player;
     }
     public SequencePlayer on(Chord c) {
-    	int noteLengthInTicks = c.getLength().num*ticksPerQuarterNote/c.getLength().den;
-    	
+    	Rational noteLength = c.getLength().times(h.getL());
+    	int noteLengthInTicks = 4*noteLength.num*ticksPerQuarterNote/noteLength.den;
+    	    	
         for (int i=0;i<c.size;i++) {
         	Note note = c.getNote(i);
         	Pitch p = new Pitch(note.value).transpose(note.octave*Pitch.OCTAVE);
@@ -82,7 +83,8 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         return player;
     }
     public SequencePlayer on(Tuplet t) {
-    	int noteLengthInTicks = t.getNoteLength().num*ticksPerQuarterNote/t.getNoteLength().den;
+    	Rational noteLength = t.getNoteLength().times(h.getL());
+    	int noteLengthInTicks = 4*noteLength.num*ticksPerQuarterNote/noteLength.den;
     	
         for (int i=0;i<t.size;i++){ 
         	Note note = t.getNote(i);
@@ -115,8 +117,8 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     	else{
     		p.transpose(h.getAccidental(n.value));
     	}
-    	int noteLengthInTicks = (ticksPerQuarterNote*n.getLength().num)/n.getLength().den;
-
+    	Rational noteLength = n.getLength().times(h.getL());
+    	int noteLengthInTicks = 4*noteLength.num*ticksPerQuarterNote/noteLength.den;
     	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
     	lastTick = lastTick+noteLengthInTicks;
     		
@@ -124,7 +126,9 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     }
     public SequencePlayer on(Rest r) {
     	// Increment the tick counter (without adding any notes) by the length of the rest.
-    	lastTick = lastTick + r.getLength().num*ticksPerQuarterNote/r.getLength().den;
+    	Rational restLength = r.getLength().times(h.getL());
+    	int restLengthInTicks = 4*restLength.num*ticksPerQuarterNote/restLength.den;
+    	lastTick = lastTick + restLengthInTicks;
         return player;
     }
     public SequencePlayer ABCPlayer(ABCmusic e){

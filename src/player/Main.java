@@ -38,7 +38,7 @@ public class Main {
         Music music=new Music(lexer);
         if (!music.checkRep()) throw new RuntimeException("Voices in music do not match.");
         //writeMusic("../../dp1/music.txt",music);
-        ABCmusicTicks ticks = new ABCmusicTicks();
+        ABCmusicTicks ticks = new ABCmusicTicks(header.getL());
         int ticksPerQuarterNote = ticks.ABCMusicTicks(music);
         // Number of quarter notes (!) per minute: Tempo * default note length divided by 4 (to scale according to quarter notes)
         System.out.println(header.getQ() + " " + header.getL());

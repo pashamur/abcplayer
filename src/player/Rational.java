@@ -77,7 +77,7 @@ public class Rational {
     public Rational divides(Rational b) {
         return this.times(b.reciprocal());
     }
-
+    
     // [helper] return gcd(m, n)
     private static int gcd(int m, int n) {
         if (0 == n) return m;

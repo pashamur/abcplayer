@@ -6,20 +6,22 @@ import sound.SequencePlayer;
 public class ABCmusicTicks implements ABCmusic.Visitor<Integer>{
 	// Calculate ticks per quarter note
 	private int ticksPerQuarterNote = 1;
+	private Rational baseNoteLength;
 	
+	public ABCmusicTicks(Rational baseNoteLength){
+		this.baseNoteLength = baseNoteLength;
+	}
 	
 	public Integer on(Music mu){
 		for (int i=0;i<mu.size;i++) {
 			ABCMusicTicks(mu.getVoice(i));
         }
-		System.out.println("Moo");
         return ticksPerQuarterNote;
     }
     public Integer on(Voice v) {
         for (int i=0;i<v.size;i++) {
         	ABCMusicTicks(v.getMajorSection(i));
         }
-		System.out.println("Moo22");
         return ticksPerQuarterNote;
     }
     public Integer on(MajorSection ms) {
@@ -41,22 +43,21 @@ public class ABCmusicTicks implements ABCmusic.Visitor<Integer>{
         return ticksPerQuarterNote;
     }
     public Integer on(Chord c) {
-       	ticksPerQuarterNote = lcm(ticksPerQuarterNote, c.getLength().den);
+       	ticksPerQuarterNote = lcm(ticksPerQuarterNote, c.getLength().times(baseNoteLength).den);
         return ticksPerQuarterNote;
     }
     
     public Integer on(Tuplet t) {
-        ticksPerQuarterNote = lcm(ticksPerQuarterNote, t.getNoteLength().den);
+        ticksPerQuarterNote = lcm(ticksPerQuarterNote, t.getNoteLength().times(baseNoteLength).den);
         return ticksPerQuarterNote;
     }
     
     public Integer on(Note n) {
-    	System.out.println(n.getLength().den);
-    	ticksPerQuarterNote = lcm(ticksPerQuarterNote, n.getLength().den);
+    	ticksPerQuarterNote = lcm(ticksPerQuarterNote, n.getLength().times(baseNoteLength).den);
         return ticksPerQuarterNote;
     }
     public Integer on(Rest r) {
-    	ticksPerQuarterNote = lcm(ticksPerQuarterNote, r.getLength().den);
+    	ticksPerQuarterNote = lcm(ticksPerQuarterNote, r.getLength().times(baseNoteLength).den);
         return ticksPerQuarterNote;
     }
     public Integer ABCMusicTicks(ABCmusic e){
