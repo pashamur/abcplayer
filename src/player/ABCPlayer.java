@@ -12,11 +12,14 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
 	private int ticksPerQuarterNote;
 	private Header h;
 	private int lastTick = 0;
+	private int[] localAccidental = {0,0,0,0,0,0,0,0};
+	private int[] zeroAccidental = {0,0,0,0,0,0,0,0};
 	
 	public ABCPlayer(int ticks, int bpm, Header h){
 		try {
 			player = new SequencePlayer(ticks, bpm);
 			ticksPerQuarterNote = ticks;
+			this.h = h;
 		} catch (MidiUnavailableException e) {
 	        e.printStackTrace();
 	    } catch (InvalidMidiDataException e) {
@@ -34,10 +37,11 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         for (int i=0;i<v.size;i++) {
             ABCPlayer(v.getMajorSection(i));
         }
+        // Reset tick after every voice
+        lastTick = 0;
         return player;
     }
     public SequencePlayer on(MajorSection ms) {
-        StringBuilder s=new StringBuilder();
         for (int i=0;i<ms.size;i++) {
             ABCPlayer(ms.getSection(i));
         }
@@ -53,6 +57,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         for (int i=0;i<m.size;i++) {
             ABCPlayer(m.getElements(i));
         }
+        localAccidental = zeroAccidental.clone();
         return player;
     }
     public SequencePlayer on(Chord c) {
@@ -61,7 +66,16 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         for (int i=0;i<c.size;i++) {
         	Note note = c.getNote(i);
         	Pitch p = new Pitch(note.value).transpose(note.octave*Pitch.OCTAVE);
-        	if (note.getHasAccidental()) p.transpose(note.getAccidental());
+        	if (note.getHasAccidental()){
+        		p.transpose(note.getAccidental());
+        		localAccidental[note.value-'A'] = note.getAccidental();
+        	}
+        	else if(localAccidental[note.value-'A'] != 0){
+        		p.transpose(localAccidental[note.value-'A']);
+        	}
+        	else{
+        		p.transpose(h.getAccidental(note.value));
+        	}
         	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
         }
         lastTick = lastTick+noteLengthInTicks;
@@ -73,7 +87,16 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         for (int i=0;i<t.size;i++){ 
         	Note note = t.getNote(i);
         	Pitch p = new Pitch(note.value).transpose(note.octave*Pitch.OCTAVE);
-        	if (note.getHasAccidental()) p.transpose(note.getAccidental());
+        	if (note.getHasAccidental()){
+        		p.transpose(note.getAccidental());
+        		localAccidental[note.value-'A'] = note.getAccidental();
+        	}
+        	else if(localAccidental[note.value-'A'] != 0){
+        		p.transpose(localAccidental[note.value-'A']);
+        	}
+        	else{
+        		p.transpose(h.getAccidental(note.value));
+        	}
         	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
         	lastTick = lastTick+noteLengthInTicks;
         }
@@ -82,8 +105,16 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     public SequencePlayer on(Note n) {
     	Pitch p = new Pitch(n.value).transpose(n.octave*Pitch.OCTAVE);
         
-    	if (n.getHasAccidental()) p.transpose(n.getAccidental());
-        
+    	if (n.getHasAccidental()){
+    		p.transpose(n.getAccidental());
+    		localAccidental[n.value-'A'] = n.getAccidental();
+    	}
+    	else if(localAccidental[n.value-'A'] != 0){
+    		p.transpose(localAccidental[n.value-'A']);
+    	}
+    	else{
+    		p.transpose(h.getAccidental(n.value));
+    	}
     	int noteLengthInTicks = (ticksPerQuarterNote*n.getLength().num)/n.getLength().den;
 
     	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
