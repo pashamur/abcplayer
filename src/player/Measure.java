@@ -38,49 +38,77 @@ public class Measure implements ABCmusic {
                 length=length.plus(rest.getLength());
             }
             else if (current.type.equals(Token.Type.tuplet_spec)) {
-                int nTuplet=current.getValue();
-                Rational noteLength = null;
-                Token temp;
-                Note[] note=new Note[nTuplet];
-                for (int i=0;i<nTuplet;i++) {
-                    if ((point+i+2)>len) throw new RuntimeException("Missing note in a tuplet.");
-                    temp=tk.get(point+i+1);
-                    if (!temp.type.equals(Token.Type.note)) throw new RuntimeException("Missing note in a tuplet.");
-                    note[i]=temp.getNote();
-                    checkAccidental(note[i]);
-                    if (i==0) noteLength=note[i].getLength(); 
-                    else if (!noteLength.equals(note[i].getLength())) throw new RuntimeException("Tuplet notes have different length.");                    
-                }
-                Tuplet newTuplet=new Tuplet(nTuplet,note,noteLength);
+                Pair<Integer,Tuplet> tempP=findTuplet(point,current.getValue(),tk);
+                point=tempP.first;
+                Tuplet newTuplet=tempP.second;
                 elements.add(newTuplet);
                 length=length.plus(newTuplet.getLength());
-                point=point+nTuplet;
             }
             else if (current.type.equals(Token.Type.multinote_start)) {
-                Token temp;
-                List<Note> notes=new ArrayList<Note>();
-                Note note;
-                while ((++point)<len) {
-                    temp=tk.get(point);
-                    if (temp.type.equals(Token.Type.note)) {
-                        note=temp.getNote();
-                        checkAccidental(note);
-                        notes.add(note);
-                    }
-                    else if (temp.type.equals(Token.Type.multinote_end)) {
-                        Chord newChord=new Chord(notes);
-                        elements.add(newChord);
-                        length=length.plus(newChord.getLength());
-                        break;
-                    }
-                    else throw new RuntimeException("Illegal token within a chord.");
-                }
-                if (point==len) throw new RuntimeException("Missing multinote_end.");
+                Pair<Integer,Chord> tempP=findChord(point,tk);
+                point=tempP.first;
+                Chord newChord=tempP.second;
+                elements.add(newChord);
+                length=length.plus(newChord.getLength());
             }
             else throw new RuntimeException("Illegal token within a measure.");
             point++;
         }
         size=elements.size();   
+    }
+    private Pair<Integer,Tuplet> findTuplet(int point, int nTuplet, List<Token> tk) {
+        int len=tk.size();
+        Rational noteLength = null;
+        Token tempT;
+        Note tempN;
+        Chord tempC;
+        ABCmusic[] eList=new ABCmusic[nTuplet];
+        for (int i=0;i<nTuplet;i++) {
+            ++point;
+            if (point>=len) throw new RuntimeException("Missing note in a tuplet.");
+            tempT=tk.get(point);
+            if (tempT.type.equals(Token.Type.note)) {
+                tempN=tempT.getNote();
+                checkAccidental(tempN);
+                eList[i]=tempN;
+                if (i==0) noteLength=tempN.getLength(); 
+                else if (!noteLength.equals(tempN.getLength())) throw new RuntimeException("Tuplet notes have different length");
+            }
+            else if (tempT.type.equals(Token.Type.multinote_start)) {
+                Pair<Integer,Chord> tempP=findChord(point,tk);
+                point=tempP.first;
+                tempC=tempP.second;
+                eList[i]=tempC;
+                if (i==0) noteLength=tempC.getLength(); 
+                else if (!noteLength.equals(tempC.getLength())) throw new RuntimeException("Tuplet notes have different length");
+            }
+        }
+        Tuplet newTuplet=new Tuplet(nTuplet,eList,noteLength);
+        Pair<Integer,Tuplet> result=new Pair<Integer,Tuplet>(point,newTuplet);
+        return result;
+    }
+    private Pair<Integer,Chord> findChord(int point, List<Token> tk) {
+        int len=tk.size();
+        Token temp;
+        List<Note> notes=new ArrayList<Note>();
+        Note note;
+        Chord newChord=null;
+        while ((++point)<len) {
+            temp=tk.get(point);
+            if (temp.type.equals(Token.Type.note)) {
+                note=temp.getNote();
+                checkAccidental(note);
+                notes.add(note);
+            }
+            else if (temp.type.equals(Token.Type.multinote_end)) {
+                newChord=new Chord(notes);
+                break;
+            }
+            else throw new RuntimeException("Illegal token within a chord.");
+        }
+        if (point==len) throw new RuntimeException("Missing multinote_end.");
+        Pair<Integer,Chord> result=new Pair<Integer,Chord>(point,newChord);
+        return result;
     }
     /**
      * [Helper] change the accidental of note according to the previous accidentals recording in accidentalList.

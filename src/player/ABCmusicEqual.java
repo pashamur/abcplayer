@@ -60,7 +60,7 @@ public class ABCmusicEqual implements ABCmusic.Visitor<Boolean>{
         if(that.size!=t.size) return false;
         if(!that.getLength().equals(t.getLength())) return false;
         for (int i=0;i<t.size;i++)
-            if (!abcmusicEqual(t.getNote(i),that.getNote(i))) return false;
+            if (!abcmusicEqual(t.getElement(i),that.getElement(i))) return false;
         return true;
     }
     public Boolean on(Note n) {

@@ -67,4 +67,26 @@ public class MeasureTest {
             throw new RuntimeException("File error.");
         }
     }
+    // test chord in tuplet
+    @Test
+    public void MeasureTest_TupletofChord() {
+        String file = "sample_abc/testMeasure4.abc";
+        List<String> result = new ArrayList<String>();
+        try {
+            Header header = Main.readFile(file, result);
+            Lexer lexer = new Lexer(result, header);
+            List<Token> tk = lexer.getTokens(0);
+            Measure measure = new Measure(tk);
+            assertTrue(measure.getLength().equals(new Rational(15,1)));
+            assertEquals(8,measure.size);
+            assertTrue(measure.getElements(0) instanceof Tuplet);
+            Tuplet tempT=(Tuplet)measure.getElements(0);
+            assertTrue(tempT.getElement(2) instanceof Chord);
+            assertTrue(measure.getElements(7) instanceof Chord);
+            for (int i=1;i<7;i++) assertTrue(measure.getElements(i) instanceof Note);
+            assertEquals("(4E0(1)1E0(1)[1E0(1)B1(1)D1(1)]E1(1) E2(1/2) D-1(1/2) 0E0(1/2) E-1(1/2) 0E0(1) -2E0(1) [E1(8)-2E0(8)] ", ABCmusicToString.abcmusicToString(measure));
+        } catch (IOException e) {
+            throw new RuntimeException("File error.");
+        }
+    }
 }
