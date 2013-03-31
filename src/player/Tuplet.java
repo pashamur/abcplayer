@@ -17,13 +17,21 @@ public class Tuplet implements ABCmusic {
      * @throws RuntimeException("Tuplet spec does not match notes.") if length of note[] does not equal spec.
      */
     public Tuplet(int spec, Note[] n, Rational l) {
-    	noteLength = l;
         size=spec;
         int len=n.length;
         if (spec!=len) throw new RuntimeException("Tuplet spec does not match notes.");
-        if (spec==2) length=l.times(new Rational(3,1));
-        else if (spec==3) length=l.times(new Rational(2,1));
-        else if (spec==4) length=l.times(new Rational(3,1));
+        if (spec==2) {
+        	length=l.times(new Rational(3,1));
+        	noteLength=l.times(new Rational(3,2));
+        }
+        else if (spec==3) {
+        	length=l.times(new Rational(2,1));
+        	noteLength=l.times(new Rational(2,3));
+        }
+        else if (spec==4) {
+        	length=l.times(new Rational(3,1));
+        	noteLength=l.times(new Rational(3,4));
+        }
         else throw new RuntimeException("Tuplet-spec invalid.");        
         notes=new Note[spec];
         for (int i=0; i<len; i++) notes[i]=n[i].clone();
