@@ -48,7 +48,8 @@ public class MajorSection implements ABCmusic {
                 } 
                 else if (ni == nf) throw new RuntimeException("Unmatched repeat-start.");
                 else nf = handleRepeat(tk, ni, nm, nf);
-            } else if (state == 1) {
+            } 
+            else if (state == 1) {
                 if (nf == len)
                     throw new RuntimeException("Unmatched repeat-start.");
                 if (tk.get(nf).type.equals(Token.Type.repeat_start))
@@ -56,13 +57,20 @@ public class MajorSection implements ABCmusic {
                 if (ni == nf)
                     throw new RuntimeException("Empty repeat section.");
                 nf = handleRepeat(tk, ni, nm, nf);
-            } else if (state == 2) {
+            } 
+            else if (state == 2) {
                 if (nf == len)
                     sections.add(new Section(tk.subList(ni, nf)));
                 else if (tk.get(nf).type.equals(Token.Type.repeat_end))
                     throw new RuntimeException("Nested repeat_end.");
-                else
+                else {
+                    if (ni==nf) ;
+                    else if (!tk.get(nf-1).type.equals(Token.Type.simple_bar))
+                        sections.add(new Section(tk.subList(ni, nf)));
+                    else if (ni!=(nf-1))
+                        sections.add(new Section(tk.subList(ni, nf-1)));
                     state = 1;
+                }
             }
             ni = ++nf;
         }

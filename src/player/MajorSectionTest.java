@@ -132,4 +132,26 @@ public class MajorSectionTest {
             throw new RuntimeException("File error.");
         }
     }
+ // check nth-repeat with start A |: B |[1 C :| [2 D |: E |[1 F :| [2 G -> ABCBDEFEG
+    @Test
+    public void MajorSectionTest_NthRepeatFollowNthRepeat() {
+        String file = "sample_abc/testRepeat5.abc";
+        List<String> result = new ArrayList<String>();
+        try {
+            Header header = Main.readFile(file, result);
+            Lexer lexer = new Lexer(result, header);
+            List<Token> tk = lexer.getTokens(0);
+            MajorSection majorSection = new MajorSection(tk);
+            assertEquals(9, majorSection.size);
+            assertTrue(ABCmusicEqual.abcmusicEqual(majorSection.getSection(3), majorSection.getSection(1)));
+            assertFalse(ABCmusicEqual.abcmusicEqual(majorSection.getSection(2), majorSection.getSection(4)));
+            assertTrue(ABCmusicEqual.abcmusicEqual(majorSection.getSection(5), majorSection.getSection(7)));
+            Rational expMeter = new Rational(6, 1);
+            for (int i = 0; i < 6; i++)
+                assertTrue(expMeter.equals(majorSection.mList.get(i)));
+            //System.out.println(ABCmusicToString.abcmusicToString(majorSection));
+        } catch (IOException e) {
+            throw new RuntimeException("File error.");
+        }
+    }
 }
