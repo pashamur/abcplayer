@@ -68,8 +68,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         return player;
     }
     public SequencePlayer on(Chord c) {
-    	Rational noteLength = c.getLength().times(header.getL());
-    	int noteLengthInTicks = 4*noteLength.num*ticksPerQuarterNote/noteLength.den;
+    	int noteLengthInTicks = getNoteLengthInTicks(c);
     	    	
         for (int i=0;i<c.size;i++) {
         	Note note = c.getNote(i);
@@ -85,8 +84,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     }
     
     public SequencePlayer on(Tuplet t) {
-    	Rational noteLength = t.getNoteLength().times(header.getL());
-    	int noteLengthInTicks = 4*noteLength.num*ticksPerQuarterNote/noteLength.den;
+    	int noteLengthInTicks = getNoteLengthInTicks(t);
     	
         for (int i=0;i<t.size;i++){ 
         	ABCmusic elem = t.getElement(i);
@@ -105,25 +103,50 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     	    p=p.transpose(n.getAccidental());
     	else 
             p=p.transpose(header.getAccidental(n.value));
-    	Rational noteLength = n.getLength().times(header.getL());
-    	int noteLengthInTicks = 4*noteLength.num*ticksPerQuarterNote/noteLength.den;
+    
+    	int noteLengthInTicks = getNoteLengthInTicks(n);
     	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
     	lastTick = lastTick+noteLengthInTicks;
     		
         return player;
     }
+    
     public SequencePlayer on(Rest r) {
     	// Increment the tick counter (without adding any notes) by the length of the rest.
-    	Rational restLength = r.getLength().times(header.getL());
-    	int restLengthInTicks = 4*restLength.num*ticksPerQuarterNote/restLength.den;
-    	lastTick = lastTick + restLengthInTicks;
-        return player;
+    	lastTick = lastTick + getNoteLengthInTicks(r);
+        
+    	return player;
     }
     
     public SequencePlayer abcPlayer(ABCmusic e){
         return e.accept(this);
     }
     
+    /**
+     * Helper method that calculates the note length for a given ABCmusic element - either
+     * a note, a tuplet, a rest or a chord
+     * 
+     * @param elem Either a note, a tuplet, a rest or a chord to calculate note length
+     * @return an integer representing the length of a single note within elem
+     */
+    private int getNoteLengthInTicks(ABCmusic elem){
+    	// First we calculate the noteLength, which is simply the unscaled length of a note times the default note length
+    	Rational noteLength;
+    	
+    	if(elem instanceof Note)
+    		noteLength = ((Note)elem).getLength().times(header.getL());
+    	else if(elem instanceof Tuplet)
+    		noteLength = ((Tuplet)elem).getNoteLength().times(header.getL());
+    	else if(elem instanceof Chord)
+    		noteLength = ((Chord)elem).getLength().times(header.getL());
+    	else if(elem instanceof Rest)
+    		noteLength = ((Rest)elem).getLength().times(header.getL());
+    	else
+    		throw new RuntimeException("Parameter to getNoteLengthInTicks must be one of [Note, Tuplet, Chord, Rest]");
+    	
+    	// Now we convert our noteLength into ticks by scaling it by 4*ticksPerQuarterNote (which is ticks / full note)
+    	return (4*ticksPerQuarterNote)*noteLength.num/noteLength.den;
+    }
     /**
      * Helper method used to process a note inside a tuplet
      * 
