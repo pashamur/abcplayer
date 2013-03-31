@@ -2,7 +2,6 @@ package player;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
-
 import sound.Pitch;
 import sound.SequencePlayer;
 

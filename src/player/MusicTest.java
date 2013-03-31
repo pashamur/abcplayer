@@ -25,6 +25,33 @@ public class MusicTest {
             throw new RuntimeException("File error.");
         }
     }
+    // test 
+    @Test
+    public void MusicTest_InvalidRep0() {
+        String file = "sample_abc/testMusic0.abc";
+        List<String> result = new ArrayList<String>();
+        try {
+            Header header = Main.readFile(file, result);
+            Lexer lexer = new Lexer(result, header);
+            Music music = new Music(lexer);
+            assertFalse(music.checkRep());
+        } catch (IOException e) {
+            throw new RuntimeException("File error.");
+        }
+    }
+    @Test
+    public void MusicTest_InvalidRep1() {
+        String file = "sample_abc/testMusic1.abc";
+        List<String> result = new ArrayList<String>();
+        try {
+            Header header = Main.readFile(file, result);
+            Lexer lexer = new Lexer(result, header);
+            Music music = new Music(lexer);
+            assertFalse(music.checkRep());
+        } catch (IOException e) {
+            throw new RuntimeException("File error.");
+        }
+    }
     // check the correct number of voices are added, and the voices matches (checkRep())
     @Test
     public void MusicTest_MultiVoice2() {
@@ -35,7 +62,6 @@ public class MusicTest {
             Lexer lexer = new Lexer(result, header);
             Music music = new Music(lexer);
             assertEquals(2, music.size);
-            System.out.println(ABCmusicToString.abcmusicToString(music));
             assertTrue(music.checkRep());
         } catch (IOException e) {
             throw new RuntimeException("File error.");
@@ -50,7 +76,6 @@ public class MusicTest {
             Lexer lexer = new Lexer(result, header);
             Music music = new Music(lexer);
             assertEquals(3, music.size);
-            //System.out.println(ABCmusicToString.abcmusicToString(music));
             assertTrue(music.checkRep());
         } catch (IOException e) {
             throw new RuntimeException("File error.");

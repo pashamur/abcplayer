@@ -1,11 +1,9 @@
 package player;
 
 import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Test;
 
 public class ABCPlayerTest {
@@ -30,5 +28,4 @@ public class ABCPlayerTest {
             throw new RuntimeException("File error.");
         }
     }
-
 }
