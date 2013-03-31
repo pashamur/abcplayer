@@ -1,4 +1,4 @@
-package player;
+package lexer;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+
+import player.Rational;
+
+import abcmusic.Note;
 
 public class TokenTest {
     @Test

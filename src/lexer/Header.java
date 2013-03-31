@@ -1,10 +1,15 @@
-package player;
+package lexer;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import abcmusic.Pair;
+
+import player.Rational;
+
 
 public class Header {
     private int[] keySignature; // accidentals derived from key signature

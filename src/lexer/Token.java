@@ -1,10 +1,15 @@
-package player;
+package lexer;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import player.Rational;
+
+import abcmusic.Note;
+import abcmusic.Rest;
 
 public class Token {
     public static enum Type {

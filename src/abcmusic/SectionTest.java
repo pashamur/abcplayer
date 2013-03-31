@@ -1,4 +1,4 @@
-package player;
+package abcmusic;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lexer.Header;
+import lexer.Lexer;
+import lexer.Token;
+
 import org.junit.Test;
+
+import player.Main;
+import player.Rational;
 
 public class SectionTest {
     //test is the correct number of measures are generated and if length of measures are correct

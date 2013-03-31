@@ -1,4 +1,4 @@
-package player;
+package lexer;
 
 import static org.junit.Assert.*;
 
@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+
 
 public class LexerTest {
     // I also print the result of lexer of all the examples in sample_abc, which

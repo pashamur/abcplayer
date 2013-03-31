@@ -1,8 +1,10 @@
-package player;
+package abcmusic;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import player.Rational;
 
 public class NoteTest {
     /**

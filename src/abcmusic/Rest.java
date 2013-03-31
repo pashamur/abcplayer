@@ -1,4 +1,6 @@
-package player;
+package abcmusic;
+
+import player.Rational;
 
 public class Rest implements ABCmusic {
     private final Rational length;

@@ -1,4 +1,6 @@
-package player;
+package abcmusic;
+
+
 /*
  * convert AST to string for print out. Format for note: [\d]*[A-G][\d]([\d(/\d)*]), 
  * e.g. 1A-1(1/2) translates to ^A,1/2.

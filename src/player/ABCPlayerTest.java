@@ -4,7 +4,14 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import lexer.Header;
+import lexer.Lexer;
+import lexer.Token;
+
 import org.junit.Test;
+
+import abcmusic.MajorSection;
 
 public class ABCPlayerTest {
 

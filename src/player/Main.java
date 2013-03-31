@@ -12,6 +12,13 @@ import java.util.regex.Pattern;
 
 import javax.sound.midi.MidiUnavailableException;
 
+import lexer.Header;
+import lexer.Lexer;
+import lexer.Token;
+
+import abcmusic.ABCmusicToString;
+import abcmusic.Music;
+
 import sound.SequencePlayer;
 
 /**
@@ -102,6 +109,6 @@ public class Main {
         fw.close();
     }
     public static void main(String[] args) throws IOException {
-        play("sample_abc/test_fur_elise_bug.abc");
+        play("sample_abc/fur_elise.abc");
     }
 }

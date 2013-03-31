@@ -1,4 +1,4 @@
-package player;
+package abcmusic;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+
+import player.Rational;
+
 
 public class TupletTest {
     @Test

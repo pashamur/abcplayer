@@ -1,4 +1,4 @@
-package player;
+package abcmusic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -7,7 +7,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lexer.Header;
+import lexer.Lexer;
+import lexer.Token;
+
 import org.junit.Test;
+
+import player.Main;
+import player.Rational;
 
 public class VoiceTest {
     // check that the correct number of majorSections are added

@@ -1,7 +1,12 @@
-package player;
+package abcmusic;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lexer.Token;
+
+import player.Rational;
+
 
 public class Voice implements ABCmusic {
     private List<MajorSection> majorSections;

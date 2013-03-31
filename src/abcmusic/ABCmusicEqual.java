@@ -1,4 +1,5 @@
-package player;
+package abcmusic;
+
 
 public class ABCmusicEqual implements ABCmusic.Visitor<Boolean>{
     private ABCmusic other;

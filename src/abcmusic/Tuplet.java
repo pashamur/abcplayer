@@ -1,4 +1,6 @@
-package player;
+package abcmusic;
+
+import player.Rational;
 
 public class Tuplet implements ABCmusic {
     private final Rational length;

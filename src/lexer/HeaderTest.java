@@ -1,4 +1,4 @@
-package player;
+package lexer;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -13,6 +13,10 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+
+import abcmusic.Pair;
+
+import player.Rational;
 
 public class HeaderTest {
     @Test

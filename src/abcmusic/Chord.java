@@ -1,6 +1,9 @@
-package player;
+package abcmusic;
 
 import java.util.List;
+
+import player.Rational;
+
 
 public class Chord implements ABCmusic {
     public final int size;

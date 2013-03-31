@@ -1,7 +1,12 @@
-package player;
+package abcmusic;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lexer.Token;
+
+import player.Rational;
+
 
 public class Section implements ABCmusic{
     private List<Measure> measures;

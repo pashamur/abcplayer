@@ -1,4 +1,6 @@
-package player;
+package abcmusic;
+
+import player.Rational;
 
 public class Note implements ABCmusic {
     private boolean hasAccidental;

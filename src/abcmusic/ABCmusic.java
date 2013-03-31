@@ -1,4 +1,5 @@
-package player;
+package abcmusic;
+
 
 public interface ABCmusic {
     public interface Visitor<R> {

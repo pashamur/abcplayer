@@ -2,6 +2,19 @@ package player;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
+
+import lexer.Header;
+
+import abcmusic.ABCmusic;
+import abcmusic.Chord;
+import abcmusic.MajorSection;
+import abcmusic.Measure;
+import abcmusic.Music;
+import abcmusic.Note;
+import abcmusic.Rest;
+import abcmusic.Section;
+import abcmusic.Tuplet;
+import abcmusic.Voice;
 import sound.Pitch;
 import sound.SequencePlayer;
 
