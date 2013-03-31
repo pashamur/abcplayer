@@ -1,8 +1,5 @@
 package player;
 
-import player.ABCmusic.Visitor;
-import sound.SequencePlayer;
-
 public class ABCmusicTicks implements ABCmusic.Visitor<Integer>{
 	// Calculate ticks per quarter note
 	private int ticksPerQuarterNote = 1;
