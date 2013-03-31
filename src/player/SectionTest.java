@@ -19,7 +19,7 @@ public class SectionTest {
             Lexer lexer = new Lexer(result, header);
             List<Token> tk=lexer.getTokens(0);
             Section section=new Section(tk.subList(0,tk.size()-1));
-            assertEquals(4,section.size);
+            assertEquals(4,section.sizeInMeasures);
             Rational expMeter=new Rational(4,1);
             for (int i=0;i<4;i++)
                 assertTrue(expMeter.equals(section.mList.get(i)));
@@ -37,7 +37,7 @@ public class SectionTest {
             Lexer lexer = new Lexer(result, header);
             List<Token> tk=lexer.getTokens(0);
             Section section=new Section(tk.subList(0,tk.size()-1));
-            assertEquals(4,section.size);
+            assertEquals(4,section.sizeInMeasures);
             Rational expMeter=new Rational(4,1);
             for (int i=0;i<4;i++)
                 assertTrue(expMeter.equals(section.mList.get(i)));
@@ -55,7 +55,7 @@ public class SectionTest {
             Lexer lexer = new Lexer(result, header);
             List<Token> tk=lexer.getTokens(0);
             Section section=new Section(tk.subList(0,tk.size()-1));
-            assertEquals(6,section.size);
+            assertEquals(6,section.sizeInMeasures);
             Rational expMeter=new Rational(4,1);
             for (int i=0;i<6;i++)
                 assertTrue(expMeter.equals(section.mList.get(i)));
