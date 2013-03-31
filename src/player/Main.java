@@ -112,6 +112,6 @@ public class Main {
         fw.close();
     }
     public static void main(String[] args) throws IOException {
-        play("sample_abc/fur_elise.abc");
+        play("sample_abc/fur_elise_test.abc");
     }
 }
