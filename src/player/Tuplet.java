@@ -2,7 +2,8 @@ package player;
 
 public class Tuplet implements ABCmusic {
     private final Rational length;
-    private final int value;
+    private final Rational noteLength;
+    public final int size;
     private final Note[] notes;
     
     public <R> R accept(Visitor<R> t) {
@@ -16,7 +17,8 @@ public class Tuplet implements ABCmusic {
      * @throws RuntimeException("Tuplet spec does not match notes.") if length of note[] does not equal spec.
      */
     public Tuplet(int spec, Note[] n, Rational l) {
-        value=spec;
+    	noteLength = l;
+        size=spec;
         int len=n.length;
         if (spec!=len) throw new RuntimeException("Tuplet spec does not match notes.");
         if (spec==2) length=l.times(new Rational(3,1));
@@ -29,11 +31,11 @@ public class Tuplet implements ABCmusic {
     public Rational getLength() {
         return length.clone();
     }
-    public int getValue() {
-        return value;
-    }
-    public Note getNotes(int i) {
-        if (i>=value) throw new RuntimeException("Index out of bound in Tuplet.");
+    public Note getNote(int i) {
+        if (i>=size) throw new RuntimeException("Index out of bound in Tuplet.");
         return notes[i].clone();
+    }
+    public Rational getNoteLength(){
+    	return noteLength.clone();
     }
 }

@@ -143,7 +143,7 @@ public class Header {
 
     public int getAccidental(char c) {
         if (c < 'A' || c > 'G')
-            throw new RuntimeException("Basenote out of bouand.");
+            throw new RuntimeException("Basenote out of bound.");
         return keySignature[c - 'A'];
     }
 

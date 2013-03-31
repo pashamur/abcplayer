@@ -48,7 +48,6 @@ public class Lexer {
         Pattern wordPattern = Pattern.compile("[^\\s]+");
 
         Pattern basenotePattern = Pattern.compile("[a-gA-G]");
-        Pattern numberPattern = Pattern.compile("\\d+");
         Pattern accidentalPattern = Pattern.compile("\\^\\^|__|=|\\^|_");
         Pattern barlinePattern = Pattern
                 .compile("\\|\\||\\[\\||\\|\\]|\\|:|:\\||\\|");
@@ -82,7 +81,6 @@ public class Lexer {
         for (; i < input.size(); i++) {
             Matcher matcher = VPattern.matcher(input.get(i));
             Matcher matcher1;
-            Matcher matcher2;
             if (matcher.matches()) {
                 String temp=input.get(i).substring(2);
                 Matcher wordMatcher = wordPattern.matcher(temp);

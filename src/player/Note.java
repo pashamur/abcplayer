@@ -20,8 +20,8 @@ public class Note implements ABCmusic {
      */
     public Note(char v, int o, int a, boolean b, Rational l) {
         hasAccidental=b;
-        accidental=a;
         octave=o;
+        accidental=a;
         value=v;
         length=l;
     }
