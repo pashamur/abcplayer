@@ -46,6 +46,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         // begin to change here, give the lexer a list of strings as the input,
         // stored in result
         result = new ArrayList<String>();
@@ -80,6 +81,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("^^A,,/2B5/C:|");
         Lexer lexer = new Lexer(result, header);
@@ -104,6 +106,7 @@ public class LexerTest {
         String temp;
         int head = 0;
         Header header = null;
+        
         while ((temp = reader.readLine()) != null) {
             Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
             if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
@@ -115,6 +118,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("[A,B/]");
         Lexer lexer = new Lexer(result, header);
@@ -151,6 +155,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("(2^A,B");
         Lexer lexer = new Lexer(result, header);
@@ -186,6 +191,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("A]|]");
         Lexer lexer = new Lexer(result, header);
@@ -220,6 +226,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("__A||");
         Lexer lexer = new Lexer(result, header);
@@ -253,6 +260,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("|[1A,,");
         Lexer lexer = new Lexer(result, header);
@@ -288,6 +296,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("||:A,,/");
         Lexer lexer = new Lexer(result, header);
@@ -323,6 +332,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("(5abcde");
         Lexer lexer = new Lexer(result, header);
@@ -355,6 +365,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("habc");
         Lexer lexer = new Lexer(result, header);
@@ -386,6 +397,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("bc ^A,,1/4/ ");
         Lexer lexer = new Lexer(result, header);
@@ -418,6 +430,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("==A,,2");
         Lexer lexer = new Lexer(result, header);
@@ -450,6 +463,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("[3ABC");
         Lexer lexer = new Lexer(result, header);
@@ -482,6 +496,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("A^,2");
         Lexer lexer = new Lexer(result, header);
@@ -514,6 +529,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         result = new ArrayList<String>();
         result.add("( 3abc");
         Lexer lexer = new Lexer(result, header);
@@ -548,6 +564,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         // begin to change here, give the lexer a list of strings as the input,
         // stored in result
         result = new ArrayList<String>();
@@ -589,6 +606,7 @@ public class LexerTest {
                 header = new Header(result);
             }
         }
+        reader.close();
         // begin to change here, give the lexer a list of strings as the input,
         // stored in result
         result = new ArrayList<String>();
