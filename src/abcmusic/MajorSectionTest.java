@@ -14,13 +14,14 @@ import org.junit.Test;
 
 import player.Main;
 import player.Rational;
+import test.TestHelpers;
 
 
 public class MajorSectionTest {
     // test in case of no repeat, only one section is added. e.g A -> A
     @Test
     public void MajorSectionTest_NoRepeat() {
-    	List<Token> tk = getLexerTokensFromFile("sample_abc/scale.abc");
+    	List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/scale.abc");
     	MajorSection majorSection = new MajorSection(tk.subList(0,tk.size()-1));
     	
     	assertEquals(1, majorSection.size);
@@ -32,7 +33,7 @@ public class MajorSectionTest {
     // e.g. A:| -> AA
     @Test
     public void MajorSectionTest_RepeatEnd() {
-    	List<Token> tk = getLexerTokensFromFile("sample_abc/testRepeat0.abc");
+    	List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/testRepeat0.abc");
     	MajorSection majorSection = new MajorSection(tk);
 
     	assertEquals(2, majorSection.size);
@@ -44,7 +45,7 @@ public class MajorSectionTest {
     // check one single repeat followed by a non-repeating section, e.g. A :| B -> AAB
     @Test
     public void MajorSectionTest_RepeatNotEnd() {
-    	List<Token> tk = getLexerTokensFromFile("sample_abc/testRepeat1.abc");
+    	List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/testRepeat1.abc");
     	MajorSection majorSection = new MajorSection(tk);
     	
     	assertEquals(3, majorSection.size);
@@ -58,7 +59,7 @@ public class MajorSectionTest {
     // check nth-repeat, e.g. A |[1 B:| [2 C -> ABAC
     @Test
     public void MajorSectionTest_NthRepeat() {
-    	List<Token> tk = getLexerTokensFromFile("sample_abc/testRepeat2.abc");
+    	List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/testRepeat2.abc");
     	MajorSection majorSection = new MajorSection(tk);
     	
     	assertEquals(4, majorSection.size);
@@ -71,7 +72,7 @@ public class MajorSectionTest {
     // check single repeat start, e.g. A |: B :| C -> ABBC
     @Test
     public void MajorSectionTest_RepeatStart() {
-    	List<Token> tk = getLexerTokensFromFile("sample_abc/testRepeat3.abc");
+    	List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/testRepeat3.abc");
     	MajorSection majorSection = new MajorSection(tk);
     	
     	assertEquals(4, majorSection.size);
@@ -83,7 +84,7 @@ public class MajorSectionTest {
     // check nth-repeat with start A |: B |[1 C :| [2 D -> ABCBD
     @Test
     public void MajorSectionTest_NthRepeatStart() {
-    	List<Token> tk = getLexerTokensFromFile("sample_abc/testRepeat4.abc");
+    	List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/testRepeat4.abc");
     	MajorSection majorSection = new MajorSection(tk);
     	
     	assertEquals(5, majorSection.size);
@@ -96,7 +97,7 @@ public class MajorSectionTest {
  // check nth-repeat with start A |: B |[1 C :| [2 D |: E |[1 F :| [2 G -> ABCBDEFEG
     @Test
     public void MajorSectionTest_NthRepeatFollowNthRepeat() {
-    	List<Token> tk = getLexerTokensFromFile("sample_abc/testRepeat5.abc");
+    	List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/testRepeat5.abc");
     	MajorSection majorSection = new MajorSection(tk);
     	
     	assertEquals(9, majorSection.size);
@@ -108,18 +109,5 @@ public class MajorSectionTest {
     		assertTrue(expMeter.equals(majorSection.mList.get(i)));
     }
     
-    // Load a file and get the first measure from it
-    private List<Token> getLexerTokensFromFile(String filename){
-        List<String> result = new ArrayList<String>();
-        try {
-        	Header header=Main.readFile(filename,result);
-            Lexer lexer = new Lexer(result, header);
-            List<Token> tk=lexer.getTokens(0);
-            
-            return tk;
-        }
-        catch (IOException e) {
-            throw new RuntimeException("File error.");
-        }
-	}
+    
 }

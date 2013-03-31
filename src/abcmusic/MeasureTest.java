@@ -14,12 +14,13 @@ import org.junit.Test;
 
 import player.Main;
 import player.Rational;
+import test.TestHelpers;
 
 
 public class MeasureTest {
     @Test
     public void MeasureTest_Basic() {
-    	Measure measure = getFirstMeasureFromFile("sample_abc/testMeasure1.abc");
+    	Measure measure = TestHelpers.getFirstMeasureFromFile("sample_abc/testMeasure1.abc");
 
     	assertTrue(measure.getLength().equals(new Rational(15,1)));
     	assertEquals(8,measure.size);
@@ -32,7 +33,7 @@ public class MeasureTest {
     //test if local accidental is applied correctly to following notes on the same octave
     @Test
     public void MeasureTest_LocalAccidental() {
-    	Measure measure = getFirstMeasureFromFile("sample_abc/testMeasure2.abc");
+    	Measure measure = TestHelpers.getFirstMeasureFromFile("sample_abc/testMeasure2.abc");
  
     	assertTrue(measure.getLength().equals(new Rational(3,1)));
     	assertEquals(1,measure.size);
@@ -42,7 +43,7 @@ public class MeasureTest {
     //test if local accidental overwriting the previous ones is applied
     @Test
     public void MeasureTest_LocalAccidentalChange() {
-    	Measure measure = getFirstMeasureFromFile("sample_abc/testMeasure3.abc");
+    	Measure measure = TestHelpers.getFirstMeasureFromFile("sample_abc/testMeasure3.abc");
 
     	assertTrue(measure.getLength().equals(new Rational(15,1)));
     	assertEquals(8,measure.size);
@@ -55,7 +56,7 @@ public class MeasureTest {
     // test chord in tuplet
     @Test
     public void MeasureTest_TupletofChord() {
-    	Measure measure = getFirstMeasureFromFile("sample_abc/testMeasure4.abc");
+    	Measure measure = TestHelpers.getFirstMeasureFromFile("sample_abc/testMeasure4.abc");
         
     	assertTrue(measure.getLength().equals(new Rational(15,1)));
     	assertEquals(8,measure.size);
@@ -67,21 +68,4 @@ public class MeasureTest {
     	assertEquals("(4E0(1)1E0(1)[1E0(1)B1(1)D1(1)]E1(1) E2(1/2) D-1(1/2) 0E0(1/2) E-1(1/2) 0E0(1) -2E0(1) [E1(8)-2E0(8)] ", ABCmusicToString.abcmusicToString(measure));
     }
     
-    
-    
-    // Load a file and get the first measure from it
-    private Measure getFirstMeasureFromFile(String filename){
-        List<String> result = new ArrayList<String>();
-        try {
-        	Header header=Main.readFile(filename,result);
-            Lexer lexer = new Lexer(result, header);
-            List<Token> tk=lexer.getTokens(0);
-            Measure measure = new Measure(tk);
-            
-            return measure;
-        }
-        catch (IOException e) {
-            throw new RuntimeException("File error.");
-        }
-	}
 }

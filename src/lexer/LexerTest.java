@@ -15,9 +15,10 @@ import org.junit.Test;
 
 public class LexerTest {
     // I also print the result of lexer of all the examples in sample_abc, which
-    // looks right
-    // if you want to write a new test, follow the rule in LexerTest1
+    // looks right. If you want to write a new test, follow the rule in LexerTest1
 
+	
+	
     @Test
     public void LexerTest1() throws IOException {
         // do not change anything here, it specifies a header with M 4/4 and L

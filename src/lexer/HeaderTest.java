@@ -17,11 +17,12 @@ import org.junit.Test;
 import abcmusic.Pair;
 
 import player.Rational;
+import test.TestHelpers;
 
 public class HeaderTest {
 	@Test
     public void HeaderTest1() throws IOException{
-        Header header = getFileHeader("sample_abc/invention.abc");
+        Header header = TestHelpers.getFileHeader("sample_abc/invention.abc");
         
         assertTrue(header.getDefaultNoteLength().equals(new Rational(1,8)));
         assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(4,4)));
@@ -37,7 +38,7 @@ public class HeaderTest {
 
     @Test
     public void HeaderTest2() throws IOException{
-    	Header header = getFileHeader("sample_abc/prelude.abc");
+    	Header header = TestHelpers.getFileHeader("sample_abc/prelude.abc");
         
         assertTrue(header.getDefaultNoteLength().equals(new Rational(1,16)));
         assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(4,4)));
@@ -54,7 +55,7 @@ public class HeaderTest {
  
     @Test
     public void HeaderTest3() throws IOException{
-    	Header header = getFileHeader("sample_abc/little_night_music.abc");
+    	Header header = TestHelpers.getFileHeader("sample_abc/little_night_music.abc");
        
         assertTrue(header.getDefaultNoteLength().equals(new Rational(1,8)));
         assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(4,4)));
@@ -67,7 +68,7 @@ public class HeaderTest {
     
     @Test
     public void HeaderTest4() throws IOException{
-    	Header header = getFileHeader("sample_abc/fur_elise.abc");
+    	Header header = TestHelpers.getFileHeader("sample_abc/fur_elise.abc");
         
         assertTrue(header.getDefaultNoteLength().equals(new Rational(1,16)));
         assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(3,8)));
@@ -80,42 +81,7 @@ public class HeaderTest {
         assertArrayEquals(expectedKeySignature, header.getKeySignature()); 
         
     }
-    
-    /**
-     * Helper function that reads lines from a file and creates a valid header
-     * 
-     * @param filename The filename of the music
-     * @return A valid header with information extracted from the file
-     * @throws IOException If we have trouble finding the file
-     */
-    
-	public Header getFileHeader(String filename) throws IOException {
-        List<String> headerLines = new ArrayList<String>();
-        FileReader fileReader;
-        try {
-            fileReader = new FileReader(filename);
-        } catch (FileNotFoundException e) {
-            throw new IOException("Cannot find the file");
-        }
-        
-        BufferedReader reader = new BufferedReader(fileReader);
-        String nextLine;
-        int head = 0;
-        Header header = null;
-        
-        while ((nextLine = reader.readLine()) != null) {
-            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
-            if ((!commentPattern.matcher(nextLine).matches()) && (!nextLine.equals(""))) {
-                headerLines.add(nextLine);
-            }
-            if ((!(nextLine.equals(""))) && (nextLine.substring(0, 1).equals("K"))
-                    && (head == 0)) {
-                head = 1;
-                header = new Header(headerLines);
-            }
-        }
-        return header;
-	}
+   
 	
 }
 
