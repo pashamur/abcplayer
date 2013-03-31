@@ -11,6 +11,7 @@ public class NoteTest {
      * 0) Test constructor
      * 1) Test that we can call setAccidental on a valid note
      * 2) Test that we can clone a note to get an identical note
+     * 3) Test that attempting to instantiate an invalid note causes a RuntimeException
      */
     @Test
     public void NoteTest_Basic0() {
@@ -42,6 +43,7 @@ public class NoteTest {
         Note origin=new Note('C',0,0,false,new Rational(1,4));
         Note copy=origin.clone();
         assertTrue(copy.equals(origin));
+        
         copy.setAccidental(1,true);
         Note backup=new Note('C',0,0,false,new Rational(1,4));
         assertTrue(origin.equals(backup));
@@ -49,14 +51,8 @@ public class NoteTest {
         
     }
     // test invalid note
-    @Test
+    @Test(expected=RuntimeException.class)
     public void NoteTest_invalidNote() {
-        boolean flag=false;
-        try {
-            new Note('c',0,0,false,new Rational(1,4));
-        } catch(RuntimeException e) {
-            flag=true;
-        }
-        assertTrue(flag);
+        new Note('c',0,0,false,new Rational(1,4));
     }
 }

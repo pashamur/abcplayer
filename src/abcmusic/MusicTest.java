@@ -16,74 +16,50 @@ import player.Main;
 public class MusicTest {
     @Test
     public void MusicTest_SingleVoice() {
-        String file = "sample_abc/paddy.abc";
-        List<String> result = new ArrayList<String>();
-        try {
-            Header header = Main.readFile(file, result);
-            Lexer lexer = new Lexer(result, header);
-            Music music = new Music(lexer);
-            assertEquals(1, music.size);
-            //System.out.println(ABCmusicToString.abcmusicToString(music));
-            //System.out.println(ABCmusicTicks.ABCMusicTicks(music));
-            assertTrue(music.checkRep());
-        } catch (IOException e) {
-            throw new RuntimeException("File error.");
-        }
+    	Music music = getMusicFromFile("sample_abc/paddy.abc");
+        assertEquals(1, music.numberOfVoices);
+        assertTrue(music.checkRep());
     }
-    // test 
+
     @Test
     public void MusicTest_InvalidRep0() {
-        String file = "sample_abc/testMusic0.abc";
-        List<String> result = new ArrayList<String>();
-        try {
-            Header header = Main.readFile(file, result);
-            Lexer lexer = new Lexer(result, header);
-            Music music = new Music(lexer);
-            assertFalse(music.checkRep());
-        } catch (IOException e) {
-            throw new RuntimeException("File error.");
-        }
+    	Music music = getMusicFromFile("sample_abc/testMusic0.abc");
+        assertFalse(music.checkRep());
     }
+    
     @Test
     public void MusicTest_InvalidRep1() {
-        String file = "sample_abc/testMusic1.abc";
-        List<String> result = new ArrayList<String>();
-        try {
-            Header header = Main.readFile(file, result);
-            Lexer lexer = new Lexer(result, header);
-            Music music = new Music(lexer);
-            assertFalse(music.checkRep());
-        } catch (IOException e) {
-            throw new RuntimeException("File error.");
-        }
+    	Music music = getMusicFromFile("sample_abc/testMusic1.abc");
+        assertFalse(music.checkRep());
     }
     // check the correct number of voices are added, and the voices matches (checkRep())
     @Test
     public void MusicTest_MultiVoice2() {
-        String file = "sample_abc/invention.abc";
-        List<String> result = new ArrayList<String>();
-        try {
-            Header header = Main.readFile(file, result);
-            Lexer lexer = new Lexer(result, header);
-            Music music = new Music(lexer);
-            assertEquals(2, music.size);
-            assertTrue(music.checkRep());
-        } catch (IOException e) {
-            throw new RuntimeException("File error.");
-        }
+    	Music music = getMusicFromFile("sample_abc/invention.abc");
+        assertEquals(2, music.numberOfVoices);
+        assertTrue(music.checkRep());
     }
+    
     @Test
     public void MusicTest_MultiVoice3() {
-        String file = "sample_abc/prelude.abc";
+    	Music music = getMusicFromFile("sample_abc/prelude.abc");
+        assertEquals(3, music.numberOfVoices);
+        assertTrue(music.checkRep());
+    }
+    
+    
+    
+    // Load a file and create a music instance from it
+    private Music getMusicFromFile(String filename){
         List<String> result = new ArrayList<String>();
         try {
-            Header header = Main.readFile(file, result);
+            Header header = Main.readFile(filename, result);
             Lexer lexer = new Lexer(result, header);
             Music music = new Music(lexer);
-            assertEquals(3, music.size);
-            assertTrue(music.checkRep());
-        } catch (IOException e) {
+            return music;
+        }
+        catch (IOException e) {
             throw new RuntimeException("File error.");
         }
-    }
+	}
 }

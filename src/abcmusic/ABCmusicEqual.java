@@ -9,8 +9,8 @@ public class ABCmusicEqual implements ABCmusic.Visitor<Boolean>{
     public Boolean on(Music mu) {
         if (!(other instanceof Music)) return false;
         Music that = (Music) other;
-        if(that.size!=mu.size) return false;
-        for (int i=0;i<mu.size;i++) 
+        if(that.numberOfVoices!=mu.numberOfVoices) return false;
+        for (int i=0;i<mu.numberOfVoices;i++) 
             if (!abcmusicEqual(mu.getVoice(i),that.getVoice(i))) return false;
         return true;
     }

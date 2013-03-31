@@ -14,15 +14,15 @@ package abcmusic;
  * one voice is included in {V0: ... }
  */
 public class ABCmusicToString implements ABCmusic.Visitor<String>{
-    public String on(Music mu){
-        int len=mu.size;
+    public String on(Music music){
+        int len = music.numberOfVoices;
         StringBuilder s=new StringBuilder();
         s.append("MU:\n");
         for (int i=0;i<len;i++) {
             s.append("{V");
             s.append((char)(i+'0'));
             s.append(":\n");
-            s.append(abcmusicToString(mu.getVoice(i)));
+            s.append(abcmusicToString(music.getVoice(i)));
             s.append("}");
             s.append("\n");
         }
