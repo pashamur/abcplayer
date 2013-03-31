@@ -10,14 +10,22 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     // Our main player for the music
 	private SequencePlayer player;
 	private int ticksPerQuarterNote;
-	private Header h;
+	private Header header;
 	private int lastTick = 0;
 	
+	/**
+	 * Construct a new ABCPlayer with the correct number of ticks per quarter note,
+	 * beats per minute, and a valid parsed header
+	 * 
+	 * @param ticks Number of ticks per quarter note. Must be a non-negative integer
+	 * @param bpm Number of beats (quarter notes) per minute. Must be non-negative integer
+	 * @param head A parsed representation of the header
+	 */
 	public ABCPlayer(int ticks, int bpm, Header head){
 		try {
 			player = new SequencePlayer(ticks, bpm);
 			ticksPerQuarterNote = ticks;
-			h = head;
+			header = head;
 		} catch (MidiUnavailableException e) {
 	        e.printStackTrace();
 	    } catch (InvalidMidiDataException e) {
@@ -26,12 +34,14 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
 	}
 	
 	public SequencePlayer on(Music mu){
+		// Process every voice in the music, one at a time 
         for (int i=0;i<mu.size;i++) {
             abcPlayer(mu.getVoice(i));
         }
         return player;
     }
     public SequencePlayer on(Voice v) {
+    	// Process all the major sections in the voice one by one.
         for (int i=0;i<v.size;i++) {
             abcPlayer(v.getMajorSection(i));
         }
@@ -58,7 +68,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         return player;
     }
     public SequencePlayer on(Chord c) {
-    	Rational noteLength = c.getLength().times(h.getL());
+    	Rational noteLength = c.getLength().times(header.getL());
     	int noteLengthInTicks = 4*noteLength.num*ticksPerQuarterNote/noteLength.den;
     	    	
         for (int i=0;i<c.size;i++) {
@@ -67,14 +77,15 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         	if (note.getHasAccidental())
         		p=p.transpose(note.getAccidental());
         	else
-        		p=p.transpose(h.getAccidental(note.value));
+        		p=p.transpose(header.getAccidental(note.value));
         	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
         }
         lastTick = lastTick+noteLengthInTicks;
         return player;
     }
+    
     public SequencePlayer on(Tuplet t) {
-    	Rational noteLength = t.getNoteLength().times(h.getL());
+    	Rational noteLength = t.getNoteLength().times(header.getL());
     	int noteLengthInTicks = 4*noteLength.num*ticksPerQuarterNote/noteLength.den;
     	
         for (int i=0;i<t.size;i++){ 
@@ -83,20 +94,21 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         	if (note.getHasAccidental())
         	    p=p.transpose(note.getAccidental());
         	else 
-                p=p.transpose(h.getAccidental(note.value));
+                p=p.transpose(header.getAccidental(note.value));
         	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
         	lastTick = lastTick+noteLengthInTicks;
         }
         return player;
     }
+    
     public SequencePlayer on(Note n) {
     	Pitch p = new Pitch(n.value).transpose(n.octave*Pitch.OCTAVE);
         
     	if (n.getHasAccidental())
     	    p=p.transpose(n.getAccidental());
     	else 
-            p=p.transpose(h.getAccidental(n.value));
-    	Rational noteLength = n.getLength().times(h.getL());
+            p=p.transpose(header.getAccidental(n.value));
+    	Rational noteLength = n.getLength().times(header.getL());
     	int noteLengthInTicks = 4*noteLength.num*ticksPerQuarterNote/noteLength.den;
     	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
     	lastTick = lastTick+noteLengthInTicks;
@@ -105,7 +117,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     }
     public SequencePlayer on(Rest r) {
     	// Increment the tick counter (without adding any notes) by the length of the rest.
-    	Rational restLength = r.getLength().times(h.getL());
+    	Rational restLength = r.getLength().times(header.getL());
     	int restLengthInTicks = 4*restLength.num*ticksPerQuarterNote/restLength.den;
     	lastTick = lastTick + restLengthInTicks;
         return player;
@@ -113,4 +125,5 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     public SequencePlayer abcPlayer(ABCmusic e){
         return e.accept(this);
     }
+
 }
