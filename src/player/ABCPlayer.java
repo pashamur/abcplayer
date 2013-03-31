@@ -89,14 +89,11 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     	int noteLengthInTicks = 4*noteLength.num*ticksPerQuarterNote/noteLength.den;
     	
         for (int i=0;i<t.size;i++){ 
-        	Note note = t.getNote(i);
-        	Pitch p = new Pitch(note.value).transpose(note.octave*Pitch.OCTAVE);
-        	if (note.getHasAccidental())
-        	    p=p.transpose(note.getAccidental());
-        	else 
-                p=p.transpose(header.getAccidental(note.value));
-        	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
-        	lastTick = lastTick+noteLengthInTicks;
+        	ABCmusic elem = t.getElement(i);
+        	if(elem instanceof Note)
+        		processNoteWithinTuplet((Note)elem, noteLengthInTicks);
+        	else if(elem instanceof Chord)
+        		processChordWithinTuplet((Chord)elem, noteLengthInTicks);
         }
         return player;
     }
@@ -122,8 +119,44 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     	lastTick = lastTick + restLengthInTicks;
         return player;
     }
+    
     public SequencePlayer abcPlayer(ABCmusic e){
         return e.accept(this);
+    }
+    
+    /**
+     * Helper method used to process a note inside a tuplet
+     * 
+     * @param note The note to be processed (from the tuplet)
+     * @param noteLengthInTicks Length of the note within the tuplet
+     */
+    private void processNoteWithinTuplet(Note note, int noteLengthInTicks){
+    	Pitch p = new Pitch(note.value).transpose(note.octave*Pitch.OCTAVE);
+    	if (note.getHasAccidental())
+    	    p=p.transpose(note.getAccidental());
+    	else 
+            p=p.transpose(header.getAccidental(note.value));
+    	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
+    	lastTick = lastTick+noteLengthInTicks;
+    }
+    
+    /**
+     * Helper method used to process a chord inside a tuplet
+     * 
+     * @param chord The chord to be processed (from the tuplet)
+     * @param noteLengthInTicks Length of a single note within the chord to be processed
+     */
+    private void processChordWithinTuplet(Chord chord, int noteLengthInTicks){
+    	for (int i=0;i<chord.size;i++) {
+        	Note note = chord.getNote(i);
+        	Pitch p = new Pitch(note.value).transpose(note.octave*Pitch.OCTAVE);
+        	if (note.getHasAccidental())
+        		p=p.transpose(note.getAccidental());
+        	else
+        		p=p.transpose(header.getAccidental(note.value));
+        	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
+        }
+        lastTick = lastTick+noteLengthInTicks;
     }
 
 }

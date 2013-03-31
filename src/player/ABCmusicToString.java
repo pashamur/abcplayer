@@ -69,7 +69,7 @@ public class ABCmusicToString implements ABCmusic.Visitor<String>{
     public String on(Tuplet t) {
         StringBuilder s=new StringBuilder("(");
         s.append(Integer.toString(t.size));
-        for (int i=0;i<t.size;i++) s.append(abcmusicToString(t.getNote(i)));
+        for (int i=0;i<t.size;i++) s.append(abcmusicToString(t.getElement(i)));
         return s.toString();
     }
     public String on(Note n) {
