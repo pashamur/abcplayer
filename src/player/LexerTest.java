@@ -559,6 +559,50 @@ public class LexerTest {
         assertTrue(":|".equals(lexer.getTokens(0).get(3).print()));
         
     }
+    
+    @Test
+    public void LexerTest17() throws IOException {
+        // do not change anything here, it specifies a header with M 4/4 and L
+        // 1/4, which will be used for the lexer
+        
+        //test another complicated one
+        String file = "sample_abc/piece1.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+            }
+        }
+        // begin to change here, give the lexer a list of strings as the input,
+        // stored in result
+        result = new ArrayList<String>();
+        result.add("||:[^^A,,,/4^^B , 1 /]:|");
+        Lexer lexer = new Lexer(result, header);
+        assertTrue("|".equals(lexer.getTokens(0).get(0).print()));
+        assertTrue("|:".equals(lexer.getTokens(0).get(1).print()));
+        assertTrue("[".equals(lexer.getTokens(0).get(2).print()));       
+        assertTrue("^^A,,,1/4".equals(lexer.getTokens(0).get(3).print()));
+        assertTrue("^^B,1/2".equals(lexer.getTokens(0).get(4).print()));     
+        assertTrue("]".equals(lexer.getTokens(0).get(5).print()));            
+        assertTrue(":|".equals(lexer.getTokens(0).get(6).print()));
+        
+    }
 
     
 }
