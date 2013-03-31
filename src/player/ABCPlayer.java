@@ -121,6 +121,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
      */
     
     private Pitch createPitchFromNote(Note note){
+    	
     	Pitch pitch = new Pitch(note.value).transpose(note.octave*Pitch.OCTAVE);
     	if (note.getHasAccidental())
     		pitch = pitch.transpose(note.getAccidental());
@@ -141,13 +142,13 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     	Rational noteLength;
     	
     	if(elem instanceof Note)
-    		noteLength = ((Note)elem).getLength().times(header.getL());
+    		noteLength = ((Note)elem).getLength().times(header.getDefaultNoteLength());
     	else if(elem instanceof Tuplet)
-    		noteLength = ((Tuplet)elem).getNoteLength().times(header.getL());
+    		noteLength = ((Tuplet)elem).getNoteLength().times(header.getDefaultNoteLength());
     	else if(elem instanceof Chord)
-    		noteLength = ((Chord)elem).getLength().times(header.getL());
+    		noteLength = ((Chord)elem).getLength().times(header.getDefaultNoteLength());
     	else if(elem instanceof Rest)
-    		noteLength = ((Rest)elem).getLength().times(header.getL());
+    		noteLength = ((Rest)elem).getLength().times(header.getDefaultNoteLength());
     	else
     		throw new RuntimeException("Parameter to getNoteLengthInTicks must be one of [Note, Tuplet, Chord, Rest]");
     	
@@ -161,6 +162,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
      * @param noteLengthInTicks Length of the note within the tuplet
      */
     private void processNoteWithinTuplet(Note note, int noteLengthInTicks){
+    	
     	Pitch pitch = createPitchFromNote(note);
     	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
     	lastTick = lastTick+noteLengthInTicks;
@@ -173,6 +175,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
      * @param noteLengthInTicks Length of a single note within the chord to be processed
      */
     private void processChordWithinTuplet(Chord chord, int noteLengthInTicks){
+    	
     	for (int i=0;i<chord.size;i++) {
         	Note note = chord.getNote(i);
         	Pitch pitch = createPitchFromNote(note);

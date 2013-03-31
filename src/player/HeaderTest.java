@@ -41,9 +41,9 @@ public class HeaderTest {
                 result = new ArrayList<String>();
             }
         }
-        assertTrue(header.getL().equals(new Rational(1,8)));
-        assertTrue(header.getM().equals(new Pair<Integer,Integer>(4,4)));
-        assertEquals(header.getQ(),140);
+        assertTrue(header.getDefaultNoteLength().equals(new Rational(1,8)));
+        assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(4,4)));
+        assertEquals(header.getTempo(),140);
         assertEquals(header.getNumVoices(),2);
         assertEquals(header.getVoiceIndex("1"),1);
         assertEquals(header.getVoiceIndex("2"),2);
@@ -82,9 +82,9 @@ public class HeaderTest {
                 result = new ArrayList<String>();
             }
         }
-        assertTrue(header.getL().equals(new Rational(1,16)));
-        assertTrue(header.getM().equals(new Pair<Integer,Integer>(4,4)));
-        assertEquals(header.getQ(),280);
+        assertTrue(header.getDefaultNoteLength().equals(new Rational(1,16)));
+        assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(4,4)));
+        assertEquals(header.getTempo(),280);
         assertEquals(header.getNumVoices(),3);
         assertEquals(header.getVoiceIndex("1"),1);
         assertEquals(header.getVoiceIndex("2"),2);
@@ -126,9 +126,9 @@ public class HeaderTest {
                 result = new ArrayList<String>();
             }
         }
-        assertTrue(header.getL().equals(new Rational(1,8)));
-        assertTrue(header.getM().equals(new Pair<Integer,Integer>(4,4)));
-        assertEquals(header.getQ(),280);
+        assertTrue(header.getDefaultNoteLength().equals(new Rational(1,8)));
+        assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(4,4)));
+        assertEquals(header.getTempo(),280);
         int[] keySign = new int[7];
         for (char i='A';i<'G';i++ ) {
            keySign[i-'A']=header.getAccidental(i); 
@@ -165,9 +165,9 @@ public class HeaderTest {
                 result = new ArrayList<String>();
             }
         }
-        assertTrue(header.getL().equals(new Rational(1,16)));
-        assertTrue(header.getM().equals(new Pair<Integer,Integer>(3,8)));
-        assertEquals(header.getQ(),240);
+        assertTrue(header.getDefaultNoteLength().equals(new Rational(1,16)));
+        assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(3,8)));
+        assertEquals(header.getTempo(),240);
         assertEquals(header.getNumVoices(),2);
         assertEquals(header.getVoiceIndex("1"),1);
         assertEquals(header.getVoiceIndex("2"),2);

@@ -36,10 +36,10 @@ public class Main {
         Lexer lexer = new Lexer(result, header);
         Music music=new Music(lexer);
         if (!music.checkRep()) throw new RuntimeException("Voices in music do not match.");
-        ABCmusicTicks ticks = new ABCmusicTicks(header.getL());
+        ABCmusicTicks ticks = new ABCmusicTicks(header.getDefaultNoteLength());
         int ticksPerQuarterNote = ticks.ABCMusicTicks(music);
         // Number of quarter notes (!) per minute: Tempo * default note length divided by 4 (to scale according to quarter notes)
-        int beatsPerMinute = (header.getQ() * header.getL().num * 4) / header.getL().den;
+        int beatsPerMinute = (header.getTempo() * header.getDefaultNoteLength().num * 4) / header.getDefaultNoteLength().den;
         ABCPlayer player = new ABCPlayer(ticksPerQuarterNote, beatsPerMinute, header);
         SequencePlayer p = player.on(music);
         try {
