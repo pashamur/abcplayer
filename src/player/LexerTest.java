@@ -21,6 +21,8 @@ public class LexerTest {
     public void LexerTest1() throws IOException {
         // do not change anything here, it specifies a header with M 4/4 and L
         // 1/4, which will be used for the lexer
+        
+        //test ^^A,,/4
         String file = "sample_abc/piece1.abc";
         List<String> result = new ArrayList<String>();
         FileReader fileReader;
@@ -54,6 +56,7 @@ public class LexerTest {
 
     @Test
     public void LexerTest2() throws IOException {
+        //test ^^A,,/2B5/C:|
         String file = "sample_abc/piece1.abc";
         List<String> result = new ArrayList<String>();
         FileReader fileReader;
@@ -88,6 +91,7 @@ public class LexerTest {
 
     @Test
     public void LexerTest3() throws IOException {
+        //test [A,B/]
         String file = "sample_abc/piece1.abc";
         List<String> result = new ArrayList<String>();
         FileReader fileReader;
@@ -123,6 +127,7 @@ public class LexerTest {
 
     @Test
     public void LexerTest4() throws IOException {
+       //test (2^A,B
         String file = "sample_abc/piece1.abc";
         List<String> result = new ArrayList<String>();
         FileReader fileReader;
@@ -157,6 +162,7 @@ public class LexerTest {
 
     @Test
     public void LexerTest5() throws IOException {
+        //test A]|]
         String file = "sample_abc/piece1.abc";
         List<String> result = new ArrayList<String>();
         FileReader fileReader;
@@ -190,6 +196,7 @@ public class LexerTest {
 
     @Test
     public void LexerTest6() throws IOException {
+        //test __A||
         String file = "sample_abc/piece1.abc";
         List<String> result = new ArrayList<String>();
         FileReader fileReader;
@@ -222,6 +229,7 @@ public class LexerTest {
 
     @Test
     public void LexerTest7() throws IOException {
+        //test |[1A,,
         String file = "sample_abc/piece1.abc";
         List<String> result = new ArrayList<String>();
         FileReader fileReader;
@@ -254,4 +262,41 @@ public class LexerTest {
 
     }
 
+    @Test
+    public void LexerTest8() throws IOException {
+        //test for ||:
+        String file = "sample_abc/piece1.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+            }
+        }
+        result = new ArrayList<String>();
+        result.add("||:A,,/");
+        Lexer lexer = new Lexer(result, header);
+        System.out.println(lexer.getTokens(0).get(0).print());
+        assertTrue("|".equals(lexer.getTokens(0).get(0).print()));
+        assertTrue("|:".equals(lexer.getTokens(0).get(1).print()));
+        assertTrue("A,,1/2".equals(lexer.getTokens(0).get(2).print()));
+
+    }
+
+    
 }

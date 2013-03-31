@@ -36,7 +36,7 @@ public class Main {
         for (char c='A';c<'H'; c=(char)(c+1))
             System.out.println(header.getAccidental(c));        
         Lexer lexer = new Lexer(result, header);
-        //writeTokens("../../dp1/lexer.txt",header,lexer);
+        writeTokens("d:/slexer.txt",header,lexer);
         Music music=new Music(lexer);
         if (!music.checkRep()) throw new RuntimeException("Voices in music do not match.");
         writeMusic("d:/music_origin.txt",music);
@@ -113,6 +113,6 @@ public class Main {
         fw.close();
     }
     public static void main(String[] args) throws IOException {
-        play("sample_abc/fur_elise.abc");
+        play("sample_abc/invention.abc");
     }
 }
