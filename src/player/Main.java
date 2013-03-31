@@ -39,7 +39,7 @@ public class Main {
         //writeTokens("../../dp1/lexer.txt",header,lexer);
         Music music=new Music(lexer);
         if (!music.checkRep()) throw new RuntimeException("Voices in music do not match.");
-        //writeMusic("../../dp1/music_origin.txt",music);
+        writeMusic("../../dp1/music_origin.txt",music);
         ABCmusicTicks ticks = new ABCmusicTicks(header.getL());
         int ticksPerQuarterNote = ticks.ABCMusicTicks(music);
         // Number of quarter notes (!) per minute: Tempo * default note length divided by 4 (to scale according to quarter notes)
@@ -112,6 +112,6 @@ public class Main {
         fw.close();
     }
     public static void main(String[] args) throws IOException {
-        play("sample_abc/fur_elise_end.abc");
+        play("sample_abc/invention.abc");
     }
 }
