@@ -52,7 +52,6 @@ public class TestHelpers {
                 header = new Header(headerLines);
             }
         }
-        reader.close();
         
         return header;
 	}
