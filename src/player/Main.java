@@ -57,7 +57,7 @@ public class Main {
         
         
         //print for check
-        FileWriter fw = new FileWriter("d:/1.txt");
+        FileWriter fw = new FileWriter("d:/fur_elise.txt");
         BufferedWriter bw = new BufferedWriter(fw);
 
         for (int j = 0; j < header.getNumVoices(); j++) {
@@ -79,7 +79,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        play("sample_abc/invention.abc");
+        play("sample_abc/fur_elise.abc");
     }
 
 }
