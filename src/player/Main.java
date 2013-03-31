@@ -32,24 +32,16 @@ public class Main {
      */
     public static void play(String file) throws IOException {
         List<String> result = new ArrayList<String>();
-        Header header=readFile(file,result);
-        for (char c='A';c<'H'; c=(char)(c+1))
-            System.out.println(header.getAccidental(c));        
+        Header header=readFile(file,result);        
         Lexer lexer = new Lexer(result, header);
-        writeTokens("d:/slexer.txt",header,lexer);
         Music music=new Music(lexer);
         if (!music.checkRep()) throw new RuntimeException("Voices in music do not match.");
-        writeMusic("d:/music_origin.txt",music);
         ABCmusicTicks ticks = new ABCmusicTicks(header.getL());
         int ticksPerQuarterNote = ticks.ABCMusicTicks(music);
         // Number of quarter notes (!) per minute: Tempo * default note length divided by 4 (to scale according to quarter notes)
-        System.out.println(header.getQ() + " " + header.getL());
         int beatsPerMinute = (header.getQ() * header.getL().num * 4) / header.getL().den;
-        System.out.println(beatsPerMinute);
         ABCPlayer player = new ABCPlayer(ticksPerQuarterNote, beatsPerMinute, header);
         SequencePlayer p = player.on(music);
-        //System.out.print(ticksPerQuarterNote);
-        //System.out.println(p.toString());
         try {
 			p.play();
 		} catch (MidiUnavailableException e) {
@@ -84,16 +76,12 @@ public class Main {
         return header;
     }
     public static void writeTokens(String file, Header header, Lexer lexer) throws IOException {
-        //print for check
-
         FileWriter fw = new FileWriter(file);
         BufferedWriter bw = new BufferedWriter(fw);
-
         for (int j = 0; j < header.getNumVoices(); j++) {
             List<Token> tk = lexer.getTokens(j);
             for (int i = 0; i < tk.size(); i++) {
                 try {
-
                     bw.write(tk.get(i).print());
                     bw.newLine();
                 } catch (RuntimeException e) {}
@@ -113,6 +101,6 @@ public class Main {
         fw.close();
     }
     public static void main(String[] args) throws IOException {
-        play("sample_abc/invention.abc");
+        play("sample_abc/fur_elise.abc");
     }
 }
