@@ -11,29 +11,29 @@ public class Note implements ABCmusic {
         return n.on(this);
     }
     /**
-     * construct a note from input. v must be [A-G]. 
-     * @param v basenote. must be [A-G]
-     * @param o octave
-     * @param a accidental. must be -1, 0, 1. If hasAccidental is false, a should be 0 (default).
-     * @param b hasAccidental (whether accidental is specified for the note or is default (unspecified)
-     * @param l length of the note (in units of L)
+     * Construct a note from individual components
+     * @param val basenote. must be [A-G]
+     * @param oct octave
+     * @param acc accidental. must be -1, 0, 1. If hasAccidental is false, a should be 0 (default).
+     * @param hasAcc hasAccidental (whether accidental is specified for the note or is default (unspecified)
+     * @param len length of the note (in units of L)
      */
-    public Note(char v, int o, int a, boolean b, Rational l) {
-        hasAccidental=b;
-        octave=o;
-        accidental=a;
-        value=v;
-        length=l;
+    public Note(char val, int oct, int acc, boolean hasAcc, Rational len) {
+		hasAccidental = hasAcc;
+		octave = oct;
+		accidental = acc;
+		value = val;
+		length = len;
     }
     /**
-     * return a clone of note. Do not modify the original
+     * Return a copy of the current note without modifying the original
      */
     @Override
     public Note clone(){
         return new Note(value,octave,accidental,hasAccidental,length);
     }
     /**
-     * reset the accidental and hasAccidenta to the default value.
+     * Set the accidental and hasAccidental fields to the given values.
      * @param a new accidental 
      * @param b new hasAccidental
      */
@@ -50,6 +50,11 @@ public class Note implements ABCmusic {
     public Rational getLength() {
         return length.clone();
     }
+    
+    /**
+     * Check for equality by comparing octaves, values, accidentals, and lengths
+     * @return true if the current note is equal to the other note
+     */
     @Override
     public boolean equals(Object other) {
         if (! (other instanceof Note)) return false;
