@@ -24,11 +24,6 @@ public class Token {
     private final Note note; //used for type note
     private final Rest rest; //used for type rest
     @SuppressWarnings("serial")
-    //map from accidental symbol to integer representation
-    private static final Map<String, Integer> accidentalToInt = Collections
-            .unmodifiableMap(new HashMap<String, Integer>() {{
-                put("^^", 2); put("^", 1); put("=", 0);put("_", -1);put("__", -2);
-            }});
     
     /** construct a Token given type and the string s representing the Token.
      *  the specific type must match string s as specified in grammar.
@@ -67,129 +62,15 @@ public class Token {
         else {
             value = -1;
             int len = s.size();
-            if (type == Type.rest) rest = new Rest(stringToRational(s.subList(1, len)));
+            if (type == Type.rest) rest = new Rest(Rational.stringListToRational(s.subList(1, len)));
             else rest=null;
-            if (type == Type.note) note = toNote(s);
+            if (type == Type.note) note = Note.stringListToNote(s);
             else note=null;
         }
     }
 
-    /**
-     * [Helper] Convert List<String> s representing a rational number to a Rational.
-     * 
-     * @param rationalString
-     *            s.size()=0, 1 or 3. if size=0, return 1/1; 
-     *            if size=1, first element represents an
-     *            integer. if size=3, first element represents an valid, nonzero
-     *            numerator, or an empty string which be default means 1; second
-     *            element is "/"; third element is a valid, nonzero denominator,
-     *            or an empty string which by default means 2;
-     * 
-     * @return Rational The Rational form of the passed in fraction
-     * @throws RuntimeException
-     *             if s.size() is not 0, 1 or 3, or does not match the above
-     *             description
-     */
-    private Rational stringToRational(List<String> rationalString) {
-        int len = rationalString.size();
-        
-        if (len == 0) 
-        	return new Rational(1,1);
-        else if (len == 1) {
-            if (rationalString.get(0).matches("[1-9]+[0-9]*"))
-                return new Rational(Integer.parseInt(rationalString.get(0)), 1);
-            throw new RuntimeException("Integer length notation incorrect.");
-        }
-        else if (len == 3) {
-            int numerator;
-            int denominator;
-            
-            String numeratorString = rationalString.get(0);
-            if (numeratorString.length() == 0)
-                numerator = 1;
-            else if (numeratorString.matches("[1-9]+[0-9]*"))
-                numerator = Integer.parseInt(numeratorString);
-            else
-                throw new RuntimeException("Numerator notation incorrect.");
-            
-            String divisionSignString = rationalString.get(1);
-            if (!divisionSignString.equals("/"))
-                throw new RuntimeException("Rational / notation incorrect.");
-            
-            String denominatorString = rationalString.get(2);
-            if (denominatorString.length() == 0)
-                denominator = 2;
-            else if (denominatorString.matches("[1-9]+[0-9]*"))
-                denominator = Integer.parseInt(denominatorString);
-            else
-                throw new RuntimeException("Denominator notation incorrect.");
-            
-            return new Rational(numerator, denominator);
-        }
-        throw new RuntimeException("Length input size incorrect.");
-    }
 
-    /**
-     * [Helper] s represents note. s.size()=3, 4, or 6. s[0] represents accidental (must
-     * be "^^", "^", "=", "_", "__", or empty string which means no accidental
-     * is specified). s[1] represents basenote, [a-gA-G]. s[2] represents
-     * octave, ("'"+) | (","+), or empty string which means not octave is
-     * specified. if size>3, the rest represents length.
-     * 
-     * @param noteParts note and its accidental, octave, length strings
-     * @return Note 
-     */
-    private Note toNote(List<String> noteParts) {
-        int len = noteParts.size();
-        boolean hasAccidental;
-        int accidental;
-        int octave=0;
-        char basenote;
-        
-        if (len!=3 && len!=4 && len!=6) 
-        	throw new RuntimeException("List of string for note is incorrect.");
-        
-        // accidentalString is either empty or one of "^^", "^", "=", "_", "__"
-        String accidentalString = noteParts.get(0);
-        if (accidentalString.length() == 0) {
-            hasAccidental = false;
-            accidental = 0;
-        } 
-        else {
-            hasAccidental = true;
-            if (accidentalToInt.containsKey(accidentalString)) 
-            	accidental = accidentalToInt.get(accidentalString);
-            else 
-            	throw new RuntimeException("Accidental syntax error.");
-        }
-        
-        // baseNoteString is a character, A-G or a-g. If the character is lower case, we convert it
-        // an upper case character with an octave, since our internal representation only deals with upper case basenotes
-        String basenoteString = noteParts.get(1);
-        if (basenoteString.matches("[a-g]")) {
-            octave++;
-            basenote=(char) (basenoteString.charAt(0)-32);
-        }
-        else if (basenoteString.matches("[A-G]")) 
-        	basenote=basenoteString.charAt(0);
-        else 
-        	throw new RuntimeException("Basenote unrecognized.");
-        
-        // octaveString should be either empty, a series of apostrophes (''''') or commas (,,,,,)
-        String octaveString = noteParts.get(2);
-        int numberOfOctaves = octaveString.length();
-        if (numberOfOctaves != 0) {
-            if (octaveString.matches("[']+")) 
-            	octave+=numberOfOctaves;
-            else if (octaveString.matches("[,]+")) 
-            	octave-=numberOfOctaves;
-            else 
-            	throw new RuntimeException("Octave syntax error.");
-        }
-        Rational noteLength = stringToRational(noteParts.subList(3, len));
-        
-        return new Note(basenote,octave,accidental,hasAccidental,noteLength);
-    }
+    
     /**
      * @return this.value
      * @throws RuntimeExeption if type is not nth_repeat or tuplet_spec.

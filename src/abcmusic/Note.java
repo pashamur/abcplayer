@@ -1,5 +1,10 @@
 package abcmusic;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import player.Rational;
 
 public class Note implements ABCmusic {
@@ -8,6 +13,12 @@ public class Note implements ABCmusic {
     public final int octave;
     public final char value;
     private final Rational length;
+    
+    // Map from accidental symbol to integer representation
+    private static final Map<String, Integer> accidentalToInt = Collections
+            .unmodifiableMap(new HashMap<String, Integer>() {{
+                put("^^", 2); put("^", 1); put("=", 0);put("_", -1);put("__", -2);
+            }});
     
     public <R> R accept(Visitor<R> n) {
         return n.on(this);
@@ -53,6 +64,69 @@ public class Note implements ABCmusic {
     }
     public Rational getLength() {
         return length.clone();
+    }
+    
+    
+    /**
+     * noteParts list represents a note. noteParts.size()=3, 4, or 6. noteParts[0] represents accidental (must
+     * be "^^", "^", "=", "_", "__", or empty string which means no accidental
+     * is specified). noteParts[1] represents basenote, [a-gA-G]. noteParts[2] represents
+     * octave, ("'"+) | (","+), or empty string which means not octave is
+     * specified. if size>3, the rest represents length.
+     * 
+     * @param noteParts note and its accidental, octave, length strings
+     * @return Note The Note instantiated with the fields in noteParts
+     */
+    public static Note stringListToNote(List<String> noteParts) {
+        int len = noteParts.size();
+        boolean hasAccidental;
+        int accidental;
+        int octave=0;
+        char basenote;
+        
+        if (len!=3 && len!=4 && len!=6) 
+        	throw new RuntimeException("List of string for note is incorrect.");
+        
+        // accidentalString is either empty or one of "^^", "^", "=", "_", "__"
+        String accidentalString = noteParts.get(0);
+        if (accidentalString.length() == 0) {
+            hasAccidental = false;
+            accidental = 0;
+        } 
+        else {
+            hasAccidental = true;
+            if (accidentalToInt.containsKey(accidentalString)) 
+            	accidental = accidentalToInt.get(accidentalString);
+            else 
+            	throw new RuntimeException("Accidental syntax error.");
+        }
+        
+        // baseNoteString is a character, A-G or a-g. If the character is lower case, we convert it
+        // an upper case character with an octave, since our internal representation only deals with upper case basenotes
+        String basenoteString = noteParts.get(1);
+        if (basenoteString.matches("[a-g]")) {
+            octave++;
+            basenote=(char) (basenoteString.charAt(0)-32);
+        }
+        else if (basenoteString.matches("[A-G]")) 
+        	basenote=basenoteString.charAt(0);
+        else 
+        	throw new RuntimeException("Basenote unrecognized.");
+        
+        // octaveString should be either empty, a series of apostrophes (''''') or commas (,,,,,)
+        String octaveString = noteParts.get(2);
+        int numberOfOctaves = octaveString.length();
+        if (numberOfOctaves != 0) {
+            if (octaveString.matches("[']+")) 
+            	octave+=numberOfOctaves;
+            else if (octaveString.matches("[,]+")) 
+            	octave-=numberOfOctaves;
+            else 
+            	throw new RuntimeException("Octave syntax error.");
+        }
+        Rational noteLength = Rational.stringListToRational(noteParts.subList(3, len));
+        
+        return new Note(basenote,octave,accidental,hasAccidental,noteLength);
     }
     
     /**

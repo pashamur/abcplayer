@@ -10,8 +10,7 @@ public class Lexer {
     private List<List<Token>> tk;
 
     /**
-     * converst string s, which means the notelength, to a list of strings which
-     * can be understood by the token
+     * Convert noteLength to a list of strings which can be understood by the token
      * 
      * @param result
      *            , mutable list of Strings, which can be understood by Token if
@@ -20,22 +19,22 @@ public class Lexer {
      *            numerator, or an empty string which be default means 1; second
      *            element is "/"; third element is a valid, nonzero denominator,
      *            or an empty string which by default means 2;
-     * @param s
+     * @param noteLength
      *            the string of notelength to be converted such as "/" "1/2" "2"
      *            "2 /4" "/ 4"
      */
-    private void convertLength(List<String> result, String s) {
+    private void convertLength(List<String> result, String noteLength) {
         Pattern numberPattern = Pattern.compile("\\d+");
         Pattern dividePattern = Pattern.compile("/");
         Matcher matcher;
         Matcher matcher1;
-        if ((matcher = numberPattern.matcher(s)).lookingAt()) { // if starting
+        if ((matcher = numberPattern.matcher(noteLength)).lookingAt()) { // if starting
                                                                 // with number
             result.add(matcher.group());
-            s = s.substring(matcher.end());
-            if (dividePattern.matcher(s).find()) { // if contains "/"
+            noteLength = noteLength.substring(matcher.end());
+            if (dividePattern.matcher(noteLength).find()) { // if contains "/"
                 result.add("/");
-                if ((matcher1 = numberPattern.matcher(s)).find()) {
+                if ((matcher1 = numberPattern.matcher(noteLength)).find()) {
                     result.add(matcher1.group()); // if contains another number
                 } else {
                     result.add("2");
@@ -44,7 +43,7 @@ public class Lexer {
         } else {
             result.add("1");
             result.add("/");
-            if ((matcher1 = numberPattern.matcher(s)).find()) {
+            if ((matcher1 = numberPattern.matcher(noteLength)).find()) {
                 result.add(matcher1.group());
             } else {
                 result.add("2");
@@ -110,7 +109,7 @@ public class Lexer {
                 throw new RuntimeException("No Voice");
             }
         }
-        // lex line be line
+        // lex line by line
         for (; i < input.size(); i++) {
             Matcher matcher = VPattern.matcher(input.get(i));
             Matcher matcher1;
@@ -157,27 +156,27 @@ public class Lexer {
                     } else if ((matcher = notePattern.matcher(substring))
                             .lookingAt()) {
                         // a note
-                        List<String> text = new ArrayList<String>();
+                        List<String> noteParts = new ArrayList<String>();
                         String note = matcher.group();
                         if ((matcher1 = accidentalPattern.matcher(note)).find()) {
-                            text.add(matcher1.group());
+                            noteParts.add(matcher1.group());
                             //if an accidental is found
                         } else {
-                            text.add("");
+                            noteParts.add("");
                         }
                         (matcher1 = basenotePattern.matcher(note)).find();
-                        text.add(matcher1.group());
+                        noteParts.add(matcher1.group());
                         if ((matcher1 = octavePattern.matcher(note)).find()) {
-                            text.add(matcher1.group());
+                            noteParts.add(matcher1.group());
                             //if an octave is found
                         } else {
-                            text.add("");
+                            noteParts.add("");
                         }
                         if ((matcher1 = noteLengthPattern.matcher(note)).find()) {
-                            convertLength(text, matcher1.group());
+                            convertLength(noteParts, matcher1.group());
                             // if note length is found
                         }
-                        tk.get(k).add(new Token(Token.Type.note, text));
+                        tk.get(k).add(new Token(Token.Type.note, noteParts));
                         substring = substring.substring(matcher.end());
 
                     } else if ((matcher = barlinePattern.matcher(substring))
