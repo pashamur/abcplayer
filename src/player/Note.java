@@ -17,8 +17,10 @@ public class Note implements ABCmusic {
      * @param acc accidental. must be -1, 0, 1. If hasAccidental is false, a should be 0 (default).
      * @param hasAcc hasAccidental (whether accidental is specified for the note or is default (unspecified)
      * @param len length of the note (in units of L)
+     * @throw RuntimeException ins val is not in [A-G]
      */
     public Note(char val, int oct, int acc, boolean hasAcc, Rational len) {
+        if (val<'A' || val>'G') throw new RuntimeException("Basenote out of bound.");
 		hasAccidental = hasAcc;
 		octave = oct;
 		accidental = acc;

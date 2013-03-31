@@ -42,6 +42,7 @@ public class Main {
         int beatsPerMinute = (header.getQ() * header.getL().num * 4) / header.getL().den;
         ABCPlayer player = new ABCPlayer(ticksPerQuarterNote, beatsPerMinute, header);
         SequencePlayer p = player.on(music);
+        System.out.println(p.toString());
         try {
 			p.play();
 		} catch (MidiUnavailableException e) {
@@ -101,6 +102,6 @@ public class Main {
         fw.close();
     }
     public static void main(String[] args) throws IOException {
-        play("sample_abc/fur_elise.abc");
+        play("sample_abc/test_fur_elise_bug.abc");
     }
 }
