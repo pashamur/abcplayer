@@ -28,7 +28,7 @@ public class ABCmusicTicks implements ABCmusic.Visitor<Integer>{
         return ticksPerQuarterNote;
     }
     public Integer on(Section sc) {
-        for (int i=0;i<sc.size;i++) {
+        for (int i=0;i<sc.sizeInMeasures;i++) {
         	ABCMusicTicks(sc.getMeasure(i));
         }
         return ticksPerQuarterNote;

@@ -44,9 +44,9 @@ public class ABCmusicToString implements ABCmusic.Visitor<String>{
     }
     public String on(Section sc) {
         StringBuilder s=new StringBuilder();
-        for (int i=0;i<sc.size;i++) {
+        for (int i=0;i<sc.sizeInMeasures;i++) {
             s.append(abcmusicToString(sc.getMeasure(i)));
-            if (i<(sc.size-1)) s.append("| ");
+            if (i<(sc.sizeInMeasures-1)) s.append("| ");
         }
         return s.toString();
     }

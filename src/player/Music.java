@@ -11,7 +11,7 @@ public class Music implements ABCmusic {
     }
     /**
      * Generate a AST with music as the root.
-     * @param tk each element of tk represents a voice.
+     * @param lex each element of lex represents a voice.
      */
     public Music(Lexer lex) {
         size=lex.getLength();
