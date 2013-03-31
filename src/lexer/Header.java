@@ -24,15 +24,15 @@ public class Header {
      * initialize all fields of Header. Lex header and generate a list of field
      * (K, M...) and their respective strings. get rid of comments.
      * 
-     * @param input
+     * @param headerLines
      *            A list of strings to be lexed
      * @throws RuntimeException
      *             if X, T, K does not appear at the right place.
      * @throws RuntimeException
      *             if syntax error within any one line.
      */
-    public Header(List<String> input) {
-        int i = 0;
+    public Header(List<String> headerLines) {
+        int currentLine = 0;
         tempo = 100;
         defaultNoteLength = new Rational(1, 8);
         meter = new Pair<Integer, Integer>(4, 4);
@@ -43,36 +43,36 @@ public class Header {
         Pattern numberPattern = Pattern.compile("\\d+");
         Pattern wordPattern = Pattern.compile("[^\\s]+");
         Pattern XPattern = Pattern.compile("X:\\s*\\d+\\s*");
-        Matcher XMatcher = XPattern.matcher(input.get(i));
+        Matcher XMatcher = XPattern.matcher(headerLines.get(currentLine));
         if (!XMatcher.matches()) {
             throw new RuntimeException("Wrong input");
         }
-        i++;
-        Pattern TPattern = Pattern.compile("T:.+");
-        Matcher TMatcher = TPattern.matcher(input.get(i));
-        if (!TMatcher.matches()) {
+        currentLine++;
+        Pattern titlePattern = Pattern.compile("T:.+");
+        Matcher titleMatcher = titlePattern.matcher(headerLines.get(currentLine));
+        if (!titleMatcher.matches()) {
             throw new RuntimeException("Wrong input");
         }
 
-        Pattern LPattern = Pattern.compile("L:\\s*\\d+\\s*/\\s*\\d+\\s*");
-        Pattern MPattern = Pattern
+        Pattern noteLengthPattern = Pattern.compile("L:\\s*\\d+\\s*/\\s*\\d+\\s*");
+        Pattern meterPattern = Pattern
                 .compile("M:\\s*((\\d+\\s*/\\s*\\d+)|C|(C\\|))\\s*");
-        Pattern QPattern = Pattern.compile("Q:\\s*\\d+\\s*");
-        Pattern CPattern = Pattern.compile("C:.+");
-        Pattern VPattern = Pattern.compile("V:\\s*[^\\s]+\\s*");
+        Pattern tempoPattern = Pattern.compile("Q:\\s*\\d+\\s*");
+        Pattern composerPattern = Pattern.compile("C:.+");
+        Pattern voicePattern = Pattern.compile("V:\\s*[^\\s]+\\s*");
 
-        for (i = 2; i < input.size() - 1; i++) {
-            if (LPattern.matcher(input.get(i)).matches()) {
-                Matcher numberMatcher = numberPattern.matcher(input.get(i));
+        for (currentLine = 2; currentLine < headerLines.size() - 1; currentLine++) {
+            if (noteLengthPattern.matcher(headerLines.get(currentLine)).matches()) {
+                Matcher numberMatcher = numberPattern.matcher(headerLines.get(currentLine));
                 numberMatcher.find();
                 int PairX = Integer.parseInt(numberMatcher.group());
                 numberMatcher.find();
                 int PairY = Integer.parseInt(numberMatcher.group());
                 defaultNoteLength = new Rational(PairX, PairY);
-            } else if (MPattern.matcher(input.get(i)).matches()) {
+            } else if (meterPattern.matcher(headerLines.get(currentLine)).matches()) {
                 int PairX;
                 int PairY;
-                Matcher numberMatcher = numberPattern.matcher(input.get(i));
+                Matcher numberMatcher = numberPattern.matcher(headerLines.get(currentLine));
                 if (numberMatcher.find()) {
                     PairX = Integer.parseInt(numberMatcher.group());
                     numberMatcher.find();
@@ -81,10 +81,10 @@ public class Header {
                 } else {
                     Pattern C = Pattern.compile("C");
                     Pattern C1 = Pattern.compile("C\\|");
-                    if (C1.matcher(input.get(i)).find()) {
+                    if (C1.matcher(headerLines.get(currentLine)).find()) {
                         PairX = 2;
                         PairY = 2;
-                    } else if (C.matcher(input.get(i)).find()) {
+                    } else if (C.matcher(headerLines.get(currentLine)).find()) {
                         PairX = 4;
                         PairY = 4;
                     } else {
@@ -92,15 +92,15 @@ public class Header {
                     }
                 }
                 meter = new Pair<Integer, Integer>(PairX, PairY);
-            } else if (QPattern.matcher(input.get(i)).matches()) {
-                Matcher numberMatcher = numberPattern.matcher(input.get(i));
+            } else if (tempoPattern.matcher(headerLines.get(currentLine)).matches()) {
+                Matcher numberMatcher = numberPattern.matcher(headerLines.get(currentLine));
                 numberMatcher.find();
                 tempo = Integer.parseInt(numberMatcher.group());
 
-            } else if (CPattern.matcher(input.get(i)).matches()) {
+            } else if (composerPattern.matcher(headerLines.get(currentLine)).matches()) {
 
-            } else if (VPattern.matcher(input.get(i)).matches()) {
-                String temp = input.get(i).substring(2);
+            } else if (voicePattern.matcher(headerLines.get(currentLine)).matches()) {
+                String temp = headerLines.get(currentLine).substring(2);
                 Matcher wordMatcher = wordPattern.matcher(temp);
                 wordMatcher.find();
                 numVoices++;
@@ -111,11 +111,11 @@ public class Header {
             }
         }
 
-        i = input.size() - 1;
+        currentLine = headerLines.size() - 1;
         Pattern KPattern = Pattern.compile("K:\\s*([A-G][#|b]?[m]?)\\s*");
         Pattern KeyPattern = Pattern.compile("[A-G][#|b]?[m]?");
-        Matcher KMatcher = KPattern.matcher(input.get(i));
-        Matcher KeyMatcher = KeyPattern.matcher(input.get(i));
+        Matcher KMatcher = KPattern.matcher(headerLines.get(currentLine));
+        Matcher KeyMatcher = KeyPattern.matcher(headerLines.get(currentLine));
         if (!KMatcher.matches()) {
             throw new RuntimeException("Wrong input");
         } else {
@@ -153,6 +153,10 @@ public class Header {
         return keySignature[c - 'A'];
     }
 
+    public int[] getKeySignature(){
+    	return keySignature.clone();
+    }
+    
     public int getNumVoices() {
         return numVoices;
     }
