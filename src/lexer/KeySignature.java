@@ -9,30 +9,30 @@ public class KeySignature {
      * given input string s representing one of the 30 types of key signature, return a int[]
      * which is the accidental for key A-G for the given key signature.
      * 
-     * @param s key signature name, e.g. "A", "Am", "C#", "Bb", "F#m" or "Gbm"
+     * @param keySignature example: "A", "Am", "C#", "Bb", "F#m" or "Gbm"
      * @return int[]
      * @throws RuntimeException("Key signature string invalid.") if s is not a valid abc signature
      * @throws RuntimeException("Key signature is not supported.") if the given key signature is
      * not one of the 30 major types (e.g. "Fb", "G#b").
      */
-    public static int[] KeySignatureToInt(String s) {
+    public static int[] KeySignatureToInt(String keySignature) {
         char note='C';
         boolean sharp=false;
         boolean flat=false;
         boolean minor=false;
-        if (!s.matches("[A-G][#|b]?[m]?"))
+        if (!keySignature.matches("[A-G][#|b]?[m]?"))
             throw new RuntimeException("Key signature string invalid.");
-        note=s.charAt(0);
-        if (s.length()==2) {
-            char temp;
-            temp=s.charAt(1);
-            if (temp=='#') sharp=true;
-            else if (temp=='b') flat=true;
+        note=keySignature.charAt(0);
+        if (keySignature.length()==2) {
+            char accidental;
+            accidental=keySignature.charAt(1);
+            if (accidental=='#') sharp=true;
+            else if (accidental=='b') flat=true;
             else minor=true;
         }
-        else if (s.length()==3) {
+        else if (keySignature.length()==3) {
             minor=true;
-            if (s.charAt(1)=='#') sharp=true;
+            if (keySignature.charAt(1)=='#') sharp=true;
             else flat=true;
         }
         return KeySignatureLookup(note,sharp,flat,minor);

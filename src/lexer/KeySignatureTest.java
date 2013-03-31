@@ -41,69 +41,33 @@ public class KeySignatureTest {
         assertArrayEquals(result,expected);
     }  
     // test exception for none-supported key signature
-    @Test
+    @Test(expected=RuntimeException.class)
     public void KeySignatureTest_NoneExist(){
-        boolean flag=false;
-        try{
-            KeySignature.KeySignatureToInt("G#b");
-        }catch(RuntimeException e) {
-            flag=true;
-        }
-        assertTrue(flag);
+        KeySignature.KeySignatureToInt("G#b");
     }
     // note not in A-G
-    @Test
+    @Test(expected=RuntimeException.class)
     public void KeySignatureTest_InvalidNote(){
-        boolean flag=false;
-        try{
-            KeySignature.KeySignatureToInt("H");
-        }catch(RuntimeException e) {
-            flag=true;
-        }
-        assertTrue(flag);
+        KeySignature.KeySignatureToInt("H");
     }  
     // containing invalid character
-    @Test
+    @Test(expected=RuntimeException.class)
     public void KeySignatureTest_InvalidCharacter(){
-        boolean flag=false;
-        try{
-            KeySignature.KeySignatureToInt("A&m");
-        }catch(RuntimeException e) {
-            flag=true;
-        }
-        assertTrue(flag);
+        KeySignature.KeySignatureToInt("A&m");
     }  
     // containing white space
-    @Test
+    @Test(expected=RuntimeException.class)
     public void KeySignatureTest_InvalidWhitespace(){
-        boolean flag=false;
-        try{
-            KeySignature.KeySignatureToInt("A m");
-        }catch(RuntimeException e) {
-            flag=true;
-        }
-        assertTrue(flag);
+        KeySignature.KeySignatureToInt("A m");
     }
     // contains both sharp and flat
-    @Test
+    @Test(expected=RuntimeException.class)
     public void KeySignatureTest_InvalidSharpFlat(){
-        boolean flag=false;
-        try{
-            KeySignature.KeySignatureToInt("C#b");
-        }catch(RuntimeException e) {
-            flag=true;
-        }
-        assertTrue(flag);
+        KeySignature.KeySignatureToInt("C#b");
     } 
     // note, sharp/flat and minor not given in the correct sequence
-    @Test
+    @Test(expected=RuntimeException.class)
     public void KeySignatureTest_InvalidSequence(){
-        boolean flag=false;
-        try{
-            KeySignature.KeySignatureToInt("#Gm");
-        }catch(RuntimeException e) {
-            flag=true;
-        }
-        assertTrue(flag);
+    	KeySignature.KeySignatureToInt("#Gm");
     } 
 }
