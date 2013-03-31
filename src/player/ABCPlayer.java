@@ -32,37 +32,37 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
 	    }
 	}
 	
-	public SequencePlayer on(Music mu){
+	public SequencePlayer on(Music music){
 		// Process every voice in the music, one at a time 
-        for (int i=0;i<mu.size;i++) {
-            abcPlayer(mu.getVoice(i));
+        for (int i=0;i<music.size;i++) {
+            abcPlayer(music.getVoice(i));
         }
         return player;
     }
-    public SequencePlayer on(Voice v) {
+    public SequencePlayer on(Voice voice) {
     	// Process all the major sections in the voice one by one.
-        for (int i=0;i<v.size;i++) {
-            abcPlayer(v.getMajorSection(i));
+        for (int i=0;i<voice.size;i++) {
+            abcPlayer(voice.getMajorSection(i));
         }
         // Reset tick after every voice
         lastTick = 0;
         return player;
     }
-    public SequencePlayer on(MajorSection ms) {
-        for (int i=0;i<ms.size;i++) {
-            abcPlayer(ms.getSection(i));
+    public SequencePlayer on(MajorSection majorsection) {
+        for (int i=0;i<majorsection.size;i++) {
+            abcPlayer(majorsection.getSection(i));
         }
         return player;
     }
-    public SequencePlayer on(Section sc) {
-        for (int i=0;i<sc.sizeInMeasures;i++) {
-            abcPlayer(sc.getMeasure(i));
+    public SequencePlayer on(Section section) {
+        for (int i=0;i<section.sizeInMeasures;i++) {
+            abcPlayer(section.getMeasure(i));
         }
         return player;
     }
-    public SequencePlayer on(Measure m) {
-        for (int i=0;i<m.size;i++) {
-            abcPlayer(m.getElements(i));
+    public SequencePlayer on(Measure measure) {
+        for (int i=0;i<measure.size;i++) {
+            abcPlayer(measure.getElements(i));
         }
         return player;
     }
@@ -71,22 +71,18 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     	    	
         for (int i=0;i<c.size;i++) {
         	Note note = c.getNote(i);
-        	Pitch p = new Pitch(note.value).transpose(note.octave*Pitch.OCTAVE);
-        	if (note.getHasAccidental())
-        		p=p.transpose(note.getAccidental());
-        	else
-        		p=p.transpose(header.getAccidental(note.value));
-        	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
+        	Pitch pitch = createPitchFromNote(note);
+        	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
         }
         lastTick = lastTick+noteLengthInTicks;
         return player;
     }
     
-    public SequencePlayer on(Tuplet t) {
-    	int noteLengthInTicks = getNoteLengthInTicks(t);
+    public SequencePlayer on(Tuplet tuplet) {
+    	int noteLengthInTicks = getNoteLengthInTicks(tuplet);
     	
-        for (int i=0;i<t.size;i++){ 
-        	ABCmusic elem = t.getElement(i);
+        for (int i=0;i<tuplet.size;i++){ 
+        	ABCmusic elem = tuplet.getElement(i);
         	if(elem instanceof Note)
         		processNoteWithinTuplet((Note)elem, noteLengthInTicks);
         	else if(elem instanceof Chord)
@@ -95,30 +91,42 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         return player;
     }
     
-    public SequencePlayer on(Note n) {
-    	Pitch p = new Pitch(n.value).transpose(n.octave*Pitch.OCTAVE);
-        
-    	if (n.getHasAccidental())
-    	    p=p.transpose(n.getAccidental());
-    	else 
-            p=p.transpose(header.getAccidental(n.value));
+    public SequencePlayer on(Note note) {
+    	Pitch pitch = createPitchFromNote(note);
     
-    	int noteLengthInTicks = getNoteLengthInTicks(n);
-    	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
+    	int noteLengthInTicks = getNoteLengthInTicks(note);
+    	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
     	lastTick = lastTick+noteLengthInTicks;
     		
         return player;
     }
     
-    public SequencePlayer on(Rest r) {
+    public SequencePlayer on(Rest rest) {
     	// Increment the tick counter (without adding any notes) by the length of the rest.
-    	lastTick = lastTick + getNoteLengthInTicks(r);
+    	lastTick = lastTick + getNoteLengthInTicks(rest);
         
     	return player;
     }
     
-    public SequencePlayer abcPlayer(ABCmusic e){
-        return e.accept(this);
+    public SequencePlayer abcPlayer(ABCmusic music){
+        return music.accept(this);
+    }
+    
+    /**
+     * Instantiate a pitch from a passed-in note
+     * 
+     * @param note The note which we are converting to a pitch
+     * @return The resulting pitch (transposed to the correct octave, and with the correct accidental)
+     */
+    
+    private Pitch createPitchFromNote(Note note){
+    	
+    	Pitch pitch = new Pitch(note.value).transpose(note.octave*Pitch.OCTAVE);
+    	if (note.getHasAccidental())
+    		pitch = pitch.transpose(note.getAccidental());
+    	else
+    		pitch = pitch.transpose(header.getAccidental(note.value));
+    	return pitch;
     }
     
     /**
@@ -133,13 +141,13 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     	Rational noteLength;
     	
     	if(elem instanceof Note)
-    		noteLength = ((Note)elem).getLength().times(header.getL());
+    		noteLength = ((Note)elem).getLength().times(header.getDefaultNoteLength());
     	else if(elem instanceof Tuplet)
-    		noteLength = ((Tuplet)elem).getNoteLength().times(header.getL());
+    		noteLength = ((Tuplet)elem).getNoteLength().times(header.getDefaultNoteLength());
     	else if(elem instanceof Chord)
-    		noteLength = ((Chord)elem).getLength().times(header.getL());
+    		noteLength = ((Chord)elem).getLength().times(header.getDefaultNoteLength());
     	else if(elem instanceof Rest)
-    		noteLength = ((Rest)elem).getLength().times(header.getL());
+    		noteLength = ((Rest)elem).getLength().times(header.getDefaultNoteLength());
     	else
     		throw new RuntimeException("Parameter to getNoteLengthInTicks must be one of [Note, Tuplet, Chord, Rest]");
     	
@@ -153,12 +161,9 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
      * @param noteLengthInTicks Length of the note within the tuplet
      */
     private void processNoteWithinTuplet(Note note, int noteLengthInTicks){
-    	Pitch p = new Pitch(note.value).transpose(note.octave*Pitch.OCTAVE);
-    	if (note.getHasAccidental())
-    	    p=p.transpose(note.getAccidental());
-    	else 
-            p=p.transpose(header.getAccidental(note.value));
-    	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
+    	
+    	Pitch pitch = createPitchFromNote(note);
+    	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
     	lastTick = lastTick+noteLengthInTicks;
     }
     
@@ -169,14 +174,11 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
      * @param noteLengthInTicks Length of a single note within the chord to be processed
      */
     private void processChordWithinTuplet(Chord chord, int noteLengthInTicks){
+    	
     	for (int i=0;i<chord.size;i++) {
         	Note note = chord.getNote(i);
-        	Pitch p = new Pitch(note.value).transpose(note.octave*Pitch.OCTAVE);
-        	if (note.getHasAccidental())
-        		p=p.transpose(note.getAccidental());
-        	else
-        		p=p.transpose(header.getAccidental(note.value));
-        	player.addNote(p.toMidiNote(), lastTick, noteLengthInTicks);
+        	Pitch pitch = createPitchFromNote(note);
+        	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
         }
         lastTick = lastTick+noteLengthInTicks;
     }

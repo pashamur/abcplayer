@@ -247,6 +247,7 @@ public class KeySignature {
         listKey.add("Gb");
         listKey.add("G#m");
         
-        for (int i=0;i<listKey.size();i++) System.out.println(listKey.get(i)+": "+Arrays.toString(KeySignatureToInt(listKey.get(i))));
+        for (int i=0;i<listKey.size();i++) 
+        	System.out.println(listKey.get(i)+": "+Arrays.toString(KeySignatureToInt(listKey.get(i))));
     }
 }

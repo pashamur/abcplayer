@@ -7,20 +7,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Header {
-    private int[] keySignature; // saccidentals derived from key signature
+    private int[] keySignature; // accidentals derived from key signature
                                 // for A-G respectively.
     private Map<String, Integer> voice;// from voice label to index.
     private int numVoices;
-    private Rational L;
-    private Pair<Integer, Integer> M;
-    private int Q;
+    private Rational defaultNoteLength;
+    private Pair<Integer, Integer> meter;
+    private int tempo;
 
     /**
      * initialize all fields of Header. Lex header and generate a list of field
      * (K, M...) and their respective strings. get rid of comments.
      * 
      * @param input
-     *            to be lexed
+     *            A list of strings to be lexed
      * @throws RuntimeException
      *             if X, T, K does not appear at the right place.
      * @throws RuntimeException
@@ -28,11 +28,12 @@ public class Header {
      */
     public Header(List<String> input) {
         int i = 0;
-        Q = 100;
-        L = new Rational(1, 8);
-        M = new Pair<Integer, Integer>(4, 4);
+        tempo = 100;
+        defaultNoteLength = new Rational(1, 8);
+        meter = new Pair<Integer, Integer>(4, 4);
         numVoices = 0;
         voice = new HashMap<String, Integer>();
+        
         keySignature = new int[7];
         Pattern numberPattern = Pattern.compile("\\d+");
         Pattern wordPattern = Pattern.compile("[^\\s]+");
@@ -62,7 +63,7 @@ public class Header {
                 int PairX = Integer.parseInt(numberMatcher.group());
                 numberMatcher.find();
                 int PairY = Integer.parseInt(numberMatcher.group());
-                L = new Rational(PairX, PairY);
+                defaultNoteLength = new Rational(PairX, PairY);
             } else if (MPattern.matcher(input.get(i)).matches()) {
                 int PairX;
                 int PairY;
@@ -85,11 +86,11 @@ public class Header {
                         throw new RuntimeException("Wrong Input");
                     }
                 }
-                M = new Pair<Integer, Integer>(PairX, PairY);
+                meter = new Pair<Integer, Integer>(PairX, PairY);
             } else if (QPattern.matcher(input.get(i)).matches()) {
                 Matcher numberMatcher = numberPattern.matcher(input.get(i));
                 numberMatcher.find();
-                Q = Integer.parseInt(numberMatcher.group());
+                tempo = Integer.parseInt(numberMatcher.group());
 
             } else if (CPattern.matcher(input.get(i)).matches()) {
 
@@ -122,16 +123,16 @@ public class Header {
         }
     }
 
-    public int getQ() {
-        return Q;
+    public int getTempo() {
+        return tempo;
     }
 
-    public Pair<Integer, Integer> getM() {
-        return new Pair<Integer, Integer>(M.first, M.second);
+    public Pair<Integer, Integer> getMeter() {
+        return new Pair<Integer, Integer>(meter.first, meter.second);
     }
 
-    public Rational getL() {
-        return L.clone();
+    public Rational getDefaultNoteLength() {
+        return defaultNoteLength.clone();
     }
 
     public int getVoiceIndex(String v) {

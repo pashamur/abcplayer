@@ -1,8 +1,14 @@
 package player;
 
+/**
+ * Calculate the amount of ticks per quarter note by calculating the least common multiple
+ * of the denominators of all of the notes in the current music scaled by the baseNoteLength
+ * which is the L parameter parsed out from the music header information.
+ */
 public class ABCmusicTicks implements ABCmusic.Visitor<Integer>{
-	// Calculate ticks per quarter note
 	private int ticksPerQuarterNote = 1;
+	
+	// The default note length (retrieved from the header)
 	private Rational baseNoteLength;
 	
 	public ABCmusicTicks(Rational baseNoteLength){
