@@ -149,6 +149,7 @@ public class Token {
         if (len!=3 && len!=4 && len!=6) 
         	throw new RuntimeException("List of string for note is incorrect.");
         
+        // accidentalString is either empty or one of "^^", "^", "=", "_", "__"
         String accidentalString = noteParts.get(0);
         if (accidentalString.length() == 0) {
             hasAccidental = false;
@@ -156,11 +157,15 @@ public class Token {
         } 
         else {
             hasAccidental = true;
-            if (accidentalToInt.containsKey(accidentalString)) accidental = accidentalToInt.get(accidentalString);
-            else throw new RuntimeException("Accidental syntax error.");
+            if (accidentalToInt.containsKey(accidentalString)) 
+            	accidental = accidentalToInt.get(accidentalString);
+            else 
+            	throw new RuntimeException("Accidental syntax error.");
         }
-        String basenoteString = noteParts.get(1);
         
+        // baseNoteString is a character, A-G or a-g. If the character is lower case, we convert it
+        // an upper case character with an octave, since our internal representation only deals with upper case basenotes
+        String basenoteString = noteParts.get(1);
         if (basenoteString.matches("[a-g]")) {
             octave++;
             basenote=(char) (basenoteString.charAt(0)-32);
@@ -170,6 +175,7 @@ public class Token {
         else 
         	throw new RuntimeException("Basenote unrecognized.");
         
+        // octaveString should be either empty, a series of apostrophes (''''') or commas (,,,,,)
         String octaveString = noteParts.get(2);
         int numberOfOctaves = octaveString.length();
         if (numberOfOctaves != 0) {
