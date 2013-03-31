@@ -487,6 +487,38 @@ public class LexerTest {
         Lexer lexer = new Lexer(result, header);
  
     }
+    
+    @Test(expected = RuntimeException.class)
+    public void LexerTest15() throws IOException {
+        //test for wrong spaces
+        String file = "sample_abc/piece1.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+            }
+        }
+        result = new ArrayList<String>();
+        result.add("( 3abc");
+        Lexer lexer = new Lexer(result, header);
+ 
+    }
 
 
     
