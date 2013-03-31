@@ -32,8 +32,8 @@ public class ABCmusicEqual implements ABCmusic.Visitor<Boolean>{
     public Boolean on(Section s) {
         if (!(other instanceof Section)) return false;
         Section that=(Section) other;
-        if(that.size!=s.size) return false;
-        for (int i=0;i<s.size;i++)
+        if(that.sizeInMeasures!=s.sizeInMeasures) return false;
+        for (int i=0;i<s.sizeInMeasures;i++)
             if (!abcmusicEqual(s.getMeasure(i),that.getMeasure(i))) return false;
         return true;
     }

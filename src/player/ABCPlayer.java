@@ -46,7 +46,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         return player;
     }
     public SequencePlayer on(Section sc) {
-        for (int i=0;i<sc.size;i++) {
+        for (int i=0;i<sc.sizeInMeasures;i++) {
             abcPlayer(sc.getMeasure(i));
         }
         return player;
