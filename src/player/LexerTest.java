@@ -291,12 +291,203 @@ public class LexerTest {
         result = new ArrayList<String>();
         result.add("||:A,,/");
         Lexer lexer = new Lexer(result, header);
-        System.out.println(lexer.getTokens(0).get(0).print());
         assertTrue("|".equals(lexer.getTokens(0).get(0).print()));
         assertTrue("|:".equals(lexer.getTokens(0).get(1).print()));
         assertTrue("A,,1/2".equals(lexer.getTokens(0).get(2).print()));
 
     }
+    
+@Test(expected = RuntimeException.class)
+    public void LexerTest9() throws IOException {
+        //test for (5
+        String file = "sample_abc/piece1.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+            }
+        }
+        result = new ArrayList<String>();
+        result.add("(5abcde");
+        Lexer lexer = new Lexer(result, header);
+
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void LexerTest10() throws IOException {
+        //test for wrong basicnote
+        String file = "sample_abc/piece1.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+            }
+        }
+        result = new ArrayList<String>();
+        result.add("habc");
+        Lexer lexer = new Lexer(result, header);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void LexerTest11() throws IOException {
+        //test for strange length
+        String file = "sample_abc/piece1.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+            }
+        }
+        result = new ArrayList<String>();
+        result.add("bc ^A,,1/4/ ");
+        Lexer lexer = new Lexer(result, header);
+    
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void LexerTest12() throws IOException {
+        //test for wrong accidental
+        String file = "sample_abc/piece1.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+            }
+        }
+        result = new ArrayList<String>();
+        result.add("==A,,2");
+        Lexer lexer = new Lexer(result, header);
+ 
+    }
+    
+    @Test(expected = RuntimeException.class)
+    public void LexerTest13() throws IOException {
+        //test for wrong nth repeat
+        String file = "sample_abc/piece1.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+            }
+        }
+        result = new ArrayList<String>();
+        result.add("[3ABC");
+        Lexer lexer = new Lexer(result, header);
+ 
+    }
+    
+    @Test(expected = RuntimeException.class)
+    public void LexerTest14() throws IOException {
+        //test for wrong order for note
+        String file = "sample_abc/piece1.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+            }
+        }
+        result = new ArrayList<String>();
+        result.add("A^,2");
+        Lexer lexer = new Lexer(result, header);
+ 
+    }
+
 
     
 }
