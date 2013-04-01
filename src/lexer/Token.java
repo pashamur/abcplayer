@@ -1,13 +1,8 @@
 package lexer;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import player.Rational;
-
 import abcmusic.Note;
 import abcmusic.Rest;
 
@@ -23,7 +18,6 @@ public class Token {
     private final int value; //used for type nth_repeat and tuplet_spec
     private final Note note; //used for type note
     private final Rest rest; //used for type rest
-    @SuppressWarnings("serial")
     
     /** construct a Token given type and the string s representing the Token.
      *  the specific type must match string s as specified in grammar.

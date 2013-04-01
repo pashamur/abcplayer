@@ -10,7 +10,7 @@ import player.Rational;
 
 public class Section implements ABCmusic{
     private List<Measure> measures;
-    public final int sizeInMeasures;
+    public final int size;
     public List<Rational> mList=new ArrayList<Rational>();
     
     public <R> R accept(Visitor<R> s) {
@@ -48,9 +48,9 @@ public class Section implements ABCmusic{
             measures.add(new Measure(tokens.subList(nextMeasureStart,nextMeasureEnd)));
             nextMeasureStart=++nextMeasureEnd;
         }
-        sizeInMeasures=measures.size();
+        size=measures.size();
         
-        for (int i=0; i<sizeInMeasures; i++) {
+        for (int i=0; i<size; i++) {
             mList.add(measures.get(i).getLength());
         }
     }
