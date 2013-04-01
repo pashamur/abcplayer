@@ -10,7 +10,6 @@ public class MeasureTest {
     @Test
     public void MeasureTest_Basic() {
     	Measure measure = TestHelpers.getFirstMeasureFromFile("sample_abc/testMeasure1.abc");
-
     	assertTrue(measure.getLength().equals(new Rational(15,1)));
     	assertEquals(8,measure.size);
     	assertTrue(measure.getElements(0) instanceof Tuplet);
@@ -56,5 +55,14 @@ public class MeasureTest {
     	for (int i=1;i<7;i++) assertTrue(measure.getElements(i) instanceof Note);
     	assertEquals("(4E0(1)1E0(1)[1E0(1)B1(1)D1(1)]E1(1) E2(1/2) D-1(1/2) 0E0(1/2) E-1(1/2) 0E0(1) -2E0(1) [E1(8)-2E0(8)] ", ABCmusicToString.abcmusicToString(measure));
     }
-    
+    // test missing chord end
+    @Test(expected=RuntimeException.class)
+    public void MeasureTest_MissingChordEnd() {
+        TestHelpers.getFirstMeasureFromFile("sample_abc/testMeasure5.abc");
+    }
+    // test tuplet length not matched
+    @Test(expected=RuntimeException.class)
+    public void MeasureTest_TupletLengthNoMatch() {
+        TestHelpers.getFirstMeasureFromFile("sample_abc/testMeasure6.abc");
+    }
 }

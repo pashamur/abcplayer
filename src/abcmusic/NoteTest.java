@@ -1,14 +1,14 @@
 package abcmusic;
 
 import static org.junit.Assert.*;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
-
 import player.Rational;
 
 public class NoteTest {
     /**
-     * 0) Test constructor
+     * 0) Test constructor and StringToNote
      * 1) Test that we can call setAccidental on a valid note
      * 2) Test that we can clone a note to get an identical note
      * 3) Test that attempting to instantiate an invalid note causes a RuntimeException
@@ -31,6 +31,40 @@ public class NoteTest {
         assertEquals(origin.octave,-1);
         assertTrue(origin.getLength().equals(new Rational(7,33)));
     }
+    @Test
+    public void NoteTest_StringToNote0() {
+        List<String> input=new ArrayList<String>();
+        input.add("^^");
+        input.add("A");
+        input.add(",");
+        input.add("");
+        input.add("/");
+        input.add("");
+        Note result=Note.stringListToNote(input);
+        Note expect=new Note('A',-1,2,true,new Rational(1,2));
+        assertTrue(ABCmusicEqual.abcmusicEqual(expect,result));
+    }
+    @Test
+    public void NoteTest_StringToNote1() {
+        List<String> input=new ArrayList<String>();
+        input.add("");
+        input.add("c");
+        input.add("'");
+        Note result=Note.stringListToNote(input);
+        Note expect=new Note('C',2,0,false,new Rational(1,1));
+        assertTrue(ABCmusicEqual.abcmusicEqual(expect,result));
+    }
+    @Test
+    public void NoteTest_StringToNote2() {
+        List<String> input=new ArrayList<String>();
+        input.add("_");
+        input.add("G");
+        input.add("");
+        input.add("2");
+        Note result=Note.stringListToNote(input);
+        Note expect=new Note('G',0,-1,true,new Rational(2,1));
+        assertTrue(ABCmusicEqual.abcmusicEqual(expect,result));
+    }
 	@Test
     public void NoteTest_setAccidental() {
         Note origin=new Note('C',0,0,false,new Rational(1,4));
@@ -42,12 +76,11 @@ public class NoteTest {
     public void NoteTest_copy() {
         Note origin=new Note('C',0,0,false,new Rational(1,4));
         Note copy=origin.clone();
-        assertTrue(copy.equals(origin));
-        
+        assertTrue(ABCmusicEqual.abcmusicEqual(copy, origin));
         copy.setAccidental(1,true);
         Note backup=new Note('C',0,0,false,new Rational(1,4));
-        assertTrue(origin.equals(backup));
-        assertFalse(origin.equals(copy));
+        assertTrue(ABCmusicEqual.abcmusicEqual(origin,backup));
+        assertFalse(ABCmusicEqual.abcmusicEqual(origin,copy));
         
     }
     // test invalid note

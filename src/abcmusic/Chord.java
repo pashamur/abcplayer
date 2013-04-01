@@ -12,13 +12,20 @@ public class Chord implements ABCmusic {
     public <R> R accept(Visitor<R> c) {
         return c.on(this);
     }
+    /**
+     * construct chord given list of notes.
+     * @param n list of Note
+     * @throws RuntimeException if n is empty
+     * prints warming if n.size=1 (chord has only one note)
+     */
     public Chord(List<Note> n) {
         size=n.size();
-        if (size<2) throw new RuntimeException("Chord contains too few notes.");
+        if (size==0) throw new RuntimeException("Chord contains empty notes.");
+        if (size==1) System.out.println("Warming: Chord contains only one note.");
         length=n.get(0).getLength();
         notes=new Note[size];
         for (int i=0;i<size;i++)
-            notes[i]=n.get(i).clone();        
+            notes[i]=n.get(i).clone();
     }
     public Rational getLength() {
         return length.clone();

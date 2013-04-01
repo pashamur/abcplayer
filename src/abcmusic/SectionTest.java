@@ -6,7 +6,6 @@ import player.Rational;
 import test.TestHelpers;
 
 public class SectionTest {
-    
 	//test is the correct number of measures are generated and if length of measures are correct
     @Test
     public void SectionTest_scale() {
@@ -32,8 +31,12 @@ public class SectionTest {
         for (int i=0;i<6;i++)
             assertTrue(expMeter.equals(section.mList.get(i)));
     }
-    
-    
- 
-    
+    @Test (expected=RuntimeException.class)
+    public void SectionTest_ExtraBar() {
+        TestHelpers.getFirstSectionFromFile("sample_abc/testSection0.abc");
+    }
+    @Test (expected=RuntimeException.class)
+    public void SectionTest_StartingWithBar() {
+        TestHelpers.getFirstSectionFromFile("sample_abc/testSection1.abc");
+    }
 }

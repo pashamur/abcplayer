@@ -3,10 +3,10 @@ package abcmusic;
 import player.Rational;
 
 public class Tuplet implements ABCmusic {
-    private final Rational length;
-    private final Rational noteLength;
-    public final int size;
-    private final ABCmusic[] elements;
+    private final Rational length;//total length of tuplet (in L)
+    private final Rational noteLength;//length of individual note (in L)
+    public final int size;//number of notes in tuplet
+    private final ABCmusic[] elements;//Note, Chord
     
     public <R> R accept(Visitor<R> t) {
         return t.on(this);
@@ -34,7 +34,7 @@ public class Tuplet implements ABCmusic {
         	length=l.times(new Rational(3,1));
         	noteLength=l.times(new Rational(3,4));
         }
-        else throw new RuntimeException("Tuplet-spec invalid.");        
+        else throw new RuntimeException("Tuplet-spec invalid.");
         elements=new ABCmusic[spec];
         for (int i=0; i<len; i++) elements[i]=n[i];
     }

@@ -8,19 +8,16 @@ import java.util.Map;
 import player.Rational;
 
 public class Note implements ABCmusic {
-    private boolean hasAccidental;
+    private boolean hasAccidental;//true if accidental has been set, false if using default
     private int accidental;
     public final int octave;
     public final char value;
     private final Rational length;
-    
-    // Map from accidental symbol to integer representation
+ // Map from accidental symbol to integer representation
     @SuppressWarnings("serial")
-    private static final Map<String, Integer> accidentalToInt = Collections
-            .unmodifiableMap(new HashMap<String, Integer>() {{
-                put("^^", 2); put("^", 1); put("=", 0);put("_", -1);put("__", -2);
-            }});
-    
+    private static final Map<String, Integer> accidentalToInt = 
+        Collections.unmodifiableMap(new HashMap<String, Integer>() {{
+        put("^^", 2); put("^", 1); put("=", 0);put("_", -1);put("__",-2);}});
     public <R> R accept(Visitor<R> n) {
         return n.on(this);
     }
@@ -66,8 +63,6 @@ public class Note implements ABCmusic {
     public Rational getLength() {
         return length.clone();
     }
-    
-    
     /**
      * noteParts list represents a note. noteParts.size()=3, 4, or 6. noteParts[0] represents accidental (must
      * be "^^", "^", "=", "_", "__", or empty string which means no accidental
@@ -86,7 +81,7 @@ public class Note implements ABCmusic {
         char basenote;
         
         if (len!=3 && len!=4 && len!=6) 
-        	throw new RuntimeException("List of string for note is incorrect.");
+            throw new RuntimeException("List of string for note is incorrect.");
         
         // accidentalString is either empty or one of "^^", "^", "=", "_", "__"
         String accidentalString = noteParts.get(0);
@@ -97,9 +92,9 @@ public class Note implements ABCmusic {
         else {
             hasAccidental = true;
             if (accidentalToInt.containsKey(accidentalString)) 
-            	accidental = accidentalToInt.get(accidentalString);
+                accidental = accidentalToInt.get(accidentalString);
             else 
-            	throw new RuntimeException("Accidental syntax error.");
+                throw new RuntimeException("Accidental syntax error.");
         }
         
         // baseNoteString is a character, A-G or a-g. If the character is lower case, we convert it
@@ -110,35 +105,23 @@ public class Note implements ABCmusic {
             basenote=(char) (basenoteString.charAt(0)-32);
         }
         else if (basenoteString.matches("[A-G]")) 
-        	basenote=basenoteString.charAt(0);
+            basenote=basenoteString.charAt(0);
         else 
-        	throw new RuntimeException("Basenote unrecognized.");
+            throw new RuntimeException("Basenote unrecognized.");
         
         // octaveString should be either empty, a series of apostrophes (''''') or commas (,,,,,)
         String octaveString = noteParts.get(2);
         int numberOfOctaves = octaveString.length();
         if (numberOfOctaves != 0) {
             if (octaveString.matches("[']+")) 
-            	octave+=numberOfOctaves;
+                octave+=numberOfOctaves;
             else if (octaveString.matches("[,]+")) 
-            	octave-=numberOfOctaves;
+                octave-=numberOfOctaves;
             else 
-            	throw new RuntimeException("Octave syntax error.");
+                throw new RuntimeException("Octave syntax error.");
         }
         Rational noteLength = Rational.stringListToRational(noteParts.subList(3, len));
         
         return new Note(basenote,octave,accidental,hasAccidental,noteLength);
-    }
-    
-    /**
-     * Check for equality by comparing octaves, values, accidentals, and lengths
-     * @return true if the current note is equal to the other note
-     */
-    @Override
-    public boolean equals(Object other) {
-        if (! (other instanceof Note)) return false;
-        Note that=(Note) other;
-        return (octave==that.octave && value==that.value && this.getHasAccidental()==that.getHasAccidental() 
-                && this.getAccidental()==that.getAccidental() && this.getLength().equals(that.getLength()));
     }
 }

@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
 import org.junit.Test;
-
 import test.TestHelpers;
 
 @SuppressWarnings("unused")
@@ -129,7 +127,6 @@ public class LexerTest {
         assertTrue("|".equals(lexer.getTokens(0).get(0).print()));
         assertTrue("|:".equals(lexer.getTokens(0).get(1).print()));
         assertTrue("A,,1/2".equals(lexer.getTokens(0).get(2).print()));
-
     }
     
     @Test(expected = RuntimeException.class)
@@ -233,6 +230,4 @@ public class LexerTest {
         assertTrue("]".equals(lexer.getTokens(0).get(5).print()));            
         assertTrue(":|".equals(lexer.getTokens(0).get(6).print()));
     }
-
-    
 }

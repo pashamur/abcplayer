@@ -19,7 +19,12 @@ public class ChordTest {
         Chord result=new Chord(notes);
         assertTrue(result.getLength().equals(new Rational(1,2)));
         assertEquals(result.size,2);
-        assertTrue(result.getNote(0).equals(new Note('C',0,0,false,new Rational(1,2))));
-        assertTrue(result.getNote(1).equals(new Note('A',0,0,false,new Rational(1,4))));
+        assertTrue(ABCmusicEqual.abcmusicEqual(result.getNote(0),new Note('C',0,0,false,new Rational(1,2))));
+        assertTrue(ABCmusicEqual.abcmusicEqual(result.getNote(1),new Note('A',0,0,false,new Rational(1,4))));
+    }
+    @Test(expected=RuntimeException.class)
+    public void ChordTest_EmptyNoteList() {
+        List<Note> notes=new ArrayList<Note>();
+        new Chord(notes);
     }
 }

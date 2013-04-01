@@ -32,7 +32,34 @@ public class VoiceTest {
             assertEquals(48,voice.mList.size());
             for (int i = 0; i < voice.mList.size(); i++)
                 assertTrue(expMeter.equals(voice.mList.get(i)));
-            //System.out.println(ABCmusicToString.abcmusicToString(voice));
+        } catch (IOException e) {
+            throw new RuntimeException("File error.");
+        }
+    }
+    // missing end bar
+    @Test (expected=RuntimeException.class)
+    public void VoiceTest_MissingEndBar() {
+        String file = "sample_abc/testVoice1.abc";
+        List<String> result = new ArrayList<String>();
+        try {
+            Header header = Main.readFile(file, result);
+            Lexer lexer = new Lexer(result, header);
+            List<Token> tk = lexer.getTokens(0);
+            new Voice(tk);
+        } catch (IOException e) {
+            throw new RuntimeException("File error.");
+        }
+    }
+    // repeated major section bar
+    @Test (expected=RuntimeException.class)
+    public void VoiceTest_RepeatedMajorSectionBar() {
+        String file = "sample_abc/testVoice2.abc";
+        List<String> result = new ArrayList<String>();
+        try {
+            Header header = Main.readFile(file, result);
+            Lexer lexer = new Lexer(result, header);
+            List<Token> tk = lexer.getTokens(0);
+            new Voice(tk);
         } catch (IOException e) {
             throw new RuntimeException("File error.");
         }

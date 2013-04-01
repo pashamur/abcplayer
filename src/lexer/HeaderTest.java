@@ -69,7 +69,5 @@ public class HeaderTest {
         assertArrayEquals(expectedKeySignature, header.getKeySignature()); 
         
     }
-   
-	
 }
 

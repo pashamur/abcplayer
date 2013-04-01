@@ -48,7 +48,7 @@ public class MajorSectionTest {
     		assertTrue(expMeter.equals(majorSection.mList.get(i)));
     }
     
-    // check nth-repeat, e.g. A |[1 B:| [2 C -> ABAC
+    // check nth-repeat, e.g. A |[1 B:|[2 C -> ABAC
     @Test
     public void MajorSectionTest_NthRepeat() {
     	List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/testRepeat2.abc");
@@ -86,7 +86,7 @@ public class MajorSectionTest {
     	for (int i = 0; i < 6; i++)
     		assertTrue(expMeter.equals(majorSection.mList.get(i)));
     }
- // check nth-repeat with start A |: B |[1 C :| [2 D |: E |[1 F :| [2 G -> ABCBDEFEG
+    // check nth-repeat with start A |: B |[1 C :| [2 D |: E |[1 F :| [2 G -> ABCBDEFEG
     @Test
     public void MajorSectionTest_NthRepeatFollowNthRepeat() {
     	List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/testRepeat5.abc");
@@ -100,6 +100,22 @@ public class MajorSectionTest {
     	for (int i = 0; i < 6; i++)
     		assertTrue(expMeter.equals(majorSection.mList.get(i)));
     }
-    
-    
+    // unmatched repeat start
+    @Test (expected=RuntimeException.class)
+    public void MajorSectionTest_MissingRepeatEnd() {
+        List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/testRepeat7.abc");
+        new MajorSection(tk);
+    }
+    // nested repeat
+    @Test (expected=RuntimeException.class)
+    public void MajorSectionTest_NestRepeat() {
+        List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/testRepeat8.abc");
+        new MajorSection(tk);
+    }
+    // missing nth repeat
+    @Test (expected=RuntimeException.class)
+    public void MajorSectionTest_MissingNthRepeat() {
+        List<Token> tk = TestHelpers.getLexerTokensFromFile("sample_abc/testRepeat9.abc");
+        new MajorSection(tk);
+    }
 }

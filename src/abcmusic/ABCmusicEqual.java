@@ -1,6 +1,6 @@
 package abcmusic;
-
-
+// compare two object of ABCmusic. Two notes are identical if base, accidental,
+// hasAccidenal and octaves are identical. Notice this is different from Pitch.equals().
 public class ABCmusicEqual implements ABCmusic.Visitor<Boolean>{
     private ABCmusic other;
     public ABCmusicEqual(ABCmusic e) {

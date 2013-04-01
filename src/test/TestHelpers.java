@@ -60,8 +60,9 @@ public class TestHelpers {
     public static Section getFirstSectionFromFile(String filename){
     	Lexer lexer = getLexerFromFile(filename);
         List<Token> tk=lexer.getTokens(0);
-            
-        return new Section(tk.subList(0,tk.size()-1));
+        if (tk.get(tk.size()-1).type.equals(Token.Type.repeat_end))
+            return new Section(tk.subList(0,tk.size()));
+        else return new Section(tk.subList(0,tk.size()-1));
 	}
     
     // Load a file and create a music instance from it
