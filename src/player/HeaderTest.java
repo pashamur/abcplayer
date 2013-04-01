@@ -41,6 +41,7 @@ public class HeaderTest {
                 result = new ArrayList<String>();
             }
         }
+        reader.close();
         assertTrue(header.getDefaultNoteLength().equals(new Rational(1,8)));
         assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(4,4)));
         assertEquals(header.getTempo(),140);
@@ -82,6 +83,7 @@ public class HeaderTest {
                 result = new ArrayList<String>();
             }
         }
+        reader.close();
         assertTrue(header.getDefaultNoteLength().equals(new Rational(1,16)));
         assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(4,4)));
         assertEquals(header.getTempo(),280);
@@ -126,6 +128,7 @@ public class HeaderTest {
                 result = new ArrayList<String>();
             }
         }
+        reader.close();
         assertTrue(header.getDefaultNoteLength().equals(new Rational(1,8)));
         assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(4,4)));
         assertEquals(header.getTempo(),280);
@@ -165,6 +168,7 @@ public class HeaderTest {
                 result = new ArrayList<String>();
             }
         }
+        reader.close();
         assertTrue(header.getDefaultNoteLength().equals(new Rational(1,16)));
         assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(3,8)));
         assertEquals(header.getTempo(),240);
@@ -180,6 +184,119 @@ public class HeaderTest {
         
          }
     
-    
+    @Test(expected = RuntimeException.class)
+    public void HeaderTest5() throws IOException{
+        String file="sample_abc/headerTest1.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+                result = new ArrayList<String>();
+            }
+        }
+        reader.close();
+        
+    }
+    @Test(expected = RuntimeException.class)
+    public void HeaderTest6() throws IOException{
+        String file="sample_abc/headerTest2.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+                result = new ArrayList<String>();
+            }
+        }
+        reader.close();
+        
+    }@Test(expected = RuntimeException.class)
+    public void HeaderTest7() throws IOException{
+        String file="sample_abc/headerTest3.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+                result = new ArrayList<String>();
+            }
+        }
+        reader.close();
+        
+    }@Test(expected = RuntimeException.class)
+    public void HeaderTest8() throws IOException{
+        String file="sample_abc/headerTest4.abc";
+        List<String> result = new ArrayList<String>();
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Cannot find the file");
+        }
+        BufferedReader reader = new BufferedReader(fileReader);
+        String temp;
+        int head = 0;
+        Header header = null;
+        while ((temp = reader.readLine()) != null) {
+            Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
+            if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
+                result.add(temp);
+            }
+            if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
+                    && (head == 0)) {
+                head = 1;
+                header = new Header(result);
+                result = new ArrayList<String>();
+            }
+        }
+        reader.close();
+        
+    }    
 }
 
