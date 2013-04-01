@@ -12,6 +12,7 @@ public class Lexer {
     /**
      * Convert noteLength to a list of strings which can be understood by the token
      * 
+     * 
      * @param result
      *            , mutable list of Strings, which can be understood by Token if
      *            result.size()=1, first element represents an integer. if
