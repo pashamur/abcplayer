@@ -1,5 +1,16 @@
 package player;
 
+import abcmusic.ABCmusic;
+import abcmusic.Chord;
+import abcmusic.MajorSection;
+import abcmusic.Measure;
+import abcmusic.Music;
+import abcmusic.Note;
+import abcmusic.Rest;
+import abcmusic.Section;
+import abcmusic.Tuplet;
+import abcmusic.Voice;
+
 /**
  * Calculate the amount of ticks per quarter note by calculating the least common multiple
  * of the denominators of all of the notes in the current music scaled by the baseNoteLength
@@ -34,7 +45,7 @@ public class ABCmusicTicks implements ABCmusic.Visitor<Integer>{
         return ticksPerQuarterNote;
     }
     public Integer on(Section sc) {
-        for (int i=0;i<sc.sizeInMeasures;i++) {
+        for (int i=0;i<sc.size;i++) {
         	ABCMusicTicks(sc.getMeasure(i));
         }
         return ticksPerQuarterNote;
