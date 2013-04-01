@@ -27,7 +27,7 @@ public class ABCmusicTicks implements ABCmusic.Visitor<Integer>{
 	}
 	
 	public Integer on(Music mu){
-		for (int i=0;i<mu.numberOfVoices;i++) {
+		for (int i=0;i<mu.size;i++) {
 			ABCMusicTicks(mu.getVoice(i));
         }
         return ticksPerQuarterNote;

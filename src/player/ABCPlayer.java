@@ -47,7 +47,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
 	
 	public SequencePlayer on(Music music){
 		// Process every voice in the music, one at a time 
-        for (int i=0;i<music.numberOfVoices;i++) {
+        for (int i=0;i<music.size;i++) {
             abcPlayer(music.getVoice(i));
         }
         return player;

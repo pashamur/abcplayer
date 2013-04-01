@@ -15,6 +15,7 @@ public class Note implements ABCmusic {
     private final Rational length;
     
     // Map from accidental symbol to integer representation
+    @SuppressWarnings("serial")
     private static final Map<String, Integer> accidentalToInt = Collections
             .unmodifiableMap(new HashMap<String, Integer>() {{
                 put("^^", 2); put("^", 1); put("=", 0);put("_", -1);put("__", -2);

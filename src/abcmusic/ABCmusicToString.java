@@ -15,7 +15,7 @@ package abcmusic;
  */
 public class ABCmusicToString implements ABCmusic.Visitor<String>{
     public String on(Music music){
-        int len = music.numberOfVoices;
+        int len = music.size;
         StringBuilder s=new StringBuilder();
         s.append("MU:\n");
         for (int i=0;i<len;i++) {
