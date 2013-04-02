@@ -15,9 +15,9 @@ public class Token {
     }
     public final Type type;
     private final List<String> text;
-    private final int value; //used for type nth_repeat and tuplet_spec
-    private final Note note; //used for type note
-    private final Rest rest; //used for type rest
+    private int value; //used for type nth_repeat and tuplet_spec
+    private Note note = null; //used for type note
+    private Rest rest = null; //used for type rest
     
     /** construct a Token given type and the string s representing the Token.
      *  the specific type must match string s as specified in grammar.
@@ -43,23 +43,17 @@ public class Token {
         text = new ArrayList<String>(s);
         if (type == Type.tuplet_spec) {
             value = (int) (s.get(0).charAt(1) - '0');
-            rest=null;
-            note=null;
             if ( value<2 || value>4 ) throw new RuntimeException("Tuplet-sec value out of bound.");
         }
         else if (type == Type.nth_repeat) {
             value = (int) (s.get(0).charAt(1) - '0');
-            rest=null;
-            note=null;
             if ( value<1 || value>2 ) throw new RuntimeException("nth-repeat value out of bound.");            
         }            
         else {
             value = -1;
             int len = s.size();
             if (type == Type.rest) rest = new Rest(Rational.stringListToRational(s.subList(1, len)));
-            else rest=null;
             if (type == Type.note) note = Note.stringListToNote(s);
-            else note=null;
         }
     }
 

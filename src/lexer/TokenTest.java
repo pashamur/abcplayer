@@ -3,6 +3,7 @@ package lexer;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -14,13 +15,7 @@ import abcmusic.Note;
 public class TokenTest {
     @Test
     public void TokenTest_Note() {
-        List<String> s=new ArrayList<String>();
-        s.add("^^");
-        s.add("a");
-        s.add("''");
-        s.add("");
-        s.add("/");
-        s.add("");
+        List<String> s= Arrays.asList("^^", "a", "''", "", "/", "");
         Token tk=new Token(Token.Type.note,s);
         Note note=tk.getNote();
         assertEquals(note.value,'A');
