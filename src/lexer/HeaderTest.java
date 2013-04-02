@@ -3,13 +3,7 @@ package lexer;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 import org.junit.Test;
 import abcmusic.Pair;
 import player.Rational;
@@ -25,14 +19,10 @@ public class HeaderTest {
         assertEquals(header.getNumVoices(),2);
         assertEquals(header.getVoiceIndex("1"),1);
         assertEquals(header.getVoiceIndex("2"),2);
-        int[] keySign = new int[7];
-        for (char i='A';i<'G';i++ ) {
-           keySign[i-'A']=header.getAccidental(i); 
-        }
-        int[] expected= {0,0,0,0,0,0,0};
-        assertArrayEquals(expected,keySign); 
         
-         }
+        int[] expected= {0,0,0,0,0,0,0};
+        assertArrayEquals(expected,header.getKeySignature());  
+    }
 
     @Test
     public void HeaderTest2() throws IOException{
@@ -44,15 +34,10 @@ public class HeaderTest {
         assertEquals(header.getVoiceIndex("1"),1);
         assertEquals(header.getVoiceIndex("2"),2);
         assertEquals(header.getVoiceIndex("3"),3);        
-        int[] keySign = new int[7];
-        for (char i='A';i<'G';i++ ) {
-           keySign[i-'A']=header.getAccidental(i); 
-        }
-        int[] expected= {0,0,0,0,0,0,0};
-        assertArrayEquals(expected,keySign); 
-        
 
-               }
+        int[] expected= {0,0,0,0,0,0,0};
+        assertArrayEquals(expected,header.getKeySignature()); 
+    }
     
  
     @Test
@@ -61,19 +46,14 @@ public class HeaderTest {
         assertTrue(header.getDefaultNoteLength().equals(new Rational(1,8)));
         assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(4,4)));
         assertEquals(header.getTempo(),280);
-        int[] keySign = new int[7];
-        for (char i='A';i<'G';i++ ) {
-           keySign[i-'A']=header.getAccidental(i); 
-        }
-        int[] expected= {0, 0, 0, 0, 0, 1, 0};
-        assertArrayEquals(expected,keySign); 
         
-         }
+        int[] expected= {0, 0, 0, 0, 0, 1, 0};
+        assertArrayEquals(expected, header.getKeySignature()); 
+    }
 
     
     @Test
-    public void HeaderTest4() throws IOException{
-        
+    public void HeaderTest4() throws IOException{    
         Header header=TestHelpers.getFileHeader("sample_abc/fur_elise.abc");
         assertTrue(header.getDefaultNoteLength().equals(new Rational(1,16)));
         assertTrue(header.getMeter().equals(new Pair<Integer,Integer>(3,8)));
@@ -81,14 +61,10 @@ public class HeaderTest {
         assertEquals(header.getNumVoices(),2);
         assertEquals(header.getVoiceIndex("1"),1);
         assertEquals(header.getVoiceIndex("2"),2);
-        int[] keySign = new int[7];
-        for (char i='A';i<'G';i++ ) {
-           keySign[i-'A']=header.getAccidental(i); 
-        }
-        int[] expected= {0,0,0,0,0,0,0};
-        assertArrayEquals(expected,keySign); 
         
-         }
+        int[] expected= {0,0,0,0,0,0,0};
+        assertArrayEquals(expected,header.getKeySignature());     
+    }
    
     @Test(expected = RuntimeException.class)
     public void HeaderTest5() throws IOException{
