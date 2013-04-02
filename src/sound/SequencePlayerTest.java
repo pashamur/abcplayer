@@ -14,7 +14,7 @@ public class SequencePlayerTest {
     public void SequencePlayer_piece1_play(){
         SequencePlayer player;
         try {
-            player = new SequencePlayer(140, 12);
+            player = new SequencePlayer(140, 12, 1);
 
             player.addNote(new Pitch('C').toMidiNote(), 0, 12);
             player.addNote(new Pitch('C').toMidiNote(), 12, 12);
@@ -59,7 +59,7 @@ public class SequencePlayerTest {
     public void SequencePlayer_piece2_play(){
         SequencePlayer player;
         try {
-            player = new SequencePlayer(200, 12);
+            player = new SequencePlayer(200, 12, 1);
             
             player.addNote(new Pitch('E').transpose(Pitch.OCTAVE).toMidiNote(), 0, 6);
             player.addNote(new Pitch('F').transpose(1).toMidiNote(), 0, 6);

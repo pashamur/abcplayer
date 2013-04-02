@@ -30,14 +30,15 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
 	 * beats per minute, and a valid parsed header
 	 * 
 	 * @param ticks Number of ticks per quarter note. Must be a non-negative integer
+	 * @param numVoices Number of voices in the music to be played
 	 * @param bpm Number of beats (quarter notes) per minute. Must be non-negative integer
 	 * @param head A parsed representation of the header
 	 */
-	public ABCPlayer(int ticks, int bpm, Header head){
+	public ABCPlayer(int ticks, int bpm, int numVoices, Header head){
 		try {
-			ticksPerQuarterNote = ticks*128; // This is to get around the NOTE_ON / NOTE_OFF in different voices problem, as per Josh's suggestion.
+			ticksPerQuarterNote = ticks; // This is to get around the NOTE_ON / NOTE_OFF in different voices problem, as per Josh's suggestion.
 			header = head;
-			player = new SequencePlayer(ticksPerQuarterNote, bpm);
+			player = new SequencePlayer(ticksPerQuarterNote, bpm, numVoices);
 		} catch (MidiUnavailableException e) {
 	        e.printStackTrace();
 	    } catch (InvalidMidiDataException e) {
@@ -59,6 +60,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         }
         // Reset tick after every voice
         lastTick = 0;
+        player.nextTrack();
         return player;
     }
     public SequencePlayer on(MajorSection majorsection) {
@@ -85,7 +87,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         for (int i=0;i<c.size;i++) {
         	Note note = c.getNote(i);
         	Pitch pitch = createPitchFromNote(note);
-        	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks-1);
+        	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
         }
         lastTick = lastTick+noteLengthInTicks;
         return player;
@@ -108,7 +110,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     	Pitch pitch = createPitchFromNote(note);
     
     	int noteLengthInTicks = getNoteLengthInTicks(note);
-    	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks-1);
+    	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
     	lastTick = lastTick+noteLengthInTicks;
     		
         return player;
@@ -176,7 +178,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     private void processNoteWithinTuplet(Note note, int noteLengthInTicks){
     	
     	Pitch pitch = createPitchFromNote(note);
-    	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks-1);
+    	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
     	lastTick = lastTick+noteLengthInTicks;
     }
     
@@ -191,7 +193,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     	for (int i=0;i<chord.size;i++) {
         	Note note = chord.getNote(i);
         	Pitch pitch = createPitchFromNote(note);
-        	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks-1);
+        	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
         }
         lastTick = lastTick+noteLengthInTicks;
     }

@@ -1,6 +1,7 @@
 package sound;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiEvent;
@@ -18,7 +19,9 @@ import javax.sound.midi.Track;
 public class SequencePlayer {
 
     private Sequencer sequencer;
-    private Track track;
+    private Sequence sequence;
+    private Track[] tracks;
+    private int currentTrackIndex;
     private int beatsPerMinute;
 
     private static int DEFAULT_CHANNEL = 0;    // midi channel - for our purpose always 0
@@ -35,26 +38,48 @@ public class SequencePlayer {
      * @param beatsPerMinute the number of beats per minute, where each beat is equal to
      * a quarter note in duration
      * @param ticksPerQuarterNote the number of ticks per quarter note
+     * @param numberofTracks The number of tracks in your music (voices). numberOfTracks > 0.
      * @throws MidiUnavailableException
      * @throws InvalidMidiDataException
      */
-    public SequencePlayer(int beatsPerMinute, int ticksPerQuarterNote)
+    public SequencePlayer(int beatsPerMinute, int ticksPerQuarterNote, int numberOfTracks)
             throws MidiUnavailableException, InvalidMidiDataException {
         this.sequencer = MidiSystem.getSequencer();
-
+        
         // Create a sequence object with with tempo-based timing, where
         // the resolution of the time step is based on ticks per quarter note.
-        Sequence sequence = new Sequence(Sequence.PPQ, ticksPerQuarterNote);
+        this.sequence = new Sequence(Sequence.PPQ, ticksPerQuarterNote);
         this.beatsPerMinute = beatsPerMinute;
 
-        // Create an empty track. Notes will be added to this track.
-        this.track = sequence.createTrack();
-
+        if(numberOfTracks <= 0)
+        	throw new RuntimeException("Cannot initialize SequencePlayer with 0 or less tracks");
+        
+        // Create an empty track array. Notes will be added tracks in this array.
+        this.tracks = new Track[numberOfTracks];
+        // Initialize the first track in the array. This will be our "default" track
+        this.tracks[0] = sequence.createTrack();
+        this.currentTrackIndex = 0;
+        
         sequencer.setSequence(sequence);
 
         checkRep();
     }
 
+    public int getTrackIndex(){
+    	return this.currentTrackIndex;
+    }
+    
+    /**
+     * Begin recording the next track in this sequencer
+     */
+    
+    public void nextTrack(){
+    	this.currentTrackIndex += 1;
+    	
+    	if(this.currentTrackIndex < tracks.length)
+    		this.tracks[currentTrackIndex] = this.sequence.createTrack();
+    }
+    
     /**
      * @param eventType the MIDI status byte; must be a valid MidiMessage type in ShortMessage
      * @param note a MIDI data byte; must be a valid pitch value
@@ -62,9 +87,9 @@ public class SequencePlayer {
      */
     private void addMidiEvent(int eventType, int note, int tick) throws InvalidMidiDataException {
         ShortMessage msg = new ShortMessage();
-        msg.setMessage(eventType, DEFAULT_CHANNEL, note, DEFAULT_VELOCITY);
+        msg.setMessage(eventType, DEFAULT_CHANNEL+currentTrackIndex, note, DEFAULT_VELOCITY);
         MidiEvent event = new MidiEvent(msg, tick);
-        this.track.add(event);
+        this.tracks[currentTrackIndex].add(event);
     }
 
     /**
@@ -115,29 +140,31 @@ public class SequencePlayer {
     public String toString() {
         String trackInfo = "";
         
-        for (int i = 0; i < track.size(); i++) {
-            MidiEvent e = track.get(i);
-            MidiMessage msg = e.getMessage();
-            String msgString = "";
-
-            if (msg instanceof javax.sound.midi.ShortMessage) {
-                ShortMessage smg = ((ShortMessage) msg);
-                int command = smg.getCommand();
-                String commandType = "UnknownCommand";
-
-                // determine the type of the command in this message
-                if (command == ShortMessage.NOTE_OFF) {
-                    commandType = "NOTE_OFF";
-                } else if (command == ShortMessage.NOTE_ON) {
-                    commandType = "NOTE_ON ";
-                }
-
-                msgString = "Event: " + commandType + " Pitch: " + smg.getData1() + " ";
-            } else {
-                msgString = "***** End of track *****  ";
-            }
-
-            trackInfo = trackInfo + msgString + " Tick: " + e.getTick() + "\n";
+        for(Track currentTrack : tracks){
+	        for (int i = 0; i < currentTrack.size(); i++) {
+	            MidiEvent e = currentTrack.get(i);
+	            MidiMessage msg = e.getMessage();
+	            String msgString = "";
+	
+	            if (msg instanceof javax.sound.midi.ShortMessage) {
+	                ShortMessage smg = ((ShortMessage) msg);
+	                int command = smg.getCommand();
+	                String commandType = "UnknownCommand";
+	
+	                // determine the type of the command in this message
+	                if (command == ShortMessage.NOTE_OFF) {
+	                    commandType = "NOTE_OFF";
+	                } else if (command == ShortMessage.NOTE_ON) {
+	                    commandType = "NOTE_ON ";
+	                }
+	
+	                msgString = "Event: " + commandType + " Pitch: " + smg.getData1() + " ";
+	            } else {
+	                msgString = "***** End of track *****  ";
+	            }
+	
+	            trackInfo = trackInfo + msgString + " Tick: " + e.getTick() + "\n";
+	        }
         }
 
         return trackInfo;
@@ -145,7 +172,7 @@ public class SequencePlayer {
 
     private void checkRep() {
         assert sequencer != null : "sequencer should be non-null";
-        assert track != null : "track should be non-null";
+        assert tracks[0] != null : "first track should be non-null";
         assert beatsPerMinute >= 0 : "should be positive number of beats per minute";
     }
 
@@ -162,7 +189,7 @@ public class SequencePlayer {
 
             // Create a new player, with 120 beats (i.e., quarter note) per
             // minute, with 2 tick per quarter note.
-            player = new SequencePlayer(120, 2);
+            player = new SequencePlayer(120, 2, 1);
 
             player.addNote(new Pitch('C').toMidiNote(), 0, 1);
             player.addNote(new Pitch('D').toMidiNote(), 1, 1);

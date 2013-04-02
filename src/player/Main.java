@@ -47,8 +47,9 @@ public class Main {
         int ticksPerQuarterNote = ticks.ABCMusicTicks(music);
         // Number of quarter notes (!) per minute: Tempo * default note length divided by 4 (to scale according to quarter notes)
         int beatsPerMinute = (header.getTempo() * header.getDefaultNoteLength().num * 4) / header.getDefaultNoteLength().den;
-        ABCPlayer player = new ABCPlayer(ticksPerQuarterNote, beatsPerMinute, header);
+        ABCPlayer player = new ABCPlayer(ticksPerQuarterNote, beatsPerMinute, music.size, header);
         SequencePlayer p = player.on(music);
+        System.out.print(p);
         try {
 			p.play();
 		} catch (MidiUnavailableException e) {
