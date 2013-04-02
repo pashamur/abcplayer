@@ -10,7 +10,6 @@ import abcmusic.Pair;
 
 import player.Rational;
 
-
 public class Header {
     private int[] keySignature; // accidentals derived from key signature
                                 // for A-G respectively.
@@ -24,12 +23,9 @@ public class Header {
      * initialize all fields of Header. Lex header and generate a list of field
      * (K, M...) and their respective strings. get rid of comments.
      * 
-     * @param headerLines
-     *            A list of strings to be lexed
-     * @throws RuntimeException
-     *             if X, T, K does not appear at the right place.
-     * @throws RuntimeException
-     *             if syntax error within any one line.
+     * @param headerLines A list of strings to be lexed
+     * @throws RuntimeException if X, T, K does not appear at the right place.
+     * @throws RuntimeException if syntax error within any one line.
      */
     public Header(List<String> headerLines) {
         int currentLine = 0;

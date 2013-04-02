@@ -18,7 +18,6 @@ import lexer.Lexer;
 import lexer.Token;
 
 public class TestHelpers {
-
     /**
      * Helper function that reads lines from a file and creates a valid header
      * 
@@ -26,7 +25,6 @@ public class TestHelpers {
      * @return A valid header with information extracted from the file
      * @throws IOException If we have trouble finding the file
      */
-    
 	public static Header getFileHeader(String filename) throws IOException {
         List<String> headerLines = new ArrayList<String>();
         FileReader fileReader;

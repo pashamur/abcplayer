@@ -1,6 +1,4 @@
 package abcmusic;
-
-
 /**
  * Pair represents an immutable pair of values (x,y). x and y MAY NOT be null.
  * 
@@ -18,11 +16,8 @@ public class Pair<X, Y >{
 
     /**
      * Make a pair.
-     * 
-     * @param first
-     *            Requires first != null.
-     * @param second
-     *            Requires second != null.
+     * @param first requires first != null.
+     * @param second Requires second != null.
      */
     public Pair(X first, Y second) {
         if (first == null || second == null)
