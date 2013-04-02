@@ -3,7 +3,6 @@ package lexer;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -11,11 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
 import org.junit.Test;
-
 import abcmusic.Pair;
-
 import player.Rational;
 
 public class HeaderTest {
@@ -201,7 +197,6 @@ public class HeaderTest {
         BufferedReader reader = new BufferedReader(fileReader);
         String temp;
         int head = 0;
-        Header header = null;
         while ((temp = reader.readLine()) != null) {
             Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
             if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
@@ -210,7 +205,7 @@ public class HeaderTest {
             if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
                     && (head == 0)) {
                 head = 1;
-                header = new Header(result);
+                new Header(result);
                 result = new ArrayList<String>();
             }
         }
@@ -230,7 +225,6 @@ public class HeaderTest {
         BufferedReader reader = new BufferedReader(fileReader);
         String temp;
         int head = 0;
-        Header header = null;
         while ((temp = reader.readLine()) != null) {
             Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
             if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
@@ -239,7 +233,7 @@ public class HeaderTest {
             if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
                     && (head == 0)) {
                 head = 1;
-                header = new Header(result);
+                new Header(result);
                 result = new ArrayList<String>();
             }
         }
@@ -258,7 +252,6 @@ public class HeaderTest {
         BufferedReader reader = new BufferedReader(fileReader);
         String temp;
         int head = 0;
-        Header header = null;
         while ((temp = reader.readLine()) != null) {
             Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
             if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
@@ -267,7 +260,7 @@ public class HeaderTest {
             if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
                     && (head == 0)) {
                 head = 1;
-                header = new Header(result);
+                new Header(result);
                 result = new ArrayList<String>();
             }
         }
@@ -288,7 +281,6 @@ public class HeaderTest {
         BufferedReader reader = new BufferedReader(fileReader);
         String temp;
         int head = 0;
-        Header header = null;
         while ((temp = reader.readLine()) != null) {
             Pattern commentPattern = Pattern.compile("%[\\w\\s]*");
             if ((!commentPattern.matcher(temp).matches()) && (!temp.equals(""))) {
@@ -297,7 +289,7 @@ public class HeaderTest {
             if ((!(temp.equals(""))) && (temp.substring(0, 1).equals("K"))
                     && (head == 0)) {
                 head = 1;
-                header = new Header(result);
+                new Header(result);
                 result = new ArrayList<String>();
             }
         }
