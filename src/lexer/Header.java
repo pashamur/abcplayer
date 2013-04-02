@@ -38,7 +38,7 @@ public class Header {
         meter = new Pair<Integer, Integer>(4, 4);
         numVoices = 0;
         voice = new HashMap<String, Integer>();
-        
+
         keySignature = new int[7];
         Pattern numberPattern = Pattern.compile("\\d+");
         Pattern wordPattern = Pattern.compile("[^\\s]+");
@@ -68,6 +68,9 @@ public class Header {
                 int PairX = Integer.parseInt(numberMatcher.group());
                 numberMatcher.find();
                 int PairY = Integer.parseInt(numberMatcher.group());
+                if (PairY == 0) {
+                    throw new RuntimeException("Wrong Input!");
+                }
                 defaultNoteLength = new Rational(PairX, PairY);
             } else if (meterPattern.matcher(headerLines.get(currentLine)).matches()) {
                 int PairX;
@@ -77,6 +80,9 @@ public class Header {
                     PairX = Integer.parseInt(numberMatcher.group());
                     numberMatcher.find();
                     PairY = Integer.parseInt(numberMatcher.group());
+                    if (PairY == 0) {
+                        throw new RuntimeException("Wrong Input!");
+                    }
 
                 } else {
                     Pattern C = Pattern.compile("C");
@@ -103,8 +109,10 @@ public class Header {
                 String temp = headerLines.get(currentLine).substring(2);
                 Matcher wordMatcher = wordPattern.matcher(temp);
                 wordMatcher.find();
+                if (voice.containsKey(wordMatcher.group())) {
+                    throw new RuntimeException("Wrong input");
+                }
                 numVoices++;
-
                 voice.put(wordMatcher.group(), numVoices);
             } else {
                 throw new RuntimeException("Wrong Input!");
