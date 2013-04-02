@@ -49,7 +49,6 @@ public class Main {
         int beatsPerMinute = (header.getTempo() * header.getDefaultNoteLength().num * 4) / header.getDefaultNoteLength().den;
         ABCPlayer player = new ABCPlayer(ticksPerQuarterNote, beatsPerMinute, header);
         SequencePlayer p = player.on(music);
-        System.out.println(p.toString());
         try {
 			p.play();
 		} catch (MidiUnavailableException e) {
