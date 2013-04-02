@@ -1,7 +1,6 @@
 package abcmusic;
 
 import static org.junit.Assert.*;
-
 import java.util.List;
 import lexer.Token;
 import org.junit.Test;
