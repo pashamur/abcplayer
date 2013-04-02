@@ -11,8 +11,8 @@ public class KeySignature {
      * 
      * @param keySignature example: "A", "Am", "C#", "Bb", "F#m" or "Gbm"
      * @return int[]
-     * @throws RuntimeException("Key signature string invalid.") if s is not a valid abc signature
-     * @throws RuntimeException("Key signature is not supported.") if the given key signature is
+     * @throws KeySignatureException("Key signature string invalid.") if s is not a valid abc signature
+     * @throws KeySignatureException("Key signature is not supported.") if the given key signature is
      * not one of the 30 major types (e.g. "Fb", "G#b").
      */
     public static int[] KeySignatureToInt(String keySignature) {
@@ -21,7 +21,7 @@ public class KeySignature {
         boolean flat=false;
         boolean minor=false;
         if (!keySignature.matches("[A-G][#|b]?[m]?"))
-            throw new RuntimeException("Key signature string invalid.");
+            throw new KeySignatureException("Key signature invalid.");
         note=keySignature.charAt(0);
         if (keySignature.length()==2) {
             char accidental;
@@ -36,6 +36,12 @@ public class KeySignature {
             else flat=true;
         }
         return KeySignatureLookup(note,sharp,flat,minor);
+    }
+    @SuppressWarnings("serial")
+    private static class KeySignatureException extends RuntimeException{
+        public KeySignatureException(String message) {
+            super("KeySignatureException: "+message);
+        }
     }
     /**
      * helper function. maps key signature to int[]
@@ -62,7 +68,7 @@ public class KeySignature {
                 }
             }else{
                 if(sharp){
-                    throw new RuntimeException("Key signature is not supported."); // none
+                    throw new KeySignatureException("Key signature is not supported."); // none
                 }else if(flat){
                     int[] result={-1,-1,0,-1,-1,0,0}; // Ab, Fm
                     return result;
@@ -74,7 +80,7 @@ public class KeySignature {
         case 'B':
             if(minor){
                 if(sharp){
-                    throw new RuntimeException("Key signature is not supported."); // none
+                    throw new KeySignatureException("Key signature is not supported."); // none
                 }else if(flat){
                     int[] result={-1,-1,0,-1,-1,0,-1}; // Bbm, Db
                     return result;
@@ -84,7 +90,7 @@ public class KeySignature {
                 }
             }else{
                 if(sharp){
-                    throw new RuntimeException("Key signature is not supported."); // none
+                    throw new KeySignatureException("Key signature is not supported."); // none
                 }else if(flat){
                     int[] result={0,-1,0,0,-1,0,0}; // Bb, Gm
                     return result;
@@ -99,7 +105,7 @@ public class KeySignature {
                     int[] result={0,0,1,1,0,1,1}; // C#m, E
                     return result;
                 }else if(flat){
-                    throw new RuntimeException("Key signature is not supported."); // none
+                    throw new KeySignatureException("Key signature is not supported."); // none
                 }else{
                     int[] result={-1,-1,0,0,-1,0,0}; // Cm, Eb
                     return result;
@@ -122,14 +128,14 @@ public class KeySignature {
                     int[] result={1,0,1,1,1,1,1,1}; // D#m, Fs
                     return result;
                 }else if(flat){
-                    throw new RuntimeException("Key signature is not supported."); // none
+                    throw new KeySignatureException("Key signature is not supported."); // none
                 }else{
                     int[] result={0,-1,0,0,0,0,0}; // Dm, F
                     return result;
                 }
             }else{
                 if(sharp){
-                    throw new RuntimeException("Key signature is not supported."); // none
+                    throw new KeySignatureException("Key signature is not supported."); // none
                 }else if(flat){
                     int[] result={-1,-1,0,-1,-1,0,-1}; // Dm, F
                     return result;
@@ -141,7 +147,7 @@ public class KeySignature {
         case 'E':
             if(minor){
                 if(sharp){
-                    throw new RuntimeException("Key signature is not supported."); // none
+                    throw new KeySignatureException("Key signature is not supported."); // none
                 }else if(flat){
                     int[] result={-1,-1,-1,-1,-1,0,-1}; // Ebm, Gb
                     return result;
@@ -151,7 +157,7 @@ public class KeySignature {
                 }
             }else{
                 if(sharp){
-                    throw new RuntimeException("Key signature is not supported."); // none
+                    throw new KeySignatureException("Key signature is not supported."); // none
                 }else if(flat){
                     int[] result={-1,-1,0,0,-1,0,0}; // Eb, Cm
                     return result;
@@ -166,7 +172,7 @@ public class KeySignature {
                     int[] result={0,0,1,0,0,1,1}; // F#m, A
                     return result;
                 }else if(flat){
-                    throw new RuntimeException("Key signature is not supported."); // none
+                    throw new KeySignatureException("Key signature is not supported."); // none
                 }else{
                     int[] result={-1,-1,0,-1,-1,0,0}; // Fm, Ab
                     return result;
@@ -176,7 +182,7 @@ public class KeySignature {
                     int[] result={1,0,1,1,1,1,1}; // F#, D#m
                     return result;
                 }else if(flat){
-                    throw new RuntimeException("Key signature is not supported."); // none
+                    throw new KeySignatureException("Key signature is not supported."); // none
                 }else{
                     int[] result={0,-1,0,0,0,0,0}; // F, Dm
                     return result;
@@ -188,14 +194,14 @@ public class KeySignature {
                     int[] result={1,0,1,1,0,1,1}; // G#m, B
                     return result;
                 }else if(flat){
-                    throw new RuntimeException("Key signature is not supported."); // none (Fsm)
+                    throw new KeySignatureException("Key signature is not supported."); // none (Fsm)
                 }else{
                     int[] result={0,-1,0,0,-1,0,0}; // Gm, Bb
                     return result;
                 }
             }else{
                 if(sharp){
-                    throw new RuntimeException("Key signature is not supported."); // none
+                    throw new KeySignatureException("Key signature is not supported."); // none
                 }else if(flat){
                     int[] result={-1,-1,-1,-1,-1,0,-1}; // Gb, Ebm
                     return result;
@@ -205,7 +211,7 @@ public class KeySignature {
                 }
             }
         default:
-            throw new RuntimeException("Key signature is not supported.");
+            throw new KeySignatureException("Key signature is not supported.");
         }
     }
     public static void main(String args[]) {
