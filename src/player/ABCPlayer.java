@@ -35,9 +35,9 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
 	 */
 	public ABCPlayer(int ticks, int bpm, Header head){
 		try {
-			player = new SequencePlayer(ticks, bpm);
-			ticksPerQuarterNote = ticks;
+			ticksPerQuarterNote = ticks*128; // This is to get around the NOTE_ON / NOTE_OFF in different voices problem, as per Josh's suggestion.
 			header = head;
+			player = new SequencePlayer(ticksPerQuarterNote, bpm);
 		} catch (MidiUnavailableException e) {
 	        e.printStackTrace();
 	    } catch (InvalidMidiDataException e) {
@@ -85,7 +85,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
         for (int i=0;i<c.size;i++) {
         	Note note = c.getNote(i);
         	Pitch pitch = createPitchFromNote(note);
-        	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
+        	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks-1);
         }
         lastTick = lastTick+noteLengthInTicks;
         return player;
@@ -108,7 +108,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     	Pitch pitch = createPitchFromNote(note);
     
     	int noteLengthInTicks = getNoteLengthInTicks(note);
-    	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
+    	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks-1);
     	lastTick = lastTick+noteLengthInTicks;
     		
         return player;
@@ -176,7 +176,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     private void processNoteWithinTuplet(Note note, int noteLengthInTicks){
     	
     	Pitch pitch = createPitchFromNote(note);
-    	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
+    	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks-1);
     	lastTick = lastTick+noteLengthInTicks;
     }
     
@@ -191,7 +191,7 @@ public class ABCPlayer implements ABCmusic.Visitor<SequencePlayer>{
     	for (int i=0;i<chord.size;i++) {
         	Note note = chord.getNote(i);
         	Pitch pitch = createPitchFromNote(note);
-        	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks);
+        	player.addNote(pitch.toMidiNote(), lastTick, noteLengthInTicks-1);
         }
         lastTick = lastTick+noteLengthInTicks;
     }
