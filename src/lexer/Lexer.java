@@ -8,7 +8,12 @@ import java.util.regex.Pattern;
 
 public class Lexer {
     private List<List<Token>> tk;
-
+    @SuppressWarnings("serial")
+    private class LexerException extends RuntimeException {
+        public LexerException (String message) {
+            super("LexerException: "+message);
+        }
+    }
     /**
      * Convert noteLength to a list of strings which can be understood by the token
      * 
@@ -68,7 +73,7 @@ public class Lexer {
      *            list of Strings to be lexed
      * @param header
      *            the header which provides useful information
-     * @throws RuntimeException
+     * @throws LexerException
      *             if syntax error within any one line.
      */
     public Lexer(List<String> input, Header header) {
@@ -254,7 +259,7 @@ public class Lexer {
                         //space
                         substring = substring.substring(matcher.end());
                     } else {
-                        throw new RuntimeException("Wrong input");
+                        throw new LexerException("Invalid input symbol.");
                     }
 
                 }

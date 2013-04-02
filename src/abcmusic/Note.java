@@ -21,6 +21,12 @@ public class Note implements ABCmusic {
     public <R> R accept(Visitor<R> n) {
         return n.on(this);
     }
+    @SuppressWarnings("serial")
+    private static class NoteException extends RuntimeException {
+        public NoteException(String message) {
+            super("NoteException: "+message);
+        }
+    }
     /**
      * Construct a note from individual components
      * @param val basenote. must be [A-G]
@@ -28,10 +34,10 @@ public class Note implements ABCmusic {
      * @param acc accidental. must be -1, 0, 1. If hasAccidental is false, a should be 0 (default).
      * @param hasAcc hasAccidental (whether accidental is specified for the note or is default (unspecified)
      * @param len length of the note (in units of L)
-     * @throw RuntimeException ins val is not in [A-G]
+     * @throw NoteException ins val is not in [A-G]
      */
     public Note(char val, int oct, int acc, boolean hasAcc, Rational len) {
-        if (val<'A' || val>'G') throw new RuntimeException("Basenote out of bound.");
+        if (val<'A' || val>'G') throw new NoteException("Basenote out of bound.");
 		hasAccidental = hasAcc;
 		octave = oct;
 		accidental = acc;
@@ -81,7 +87,7 @@ public class Note implements ABCmusic {
         char basenote;
         
         if (len!=3 && len!=4 && len!=6) 
-            throw new RuntimeException("List of string for note is incorrect.");
+            throw new NoteException("List of string for note is incorrect.");
         
         // accidentalString is either empty or one of "^^", "^", "=", "_", "__"
         String accidentalString = noteParts.get(0);
@@ -94,7 +100,7 @@ public class Note implements ABCmusic {
             if (accidentalToInt.containsKey(accidentalString)) 
                 accidental = accidentalToInt.get(accidentalString);
             else 
-                throw new RuntimeException("Accidental syntax error.");
+                throw new NoteException("Accidental syntax error.");
         }
         
         // baseNoteString is a character, A-G or a-g. If the character is lower case, we convert it
@@ -107,7 +113,7 @@ public class Note implements ABCmusic {
         else if (basenoteString.matches("[A-G]")) 
             basenote=basenoteString.charAt(0);
         else 
-            throw new RuntimeException("Basenote unrecognized.");
+            throw new NoteException("Basenote unrecognized.");
         
         // octaveString should be either empty, a series of apostrophes (''''') or commas (,,,,,)
         String octaveString = noteParts.get(2);
@@ -118,10 +124,9 @@ public class Note implements ABCmusic {
             else if (octaveString.matches("[,]+")) 
                 octave-=numberOfOctaves;
             else 
-                throw new RuntimeException("Octave syntax error.");
+                throw new NoteException("Octave syntax error.");
         }
         Rational noteLength = Rational.stringListToRational(noteParts.subList(3, len));
-        
         return new Note(basenote,octave,accidental,hasAccidental,noteLength);
     }
 }

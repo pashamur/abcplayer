@@ -18,8 +18,20 @@ public class MajorSection implements ABCmusic {
     public <R> R accept(Visitor<R> m) {
         return m.on(this);
     }
-
-    // tk is non-empty; end with ':|' or no bar
+    
+    @SuppressWarnings("serial")
+    private static class MajorSectionException extends RuntimeException {
+        public MajorSectionException (String message) {
+            super("MajorSectionException: "+message);
+        }
+    }
+    /**
+     * Construct a majorsection using tk.
+     * 
+     * @param tk is non-empty; end with ':|' or no bar
+     * @throw MajorSectionException if tk is empty
+     * @throw MajorSectionException if syntax error (duplicated bar, nested repeat, missing nth-repeat.
+     */
     public MajorSection(List<Token> tk) {
         sections = new ArrayList<Section>();
         int ni = 0;
@@ -27,7 +39,7 @@ public class MajorSection implements ABCmusic {
         int nm = 0;
         int len = tk.size();
         if (len < 1)
-            throw new RuntimeException("Empty major section.");
+            throw new MajorSectionException("Empty major section.");
         Token current;
         while (ni < len) {
             while (nf < len) {
@@ -35,12 +47,12 @@ public class MajorSection implements ABCmusic {
                 if (current.type.equals(Token.Type.repeat_start) || current.type.equals(Token.Type.repeat_end)) break;
                 if (current.type.equals(Token.Type.nth_repeat)) {
                     if (current.getValue() == 1) {
-                        if (repeat) throw new RuntimeException("Duplicated 1st-repeat.");
+                        if (repeat) throw new MajorSectionException("Duplicated 1st-repeat.");
                         if ((ni != nf) && !tk.get(nf - 1).type.equals(Token.Type.simple_bar))
-                            throw new RuntimeException("Missing simple_bar before 1st_repeat");
+                            throw new MajorSectionException("Missing simple_bar before 1st_repeat");
                         repeat = true;
                         nm = nf;
-                    } else throw new RuntimeException("Extra 2nd-repeat.");
+                    } else throw new MajorSectionException("Extra 2nd-repeat.");
                 }
                 nf++;
             }
@@ -51,23 +63,23 @@ public class MajorSection implements ABCmusic {
                     if (ni != nf) sections.add(new Section(tk.subList(ni, nf)));
                     state = 1;
                 } 
-                else if (ni == nf) throw new RuntimeException("Unmatched repeat-start.");
+                else if (ni == nf) throw new MajorSectionException("Unmatched repeat-start.");
                 else nf = handleRepeat(tk, ni, nm, nf);
             } 
             else if (state == 1) {
                 if (nf == len)
-                    throw new RuntimeException("Unmatched repeat-start.");
+                    throw new MajorSectionException("Unmatched repeat-start.");
                 if (tk.get(nf).type.equals(Token.Type.repeat_start))
-                    throw new RuntimeException("Nested repeat-start.");
+                    throw new MajorSectionException("Nested repeat-start.");
                 if (ni == nf)
-                    throw new RuntimeException("Empty repeat section.");
+                    throw new MajorSectionException("Empty repeat section.");
                 nf = handleRepeat(tk, ni, nm, nf);
             } 
             else if (state == 2) {
                 if (nf == len)
                     sections.add(new Section(tk.subList(ni, nf)));
                 else if (tk.get(nf).type.equals(Token.Type.repeat_end))
-                    throw new RuntimeException("Nested repeat_end.");
+                    throw new MajorSectionException("Nested repeat_end.");
                 else {
                     if (ni==nf) ;
                     else if (!tk.get(nf-1).type.equals(Token.Type.simple_bar))
@@ -102,11 +114,11 @@ public class MajorSection implements ABCmusic {
             return nf;
         } else {
             if (nf > (len - 2))
-                throw new RuntimeException("Missing 2nd-repeat.");
+                throw new MajorSectionException("Missing 2nd-repeat.");
             Token current = tk.get(nf + 1);
             if (current.type.equals(Token.Type.nth_repeat) && current.getValue() == 2) {
                 if (!tk.get(nm-1).type.equals(Token.Type.simple_bar))
-                    throw new RuntimeException("Missing simple-bar before 1st-repeat [1.");
+                    throw new MajorSectionException("Missing simple-bar before 1st-repeat [1.");
                 Section temp = new Section(tk.subList(ni, nm-1));
                 sections.add(temp);
                 sections.add(new Section(tk.subList(nm + 1, nf)));
@@ -115,9 +127,14 @@ public class MajorSection implements ABCmusic {
                 state = 2;
                 return nf + 1;
             } else
-                throw new RuntimeException("Missing 2nd-repeat.");
+                throw new MajorSectionException("Missing 2nd-repeat.");
         }
     }
+    /**
+     * @param i
+     * @return ith section
+     * @throw if i larger than sections.size()
+     */
     public Section getSection(int i) {
         return sections.get(i);
     }

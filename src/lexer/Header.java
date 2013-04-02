@@ -18,14 +18,20 @@ public class Header {
     private Rational defaultNoteLength;
     private Pair<Integer, Integer> meter;
     private int tempo;
-
+    
+    @SuppressWarnings("serial")
+    private class HeaderException extends RuntimeException {
+        public HeaderException(String message) {
+            super("HeaderException: "+message);
+        }
+    }
     /**
      * initialize all fields of Header. Lex header and generate a list of field
      * (K, M...) and their respective strings. get rid of comments.
      * 
      * @param headerLines A list of strings to be lexed
-     * @throws RuntimeException if X, T, K does not appear at the right place.
-     * @throws RuntimeException if syntax error within any one line.
+     * @throws HeaderException if X, T, K does not appear at the right place.
+     * @throws HeaderException if syntax error within any one line.
      */
     public Header(List<String> headerLines) {
         int currentLine = 0;
@@ -41,13 +47,13 @@ public class Header {
         Pattern XPattern = Pattern.compile("X:\\s*\\d+\\s*");
         Matcher XMatcher = XPattern.matcher(headerLines.get(currentLine));
         if (!XMatcher.matches()) {
-            throw new RuntimeException("Wrong input");
+            throw new HeaderException("Invalid input.");
         }
         currentLine++;
         Pattern titlePattern = Pattern.compile("T:.+");
         Matcher titleMatcher = titlePattern.matcher(headerLines.get(currentLine));
         if (!titleMatcher.matches()) {
-            throw new RuntimeException("Wrong input");
+            throw new HeaderException("Invalid input.");
         }
 
         Pattern noteLengthPattern = Pattern.compile("L:\\s*\\d+\\s*/\\s*\\d+\\s*");
@@ -65,7 +71,7 @@ public class Header {
                 numberMatcher.find();
                 int PairY = Integer.parseInt(numberMatcher.group());
                 if (PairY == 0) {
-                    throw new RuntimeException("Wrong Input!");
+                    throw new HeaderException("Invalid Input.");
                 }
                 defaultNoteLength = new Rational(PairX, PairY);
             } else if (meterPattern.matcher(headerLines.get(currentLine)).matches()) {
@@ -77,7 +83,7 @@ public class Header {
                     numberMatcher.find();
                     PairY = Integer.parseInt(numberMatcher.group());
                     if (PairY == 0) {
-                        throw new RuntimeException("Wrong Input!");
+                        throw new HeaderException("Invalid Input.");
                     }
 
                 } else {
@@ -90,7 +96,7 @@ public class Header {
                         PairX = 4;
                         PairY = 4;
                     } else {
-                        throw new RuntimeException("Wrong Input");
+                        throw new HeaderException("Invalid Input");
                     }
                 }
                 meter = new Pair<Integer, Integer>(PairX, PairY);
@@ -106,12 +112,12 @@ public class Header {
                 Matcher wordMatcher = wordPattern.matcher(temp);
                 wordMatcher.find();
                 if (voice.containsKey(wordMatcher.group())) {
-                    throw new RuntimeException("Wrong input");
+                    throw new HeaderException("Invalid input.");
                 }
                 numVoices++;
                 voice.put(wordMatcher.group(), numVoices);
             } else {
-                throw new RuntimeException("Wrong Input!");
+                throw new HeaderException("Invalid Input.");
             }
         }
 
@@ -148,12 +154,12 @@ public class Header {
         if (voice.containsKey(v))
             return voice.get(v);
         else
-            throw new RuntimeException("Voice not found.");
+            throw new HeaderException("Voice not found.");
     }
 
     public int getAccidental(char c) {
         if (c < 'A' || c > 'G')
-            throw new RuntimeException("Basenote out of bound.");
+            throw new HeaderException("Basenote out of bound.");
         return keySignature[c - 'A'];
     }
 

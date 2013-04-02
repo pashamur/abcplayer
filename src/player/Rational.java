@@ -35,15 +35,25 @@ import java.util.List;
 public class Rational {
     public final int num;   // the numerator
     public final int den;   // the denominator
-
-    // create and initialize a new Rational object
+    @SuppressWarnings("serial")
+    private static class RationalException extends RuntimeException {
+        public RationalException (String message) {
+            super("RationalException: "+message);
+        }
+    }
+    /**
+     *  create and initialize a new Rational object
+     * @param numerator int
+     * @param denominator non-zero int
+     * @throw RationalException if denominator=0
+     */
     public Rational(int numerator, int denominator) {
         if (denominator == 0) {
-            throw new RuntimeException("Denominator is zero");
+            throw new RationalException("Denominator is zero");
         }
         int g = gcd(numerator, denominator);
-        num = numerator   / g;
-        den = denominator / g;
+        num = numerator/g;
+        den = denominator/g;
     }
     
     @Override
@@ -73,7 +83,7 @@ public class Rational {
      *            or an empty string which by default means 2;
      * 
      * @return Rational The Rational form of the passed in fraction
-     * @throws RuntimeException
+     * @throws RationalException
      *             if s.size() is not 0, 1 or 3, or does not match the above
      *             description
      */
@@ -85,7 +95,7 @@ public class Rational {
         else if (len == 1) {
             if (rationalString.get(0).matches("[1-9]+[0-9]*"))
                 return new Rational(Integer.parseInt(rationalString.get(0)), 1);
-            throw new RuntimeException("Integer length notation incorrect.");
+            throw new RationalException("Integer length notation incorrect.");
         }
         else if (len == 3) {
             int numerator;
@@ -97,11 +107,11 @@ public class Rational {
             else if (numeratorString.matches("[1-9]+[0-9]*"))
                 numerator = Integer.parseInt(numeratorString);
             else
-                throw new RuntimeException("Numerator notation incorrect.");
+                throw new RationalException("Numerator notation incorrect.");
             
             String divisionSignString = rationalString.get(1);
             if (!divisionSignString.equals("/"))
-                throw new RuntimeException("Rational / notation incorrect.");
+                throw new RationalException("Rational / notation incorrect.");
             
             String denominatorString = rationalString.get(2);
             if (denominatorString.length() == 0)
@@ -109,11 +119,11 @@ public class Rational {
             else if (denominatorString.matches("[1-9]+[0-9]*"))
                 denominator = Integer.parseInt(denominatorString);
             else
-                throw new RuntimeException("Denominator notation incorrect.");
+                throw new RationalException("Denominator notation incorrect.");
             
             return new Rational(numerator, denominator);
         }
-        throw new RuntimeException("Length input size incorrect.");
+        throw new RationalException("Length input size incorrect.");
     }
 
     // return (this * b)

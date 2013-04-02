@@ -18,6 +18,13 @@ public class Measure implements ABCmusic {
     public <R> R accept(Visitor<R> m) {
         return m.on(this);
     }
+    
+    @SuppressWarnings("serial")
+    private static class MeasureException extends RuntimeException {
+        public MeasureException(String message) {
+            super("MeasureException: "+message);
+        }
+    }
     /**
      * group tokens in tk into one of note, rest, chord or tuplet and add to elements.
      * @param tk represents a measure. should contain only note. rest, multinote_start, multinote_end, tuplet_spec.
@@ -27,7 +34,7 @@ public class Measure implements ABCmusic {
         int point=0;
         int len=tk.size();
         Token current;
-        if (len<1) throw new RuntimeException("Empty measure.");
+        if (len<1) throw new MeasureException("Empty measure.");
         elements=new ArrayList<ABCmusic>();
         while (point<len) {
             current=tk.get(point);
@@ -56,7 +63,7 @@ public class Measure implements ABCmusic {
                 elements.add(newChord);
                 length=length.plus(newChord.getLength());
             }
-            else throw new RuntimeException("Illegal token within a measure.");
+            else throw new MeasureException("Illegal token within a measure.");
             point++;
         }
         size=elements.size();   
@@ -70,14 +77,14 @@ public class Measure implements ABCmusic {
         ABCmusic[] eList=new ABCmusic[nTuplet];
         for (int i=0;i<nTuplet;i++) {
             ++point;
-            if (point>=len) throw new RuntimeException("Missing note in a tuplet.");
+            if (point>=len) throw new MeasureException("Missing note in a tuplet.");
             tempT=tk.get(point);
             if (tempT.type.equals(Token.Type.note)) {
                 tempN=tempT.getNote();
                 checkAccidental(tempN);
                 eList[i]=tempN;
                 if (i==0) noteLength=tempN.getLength(); 
-                else if (!noteLength.equals(tempN.getLength())) throw new RuntimeException("Tuplet notes have different length");
+                else if (!noteLength.equals(tempN.getLength())) throw new MeasureException("Tuplet notes have different length");
             }
             else if (tempT.type.equals(Token.Type.multinote_start)) {
                 Pair<Integer,Chord> tempP=findChord(point,tk);
@@ -85,7 +92,7 @@ public class Measure implements ABCmusic {
                 tempC=tempP.second;
                 eList[i]=tempC;
                 if (i==0) noteLength=tempC.getLength(); 
-                else if (!noteLength.equals(tempC.getLength())) throw new RuntimeException("Tuplet notes have different length");
+                else if (!noteLength.equals(tempC.getLength())) throw new MeasureException("Tuplet notes have different length");
             }
         }
         Tuplet newTuplet=new Tuplet(nTuplet,eList,noteLength);
@@ -109,9 +116,9 @@ public class Measure implements ABCmusic {
                 newChord=new Chord(notes);
                 break;
             }
-            else throw new RuntimeException("Illegal token within a chord.");
+            else throw new MeasureException("Illegal token within a chord.");
         }
-        if (point==len) throw new RuntimeException("Missing multinote_end.");
+        if (point==len) throw new MeasureException("Missing multinote_end.");
         Pair<Integer,Chord> result=new Pair<Integer,Chord>(point,newChord);
         return result;
     }

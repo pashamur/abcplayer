@@ -11,15 +11,21 @@ public class Chord implements ABCmusic {
     public <R> R accept(Visitor<R> c) {
         return c.on(this);
     }
+    @SuppressWarnings("serial")
+    private static class ChordException extends RuntimeException{
+        public ChordException(String message) {
+            super("ChordException: "+message);
+        }
+    }
     /**
      * construct chord given list of notes.
      * @param n list of Note
-     * @throws RuntimeException if n is empty
+     * @throws ChordException if n is empty
      * prints warming if n.size=1 (chord has only one note)
      */
     public Chord(List<Note> n) {
         size=n.size();
-        if (size==0) throw new RuntimeException("Chord contains empty notes.");
+        if (size==0) throw new ChordException("Chord contains empty notes.");
         if (size==1) System.out.println("Warming: Chord contains only one note.");
         length=n.get(0).getLength();
         notes=new Note[size];
@@ -30,7 +36,7 @@ public class Chord implements ABCmusic {
         return length.clone();
     }
     public Note getNote(int i){
-        if (i>=size) throw new RuntimeException("Index out of bound in Chord.");
+        if (i>=size) throw new ChordException("Index out of bound in Chord.");
         else return notes[i].clone();
     }
 }
