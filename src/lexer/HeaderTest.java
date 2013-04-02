@@ -273,7 +273,9 @@ public class HeaderTest {
         }
         reader.close();
         
-    }@Test(expected = RuntimeException.class)
+    }
+    
+    @Test(expected = RuntimeException.class)
     public void HeaderTest8() throws IOException{
         String file="sample_abc/headerTest4.abc";
         List<String> result = new ArrayList<String>();
